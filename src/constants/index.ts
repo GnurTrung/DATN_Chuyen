@@ -118,7 +118,7 @@ export const ACTIVITY_STATUS = {
   AUCTION_SETTLE: 14,
 };
 
-export const REFUNDABLE_FEE = 3.33 * 10 ** 9;
+export const REFUNDABLE_FEE = 0.01 * 10 ** 9;
 
 export const TOP_RANK = {
   TOP_1: 1,

@@ -1,11 +1,8 @@
-import IconGlobalSmall from "@/assets/icons/IconGlocalSmall";
-import IconTwitter from "@/assets/icons/IconTwitter";
 import CustomImage from "@/components/custom-image";
 import React from "react";
 import Public from "./public";
 import { Provider, useContexts } from "./context";
 import ModalMintSuccess from "@/components/custom-modal/ModalMintSuccess";
-import { useWalletKit } from "@mysten/wallet-kit";
 
 const INODetailContainerImpl = () => {
   const {

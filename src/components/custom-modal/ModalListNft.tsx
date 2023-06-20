@@ -7,7 +7,6 @@ import VenomToken from "../../../public/images/token/venom.png";
 import Image from "next/image";
 import CustomInput from "../input";
 import { TransactionBlock } from "@mysten/sui.js";
-import { useVenom } from "@/contexts/useVenom";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import useProviderSigner from "@/contexts/useProviderSigner";
@@ -62,7 +61,7 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
       });
       if (!response) toast.error("Opps! There are some errors");
       else if (response?.effects?.status.status == "success") {
-        toast.success("Mint success");
+        toast.success("List success!");
         if (typeof window !== "undefined") {
           window.location.reload();
         }
@@ -95,7 +94,7 @@ const ModalListNft = ({ open, onCancel, nft }: IModalListNft) => {
         <p className="text-secondary text-base">You decide to list:</p>
         <div className="text-white flex justify-between items-center space-x-2 py-8 border-b border-solid border-stroke">
           <CustomImage
-            src="/images/demo_nft.png"
+            src={nft?.imageUrl}
             alt="nft"
             width={50}
             height={50}

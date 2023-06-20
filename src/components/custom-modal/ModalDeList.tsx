@@ -1,17 +1,21 @@
 import CustomModal from ".";
 import { useState } from "react";
-import { useVenom } from "@/contexts/useVenom";
-import { Address } from "everscale-inpage-provider";
+import { TransactionBlock } from "@mysten/sui.js";
 import { toast } from "react-hot-toast";
-import Sell from "../../contexts/abi/Sell.abi.json";
 import useProviderSigner from "@/contexts/useProviderSigner";
-import { delay } from "@/helper/delay";
 import CustomImage from "../custom-image";
 import IconVerified from "@/assets/icons/IconVerified";
 import Image from "next/image";
 import VenomToken from "../../../public/images/token/venom.png";
 import { NumericFormat } from "react-number-format";
 import { formatBalance } from "@/utils";
+import {
+  DELIST_NFT,
+  SC_CONTRACT_MODULE,
+  SC_PACKAGE_MARKET,
+  SC_SHARED_MARKET,
+} from "@/configs";
+import { useWalletKit } from "@mysten/wallet-kit";
 
 interface IModalCancelNFT {
   open: boolean;
@@ -19,35 +23,44 @@ interface IModalCancelNFT {
   nft: any;
   manager: any;
 }
-const ModalCancelNFT = ({ open, onCancel, nft, manager }: IModalCancelNFT) => {
+const ModalCancelNFT = ({ open, onCancel, nft }: IModalCancelNFT) => {
   const [loading, setLoading] = useState(false);
-  const { account, provider } = useVenom();
-  const { getInfoNFT } = useProviderSigner();
+  const { getObject } = useProviderSigner();
+  const { signAndExecuteTransactionBlock } = useWalletKit();
+  const nft_adress = nft?.nftId;
   const handleListing = async () => {
     try {
       setLoading(true);
-      const contract = new provider.Contract(Sell, new Address(manager));
-      const res = (await contract.methods
-        .cancelOrder()
-        .send({ from: account, amount: "1000000000" })) as any;
-      delay(2000);
-      const nftData = await getInfoNFT(nft.nftId);
-      if (
-        nftData?.manager?._address == nftData?.owner?._address &&
-        nftData?.owner?._address == account
-      )
-        toast.success("Delist successfully!");
-      else {
-        toast.error("Delist failed!");
-      }
-    } catch (err) {
-      console.log(err);
+      if (!nft_adress) return;
+      const object = await getObject(nft_adress);
+
+      const typeNFT = object?.data?.type;
+      if (!typeNFT) return;
+
+      const tx = new TransactionBlock();
+      const request = {
+        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${DELIST_NFT}`,
+        typeArguments: [typeNFT],
+        arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nft_adress)],
+      } as any;
+      tx.moveCall(request);
+      const response = await signAndExecuteTransactionBlock({
+        transactionBlock: tx,
+        options: { showEffects: true },
+      });
+      if (!response) toast.error("Opps! There are some errors");
+      else if (response?.effects?.status.status == "success") {
+        toast.success("Delist success!");
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
+      } else toast.error(response?.effects?.status.error || "");
+    } catch (ex: any) {
+      toast.error(ex.message);
+      console.log(ex);
     } finally {
       setLoading(false);
       onCancel();
-      if (typeof window !== "undefined") {
-        window.location.reload();
-      }
     }
   };
   return (
@@ -64,7 +77,7 @@ const ModalCancelNFT = ({ open, onCancel, nft, manager }: IModalCancelNFT) => {
       <div className="pt-5">
         <div className="text-white flex justify-between items-center space-x-2 pb-8 border-b border-solid border-stroke">
           <CustomImage
-            src="/images/demo_nft.png"
+            src={nft?.imageUrl}
             alt="nft"
             width={50}
             height={50}
