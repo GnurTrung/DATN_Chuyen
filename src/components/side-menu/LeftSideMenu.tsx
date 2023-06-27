@@ -21,9 +21,13 @@ const LeftSideMenu = () => {
       icon: <IconHome active={router.pathname === "/"} />,
     },
     {
-      href: "/mint-nft",
+      href: "/",
       name: "Launchpad",
       icon: <IconRocket active={router.pathname === "/mint-nft"} />,
+      onClick: (e: any) => {
+        e.preventDefault();
+        toast.success("Coming soon!", { duration: 1000 });
+      }
     },
     {
       href: "/play",
