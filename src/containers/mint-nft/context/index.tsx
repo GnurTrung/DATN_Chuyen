@@ -20,25 +20,25 @@ export const Provider = ({ children }: any) => {
       const allData = await getBanner([]);
       const all = allData?.data || [];
       const actives = all
-        .filter((x: any) => x.attributes.collectionStatus === "Active")
+        .filter((x: any) => x.collectionStatus === "Active")
         .sort(
           (a: any, b: any) =>
-            Number(new Date(a.attributes.publicStartTime)) -
-            Number(new Date(b.attributes.publicStartTime))
+            Number(new Date(a.publicStartTime)) -
+            Number(new Date(b.publicStartTime))
         );
       const upcoming = all
-        .filter((x: any) => x.attributes.collectionStatus === "Upcoming")
+        .filter((x: any) => x.collectionStatus === "Upcoming")
         .sort(
           (a: any, b: any) =>
-            Number(new Date(a.attributes.publicStartTime)) -
-            Number(new Date(b.attributes.publicStartTime))
+            Number(new Date(a.publicStartTime)) -
+            Number(new Date(b.publicStartTime))
         );
       const completed = all
-        .filter((x: any) => x.attributes.collectionStatus === "Completed")
+        .filter((x: any) => x.collectionStatus === "Completed")
         .sort(
           (a: any, b: any) =>
-            Number(new Date(a.attributes.publicStartTime)) -
-            Number(new Date(b.attributes.publicStartTime))
+            Number(new Date(a.publicStartTime)) -
+            Number(new Date(b.publicStartTime))
         );
       setActive(actives || []);
       setUpcoming(upcoming || []);

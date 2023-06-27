@@ -29,26 +29,16 @@ function Banner() {
       console.log(ex);
     }
   };
-  const getLogo = (item: any) => {
-    try {
-      const data = item?.attributes?.banner?.data;
-      if (data && data?.attributes?.url)
-        return getLogoURL(data?.attributes?.url);
-    } catch (ex: any) {
-      toast.error(ex);
-    }
-    return null;
-  };
   const getUnixTime = (idx: any) => {
     return new Date(idx).getTime();
   };
   const getStartTime = (idx: any) => {
     try {
       const arr = [
-        getUnixTime(idx?.attributes?.publicStartTime),
-        getUnixTime(idx?.attributes?.keyHolderStartTime),
-        getUnixTime(idx?.attributes?.whitelistStartTime),
-        getUnixTime(idx?.attributes?.privateStartTime),
+        getUnixTime(idx?.publicStartTime),
+        getUnixTime(idx?.keyHolderStartTime),
+        getUnixTime(idx?.whitelistStartTime),
+        getUnixTime(idx?.privateStartTime),
       ];
       const arrSort = arr.filter((x) => x != 0).sort();
       return arrSort[0];
@@ -59,10 +49,10 @@ function Banner() {
   const getEndTime = (idx: any) => {
     try {
       const arr = [
-        getUnixTime(idx?.attributes?.publicEndTime),
-        getUnixTime(idx?.attributes?.keyHolderEndTime),
-        getUnixTime(idx?.attributes?.whitelistEndTime),
-        getUnixTime(idx?.attributes?.privateEndTime),
+        getUnixTime(idx?.publicEndTime),
+        getUnixTime(idx?.keyHolderEndTime),
+        getUnixTime(idx?.whitelistEndTime),
+        getUnixTime(idx?.privateEndTime),
       ];
       const arrSort = arr
         .filter((x) => x != 0)
@@ -75,7 +65,7 @@ function Banner() {
   };
   const getSUIprice = (idx: any) => {
     try {
-      const pricePublic = idx?.attributes?.pricePublic;
+      const pricePublic = idx?.pricePublic;
       if (pricePublic == -1) return "TBA";
       else if (pricePublic == 0) return "0 SUI";
       else if (pricePublic) return `${pricePublic} SUI`;
@@ -121,9 +111,9 @@ function Banner() {
                     }}
                   >
                     <div className="w-full relative text-dark">
-                      <Link href={`/ino/${item?.attributes?.code}`}>
+                      <Link href={`/ino/${item?.code}`}>
                         <CustomImage
-                          src={getLogo(item)}
+                          src={item?.banner}
                           alt={"title"}
                           className="rounded-lg cursor-pointer !object-cover w-full md:aspect-[4/1] h-[308px] sm:h-[420px] md:min-h-[350px]"
                         />
@@ -133,7 +123,7 @@ function Banner() {
                           <div className="flex justify-between items-center gap-0 max-sm:w-full sm:gap-4 flex-col sm:flex-row">
                             <CustomImage
                               src={getLogoURL(
-                                item?.attributes?.logo?.data?.attributes?.url
+                                item?.logo
                               )}
                               alt={"title"}
                               className="hidden sm:block rounded-lg cursor-pointer !object-cover aspect-square border-2 h-[131px] w-[131px] border-white border-solid max-w-none ml-1"
@@ -142,7 +132,7 @@ function Banner() {
                               <div className="flex gap-2 sm:gap-0">
                                 <CustomImage
                                   src={getLogoURL(
-                                    item?.attributes?.logo?.data?.attributes
+                                    item?.logo?.data?.attributes
                                       ?.url
                                   )}
                                   alt={"title"}
@@ -150,16 +140,16 @@ function Banner() {
                                 />
                                 <div className="pr-[2rem] sm:p-0">
                                   <Link
-                                    href={`/ino/${item?.attributes?.code}`}
+                                    href={`/ino/${item?.code}`}
                                     className="flex items-center gap-1 sm:gap-2 hover:text-primary"
                                   >
                                     <IconVerified className="min-h-[16.66px] min-w-[16.66px]"/>
                                     <div className="font-[600] sm:font-[500] text-[16px] sm:text-[20px] three_dot_1_line">
-                                      {item?.attributes?.name}
+                                      {item?.name}
                                     </div>
                                   </Link>
                                   <div className="font-normal text-[black] text-[12px] three_dot_2_line">
-                                    {item?.attributes?.description}
+                                    {item?.description}
                                   </div>
                                 </div>
                               </div>
@@ -170,15 +160,15 @@ function Banner() {
                                       Items
                                     </div>
                                     <div className="text-sm font-semibold">
-                                      {Number(item?.attributes?.itemCount) ==
+                                      {Number(item?.itemCount) ==
                                       0 ? (
                                         `TBA`
-                                      ) : Number(item?.attributes?.itemCount) >=
+                                      ) : Number(item?.itemCount) >=
                                         1000000 ? (
                                         "∞"
                                       ) : (
                                         <NumericFormat
-                                          value={item?.attributes?.itemCount}
+                                          value={item?.itemCount}
                                           displayType="text"
                                           thousandSeparator=","
                                         />
@@ -234,7 +224,7 @@ function Banner() {
                                 )}
                               </div>
                               <Link
-                                href={`/ino/${item?.attributes?.code}`}
+                                href={`/ino/${item?.code}`}
                                 className="absolute top-5 right-5 xl:top-auto xl:bottom-3 xl:right-4 text-[#00C089] text-[14px] gap-2 flex items-center font-[500]"
                               >
                                 <div className="hidden xl:block">
