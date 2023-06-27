@@ -11,7 +11,7 @@ import { useCollectionDetailContext } from "./context";
 import Activities from "./activities";
 import cx from "classnames";
 import Analysis from "./Analysis";
-import INODetailContainer from "../ino";
+import MintDetailContainer from "./ino";
 
 const CollectionDetailContainer = () => {
   const { account } = useVenom();
@@ -61,7 +61,7 @@ const CollectionDetailContainer = () => {
     {
       key: "4",
       label: "Mint NFT",
-      children: <INODetailContainer />,
+      children: <MintDetailContainer />,
     },
   ];
   return (
