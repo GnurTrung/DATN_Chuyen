@@ -48,8 +48,8 @@ export default function App({ Component, pageProps }: AppProps) {
             )}
           >
             <Meta
-              title="Ventory"
-              description="Ventory | The best marketplace on Venom Network"
+              title="ChuyenDT"
+              description="ChuyenDT | The best marketplace on Sui Network"
             />
             <Header />
             <div className="flex items-start justify-between flex-1 px-2 sm:layout pt-4">

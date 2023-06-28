@@ -173,13 +173,13 @@ function Footer() {
               />
             </div>
             <p className="lead-6 text-grey max-w-[28rem] 2md:text-right">
-              Ventory community brings only the best and brightest projects to
-              the Venom ecosystem.
+              ChuyenDT community brings only the best and brightest projects to
+              the Sui ecosystem.
             </p>
             <ul className="mb-[15px] flex items-center space-x-4">
               <li>
                 <Link
-                  href="https://twitter.com/Ventory_gg"
+                  href="https://twitter.com/ChuyenDT_gg"
                   target="_blank"
                   rel="noreferrer"
                 >

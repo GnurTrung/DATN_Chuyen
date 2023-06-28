@@ -70,7 +70,7 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
           />
           <div className="flex flex-col items-start">
             <span className="text-white text-xl font-semibold">
-              {profile?.userName || "Ventory"}
+              {profile?.userName || "ChuyenDT"}
             </span>
             <div className="flex items-center space-x-3">
               <span className="text-secondary font-medium">
@@ -107,7 +107,7 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
             <div className="flex items-center space-x-2 justify-between">
               <Image src={Venom} alt="Venom" />
               <div className="flex-1">
-                <span className="text-secondary">Venom</span>
+                <span className="text-secondary">Sui</span>
                 <div className="flex items-center space-x-3">
                   <span className="text-white font-medium">
                     {formatWallet(currentAccount?.address)}

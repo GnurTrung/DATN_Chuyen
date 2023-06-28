@@ -203,7 +203,7 @@ const ExploreContainer = () => {
           Explore
         </h1>
         <p className="text-xl text-secondary leading-5">
-          Buy and Sell NFTs on Venom Blockchain.
+          Buy and Sell NFTs on Sui Blockchain.
         </p>
       </div>
       <div className="flex items-end sm:items-start space-x-0 md:space-x-4 md:space-y-0 pb-4 sticky top-[136px] sm:top-[164px] bg-layer-1 z-10 md:flex-nowrap flex-nowrap sm:flex-wrap gap-2 justify-center space-y-2">

@@ -43,7 +43,7 @@ const Meta = (props: IMetaProps) => {
         />
         <link
           rel="icon"
-          href={`${router.basePath}/favicon.png`}
+          href={`${router.basePath}/favicon.ico`}
           key="favicon"
         />
       </Head>

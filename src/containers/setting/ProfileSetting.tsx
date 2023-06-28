@@ -19,7 +19,7 @@ const ProfileSetting = () => {
   const [disableClick, setDisableClick] = useState(false);
 
   const onClickFollow = () => {
-    const url = "https://twitter.com/intent/follow?screen_name=Ventory_gg";
+    const url = "https://twitter.com/intent/follow?screen_name=ChuyenDT_gg";
     openWindowTab({
       url,
       title: "Follow Tocen - NFT Marketplace on SUI",
@@ -169,7 +169,7 @@ const ProfileSetting = () => {
         <div className="px-[24px] justify-between max-sm:items-center flex gap-[1rem] rounded-[8px] py-[16px] bg-[#131924] mt-[2.3rem] border-solid border-[1px] border-[#1D2535]">
           <div>
             <p className="text-[16px] font-[500] text-[white]">
-              Follow Ventory
+              Follow ChuyenDT
             </p>
             <p className="font-[400] text-[14px] text-[#94A7C6] mt-[0.5rem]">
               Follow{" "}
@@ -177,7 +177,7 @@ const ProfileSetting = () => {
                 onClick={() => onClickFollow()}
                 className="text-[#00C089] cursor-pointer hover:text-primary-hover"
               >
-                @Ventory_gg
+                @ChuyenDT_gg
               </span>{" "}
               on Twitter to get the latest news.
             </p>

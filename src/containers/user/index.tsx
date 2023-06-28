@@ -89,11 +89,11 @@ const UserContainer = () => {
     return "";
   };
 
-  useEffect(() => {
-    if (!account) {
-      router.push("/");
-    }
-  }, [account]);
+  // useEffect(() => {
+  //   if (!account) {
+  //     router.push("/");
+  //   }
+  // }, [account]);
 
   return (
     <div className="w-full pb-20">
@@ -115,7 +115,7 @@ const UserContainer = () => {
             />
             <div className="flex-1">
               <div className="text-white font-semibold text-xl flex items-center space-x-2">
-                <span>{profile?.userName || "Ventory"}</span>
+                <span>{profile?.userName || "ChuyenDT"}</span>
                 {/* <IconVerified /> */}
               </div>
               <div className="text-secondary font-medium flex items-center">
@@ -140,7 +140,7 @@ const UserContainer = () => {
                 </Button>
                 <TwitterShareButton
                   url={getURL()}
-                  title={`My profile on Ventory`}
+                  title={`My profile on ChuyenDT`}
                 >
                   <div className="btn-secondary space-x-2 px-4">
                     <IconTwitter width={24} height={24} />

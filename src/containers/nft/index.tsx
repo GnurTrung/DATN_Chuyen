@@ -22,7 +22,6 @@ import Link from "next/link";
 import Image from "next/image";
 import ModalCancelNFT from "@/components/custom-modal/ModalDeList";
 import { NumericFormat } from "react-number-format";
-import { Address } from "everscale-inpage-provider";
 import ModalBuySuccess from "@/components/custom-modal/ModalBuySuccess";
 import ModalWaiting from "@/components/custom-modal/ModalWaiting";
 import { REFUNDABLE_FEE, TOP_RANK } from "@/constants";
@@ -31,10 +30,19 @@ import ModalMakeOffer from "@/components/custom-modal/ModalMakeOffer";
 import { useApplicationContext } from "@/contexts/useApplication";
 import IconRemoveCart from "@/assets/icons/IconRemoveCart";
 import { useWalletKit } from "@mysten/wallet-kit";
+import {
+  BUY_NFT,
+  SC_CONTRACT_MODULE,
+  SC_PACKAGE_MARKET,
+  SC_SHARED_MARKET,
+} from "@/configs";
+import useProviderSigner from "@/contexts/useProviderSigner";
+import { TransactionBlock } from "@mysten/sui.js";
 
 const NftDetailContainer = () => {
-  const { account, isAuthenticated, login, provider } = useVenom();
-  const { isConnected } = useWalletKit();
+  const { account, login } = useVenom();
+  const { getObject } = useProviderSigner();
+  const { signAndExecuteTransactionBlock, isConnected } = useWalletKit();
   const {
     currentTab,
     setCurrentTab,
@@ -101,30 +109,42 @@ const NftDetailContainer = () => {
     }
   };
 
-  const estimatedFund = Number(nftDetail?.listingPrice) + REFUNDABLE_FEE;
+  const listingPrice = nftDetail?.listingPrice;
+  const nftId = nftDetail?.nftId;
 
   const handleBuy = async () => {
     onShowModalWaiting();
     onHideModalBuyNft();
     try {
-      const callData = {
-        sender: new Address(account),
-        recipient: new Address(nftDetail?.managerNft),
-        amount: estimatedFund.toString(),
-        bounce: true,
-      };
-      const res = await provider?.sendMessage(callData);
-      if (res) {
-        setTimeout(() => {
-          toast.success("Bought successfully!");
-          onShowModalBuySuccess();
-          onHideModalWaiting();
-        }, 2000);
-      }
-    } catch (error: any) {
-      console.log(error);
+      if (!nftId || !listingPrice) return;
+      const object = await getObject(nftId);
+      const typeNFT = object?.data?.type;
+      if (!typeNFT) return;
+
+      const price_sm = listingPrice;
+      const tx = new TransactionBlock();
+      const [coin] = tx.splitCoins(tx.gas, [tx.pure(price_sm)]);
+      const request = {
+        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${BUY_NFT}`,
+        typeArguments: [typeNFT],
+        arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nftId), coin],
+      } as any;
+      console.log(request, price_sm);
+      tx.moveCall(request);
+      const response = await signAndExecuteTransactionBlock({
+        transactionBlock: tx,
+        options: { showEffects: true },
+      });
+      if (!response) toast.error("Opps! There are some errors");
+      else if (response?.effects?.status.status == "success") {
+        toast.success("Bought successfully!");
+        onShowModalBuySuccess();
+      } else toast.error(response?.effects?.status.error || "");
+    } catch (ex: any) {
+      toast.error(ex.message);
+      console.log(ex);
+    } finally {
       onHideModalWaiting();
-      toast.error(error.message);
     }
   };
 

@@ -39,34 +39,17 @@ const ProductCard = (props: any) => {
     nftId,
     title,
     imageUrl,
-    avatar,
-    numberLike,
     listingPrice,
     ownerAddress,
-    creatorAddress,
     isListing,
-    isLike,
-    handleLikeNft,
-    isActive,
-    nftStatus,
-    verify,
-    isOnWallet = false,
     collectionAddress,
-    royaltyFee,
-    timeListing,
     ranking,
     top = 0,
-    isOnBulkAction,
-    onSelectNft,
-    selectedNft,
-    disabledCheckbox,
     offerPrice,
-    id,
-    managerNft,
     gridMode,
   } = props;
 
-  const { account, provider, balance, isAuthenticated, login } = useVenom();
+  const { account } = useVenom();
   const { addItem, items, removeItem } = useApplicationContext();
 
   const renderPrice = () => {
@@ -133,7 +116,7 @@ const ProductCard = (props: any) => {
       const typeNFT = object?.data?.type;
       if (!typeNFT) return;
 
-      const price_sm = listingPrice * SUI_OFFSET;
+      const price_sm = listingPrice;
       const tx = new TransactionBlock();
       const [coin] = tx.splitCoins(tx.gas, [tx.pure(price_sm)]);
       const request = {
@@ -141,6 +124,7 @@ const ProductCard = (props: any) => {
         typeArguments: [typeNFT],
         arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nftId), coin],
       } as any;
+      console.log(request, price_sm);
       tx.moveCall(request);
       const response = await signAndExecuteTransactionBlock({
         transactionBlock: tx,
@@ -161,7 +145,6 @@ const ProductCard = (props: any) => {
 
   const onClickBuy = (e: any) => {
     e.preventDefault();
-    // if (!isAuthenticated) return login();
     onShowModalBuyNft();
   };
 
@@ -302,7 +285,7 @@ const ProductCard = (props: any) => {
                       <div className="flex items-center space-x-1">
                         <Image
                           src={VenomToken}
-                          alt="Venom"
+                          alt="Sui"
                           width={12}
                           height={12}
                         />

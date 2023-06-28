@@ -24,8 +24,8 @@ import Search from "./Search";
 import { ConnectButton, useWalletKit } from "@mysten/wallet-kit";
 
 const Header = () => {
-  const { account, login, isConnected } = useVenom();
-  const { status, currentAccount } = useWalletKit();
+  const { account, login } = useVenom();
+  const { status, currentAccount, isConnected } = useWalletKit();
   const {
     showModal: showDrawerWallet,
     onShow: onShowDrawerWallet,
@@ -56,12 +56,7 @@ const Header = () => {
       <Drawer
         title={
           !isConnected ? (
-            <Button
-              onClick={login}
-              className="btn-primary w-full text-[16px] text-[#0F131C] h-[2.5rem]"
-            >
-              Connect Wallet
-            </Button>
+            <ConnectButton className="btn-primary w-full !text-black" />
           ) : (
             <div className="bg-layer-1 rounded-lg flex items-center p-2 space-x-2">
               <Image src={DefaultAvatar} alt="Avatar" width={24} height={24} />

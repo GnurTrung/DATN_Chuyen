@@ -110,7 +110,7 @@ const ModalCancelNFT = ({ open, onCancel, nft }: IModalCancelNFT) => {
           Remove Listing?
         </h4>
         <p className="text-[#BABAC7] leading-5">
-          Canceling your listing will unpublish this sale from Ventory and
+          Canceling your listing will unpublish this sale from ChuyenDT and
           requires a transaction to make sure it will never be fulfillable.
         </p>
       </div>
