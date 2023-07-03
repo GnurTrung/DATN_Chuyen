@@ -60,3 +60,13 @@ export const getRankingCollection = async (params: any) => {
     console.log(error);
   }
 };
+
+export const creatCollection = async (params: any) => {
+  try {
+    const res = await AxiosInstance.post("/cms/add-cms", params);
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
