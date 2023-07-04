@@ -2,7 +2,12 @@ import { DEFAULT_LIMIT } from "@/constants";
 import useProviderSigner from "@/contexts/useProviderSigner";
 import { useVenom } from "@/contexts/useVenom";
 import { getActivityApi } from "@/service/activity";
-import { getMoreNftApi, getNftDetailApi, likeNftApi } from "@/service/nft";
+import {
+  getListOffer,
+  getMoreNftApi,
+  getNftDetailApi,
+  likeNftApi,
+} from "@/service/nft";
 import { useRouter } from "next/router";
 import {
   createContext,
@@ -22,6 +27,7 @@ interface INftDetailContext {
   moreNfts?: any[];
   handleLikeNft?: any;
   activity?: any;
+  dataOffers?: any;
 }
 
 const NftDetailContext = createContext<INftDetailContext>({});
@@ -37,12 +43,12 @@ export enum NFT_DETAIL_TABS {
 
 const NftDetailProvider = ({ children }: { children: any }) => {
   const router = useRouter();
-  const { isAuthenticated, login, isInitializing } = useVenom();
+  const { isAuthenticated, login } = useVenom();
   const [nftDetail, setNftDetail] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [nftOnchain, setNftOnchain] = useState({});
   const [moreNfts, setMoreNfts] = useState([]);
-  const { getInfoNFT, getInfoManager } = useProviderSigner();
+  const [dataOffers, setDataOffers] = useState([]);
   const [activity, setActivity] = useState({ data: [], nextPage: false });
   const [pagination, setPagination] = useState({
     page: 1,
@@ -67,19 +73,6 @@ const NftDetailProvider = ({ children }: { children: any }) => {
     };
     if (router.query.id) getNftDetail();
   }, [router.query.id]);
-
-  useEffect(() => {
-    const getNftOnchain = async () => {
-      if (!isInitializing) {
-        setLoading(true);
-        const res = await getInfoNFT(router.query.id as string);
-        const offer = await getInfoManager(res?.manager?._address);
-        if (res) setNftOnchain({ ...res, ...offer });
-        setLoading(false);
-      }
-    };
-    if (router.query.id) getNftOnchain();
-  }, [router.query.id, isInitializing]);
 
   useEffect(() => {
     const getMoreNfts = async () => {
@@ -112,6 +105,15 @@ const NftDetailProvider = ({ children }: { children: any }) => {
       getNftActivity();
   }, [currentTab, pagination, router.query.id]);
 
+  const getListNFTOffer = async () => {
+    const data = await getListOffer(router.query.id);
+    setDataOffers(data?.data?.rows);
+  };
+
+  useEffect(() => {
+    router.query.id && getListNFTOffer();
+  }, [router.query.id]);
+
   const value = useMemo(() => {
     return {
       currentTab,
@@ -121,8 +123,17 @@ const NftDetailProvider = ({ children }: { children: any }) => {
       handleLikeNft,
       nftOnchain,
       activity,
+      dataOffers,
     };
-  }, [currentTab, nftDetail, moreNfts, handleLikeNft, nftOnchain, activity]);
+  }, [
+    currentTab,
+    nftDetail,
+    moreNfts,
+    handleLikeNft,
+    nftOnchain,
+    activity,
+    dataOffers,
+  ]);
   return (
     <NftDetailContext.Provider value={value}>
       {children}

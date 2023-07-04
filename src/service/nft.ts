@@ -37,3 +37,14 @@ export const likeNftApi = async (nftId: string) => {
     console.log(error);
   }
 };
+
+export const getListOffer = async (address: any) => {
+  try {
+    const url = `/nft/get-offers/${address}?page=1&limit=100000`;
+    const response = await AxiosInstance.get(url);
+    return response?.data || {};
+  } catch (ex) {
+    console.log(ex);
+  }
+  return { data: { rows: [], total: 0 } };
+};

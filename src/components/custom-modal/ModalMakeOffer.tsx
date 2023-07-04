@@ -8,6 +8,16 @@ import CustomSelect from "../select";
 import { DURATION_OPTIONS } from "@/constants";
 import { formatBalance } from "@/utils";
 import { toast } from "react-hot-toast";
+import {
+  MAKE_OFFER,
+  SC_CONTRACT_MODULE,
+  SC_PACKAGE_MARKET,
+  SC_SHARED_MARKET,
+  SUI_OFFSET,
+} from "@/configs";
+import useProviderSigner from "@/contexts/useProviderSigner";
+import { useWalletKit } from "@mysten/wallet-kit";
+import { TransactionBlock } from "@mysten/sui.js";
 
 interface IModalMakeOffer {
   open: boolean;
@@ -34,10 +44,52 @@ const CURRENCY_OPTIONS = [
 
 const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
   const [price, setPrice] = useState<any>("");
+  const [loading, setLoading] = useState<any>(false);
   const [date, setDate] = useState<any>(DURATION_OPTIONS[0].value);
+  const { getObject } = useProviderSigner();
+  const { signAndExecuteTransactionBlock } = useWalletKit();
 
-  const handleMakeOffer = () => {
-    toast.success("Coming soon!");
+  const handleMakeOffer = async () => {
+    try {
+      setLoading(true);
+      const itemID = nft?.nftId;
+      if (!itemID || !price || price <= 0) return;
+      const object = await getObject(itemID);
+
+      const typeNFT = object?.data?.type;
+      if (!typeNFT) return;
+      const price_sm = price * SUI_OFFSET;
+      const tx = new TransactionBlock();
+      const [coin] = tx.splitCoins(tx.gas, [tx.pure(price_sm)]);
+
+      const request = {
+        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${MAKE_OFFER}`,
+        typeArguments: [typeNFT],
+        arguments: [
+          tx.pure(SC_SHARED_MARKET),
+          tx.pure(itemID),
+          tx.pure(price_sm.toString()),
+          coin,
+        ],
+      } as any;
+      tx.moveCall(request);
+      const response = (await signAndExecuteTransactionBlock({
+        transactionBlock: tx,
+        options: { showEffects: true },
+      })) as any;
+      if (!response) toast.error("Opps! There are some errors");
+      else if (response?.effects?.status.status == "success") {
+        toast.success("Make Offer success!");
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
+      } else toast.error(response?.effects?.status.error || "");
+    } catch (ex: any) {
+      toast.error(ex?.message);
+      console.log(ex);
+    } finally {
+      setLoading(false);
+    }
   };
   const onChangeSort = (value: any) => {
     setDate(value);
@@ -50,6 +102,7 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
       okText="Make Offer"
       width={504}
       onOk={handleMakeOffer}
+      loading={loading}
     >
       <div>
         <div className="rounded-lg border border-solid border-stroke bg-layer-2 p-2">
