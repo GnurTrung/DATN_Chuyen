@@ -1,11 +1,9 @@
 import IconArrowDown from "@/assets/icons/IconArrowDown";
-import IconClose from "@/assets/icons/IconClose";
 import IconCloseRounded from "@/assets/icons/IconCloseRounded";
 import IconFilter from "@/assets/icons/IconFilter";
 import IconSort from "@/assets/icons/IconSort";
 import IconGridLarge from "@/assets/icons/IconGridLarge";
 import IconGridSmall from "@/assets/icons/IconGridSmall";
-import CustomCheckBox from "@/components/checkbox";
 import CustomInput from "@/components/input";
 import ProductCard from "@/components/product-card";
 import CustomSelect from "@/components/select";
@@ -13,17 +11,21 @@ import { GRID_MODE } from "@/constants";
 import useToggleFilter from "@/hooks/useToggleFilter";
 import { Button, Collapse, Switch } from "antd";
 import cx from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { STATUS_FILTER, SORT_OPTION, useExploreContext } from "./context";
 import useDebounce from "@/hooks/useDebounce";
 import { isMobile } from "react-device-detect";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoData from "@/components/NoData";
 import SkeletonLoadingGrid from "@/components/product-card/SkeletonLoadingGrid";
-
+import { TYPE_TICKET } from "@/constants/market";
+import { toast } from "react-hot-toast";
+import { useWalletKit } from "@mysten/wallet-kit";
+import { TransactionBlock } from "@mysten/sui.js";
 const { Panel } = Collapse;
 
 const ExploreContainer = () => {
+  const { signAndExecuteTransactionBlock } = useWalletKit();
   const [gridMode, setGridMode] = useState(GRID_MODE.LARGE);
   const { isFilterShown, toggleFilter, onShow } = useToggleFilter(false);
   const [searchText, setSearchText] = useState("");
@@ -31,6 +33,7 @@ const ExploreContainer = () => {
   const [status, setStatus] = useState<any>("buy-now,not-for-sale");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [loadingTicket, setLoadingTicket] = useState(false);
   const {
     listNft,
     setParamsSearch,
@@ -39,8 +42,10 @@ const ExploreContainer = () => {
     loadMoreNft,
     pagination,
     handleLikeNft,
+    userNFT,
+    getListNftWallet
   } = useExploreContext();
-
+  const hasTicket = userNFT.find((x: any) => x.type.includes(TYPE_TICKET));
   const debounceSearchText = useDebounce(searchText, 300);
 
   useEffect(() => {
@@ -88,6 +93,44 @@ const ExploreContainer = () => {
       minPrice: minPrice,
       maxPrice: maxPrice,
     });
+  };
+
+  const handleMint = async () => {
+    try {
+      setLoadingTicket(true);
+      const PK = TYPE_TICKET;
+      const MODULE = "datn_dnft";
+      const SC_FUNCTION = "mint";
+      const tx = new TransactionBlock();
+      const args = [
+        tx.pure("https://ipfs.io/ipfs/bafybeidnpruwfc2e4vb2sedsrltq2axidw5ioryzqqmbyl6uxg4giiidqi/362.png"),
+        tx.pure("Ticket"),
+        tx.pure("Ticket"),
+      ];
+      const data = {
+        target: `${PK}::${MODULE}::${SC_FUNCTION}`,
+        typeArguments: [],
+        arguments: args,
+      } as any;
+      tx.moveCall(data);
+      const response = await signAndExecuteTransactionBlock({
+        transactionBlock: tx,
+        options: {
+          showEffects: true,
+        },
+      });
+      console.log(response);
+      if (!response) toast.error("Opps! There are some errors");
+      else if (response?.effects?.status.status == "success") {
+        toast.success("Mint ticket successfully!");
+        await getListNftWallet();
+      } else toast.error(response?.effects?.status.error || "");
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message);
+    } finally {
+      setLoadingTicket(false);
+    }
   };
 
   const renderFilter = () => {
@@ -166,32 +209,7 @@ const ExploreContainer = () => {
               </Button>
             </div>
           </Panel>
-          {/* <Panel
-          header={
-            <span className="text-white text-[18px] font-semibold lead-[26px]">
-              Clothes
-            </span>
-          }
-          className="filter-header"
-          key={3}
-        >
-          <div className="flex flex-col space-y-4">
-            <div className="text-secondary flex space-x-[10px]">
-              <CustomCheckBox id="1" />
-              <label htmlFor="1" className="flex-1">
-                Striped Pink Green
-              </label>
-              <span className="rounded-[4px] w-6 h-6 bg-layer-focus text-center">
-                16
-              </span>
-            </div>
-          </div>
-        </Panel> */}
         </Collapse>
-        {/* <div className="flex gap-2 py-4 w-full sm:hidden">
-          <Button className="btn-secondary basis-1/2">Reset</Button>
-          <Button className="btn-primary basis-1/2">Apply</Button>
-        </div> */}
       </div>
     );
   };
@@ -206,106 +224,109 @@ const ExploreContainer = () => {
           Buy and Sell NFTs on Sui Blockchain.
         </p>
       </div>
-      <div className="flex items-end sm:items-start space-x-0 md:space-x-4 md:space-y-0 pb-4 sticky top-[136px] sm:top-[164px] bg-layer-1 z-10 md:flex-nowrap flex-nowrap sm:flex-wrap gap-2 justify-center space-y-2">
-        <Button
-          className={cx("btn-secondary w-12", {
-            "bg-white": isFilterShown,
-          })}
-          onClick={toggleFilter}
-        >
-          <IconFilter fill={isFilterShown ? "#0F131C" : undefined} />
-        </Button>
-        <CustomInput
-          iconSearch
-          placeholder="Search..."
-          className="h-12"
-          onChange={onChangeSearchText}
-        />
-        <CustomSelect
-          value={paramsSearch.orderBy}
-          options={SORT_OPTION}
-          onChange={onChangeSort}
-          className="hidden sm:block"
-        />
-        <Button className="btn-secondary w-12 sm:hidden space-x-0 px-3">
-          <IconSort />
-        </Button>
-        <div className="bg-layer-3 rounded-lg flex items-center h-12 px-2 space-x-2">
-          <div
-            className={cx("p-2 hover:bg-layer-1 rounded-lg cursor-pointer", {
-              "bg-layer-1": gridMode === GRID_MODE.LARGE,
+      {hasTicket && <div>
+        <div className="flex items-end sm:items-start space-x-0 md:space-x-4 md:space-y-0 pb-4 sticky top-[136px] sm:top-[164px] bg-layer-1 z-10 md:flex-nowrap flex-nowrap sm:flex-wrap gap-2 justify-center space-y-2">
+          <Button
+            className={cx("btn-secondary w-12", {
+              "bg-white": isFilterShown,
             })}
-            onClick={() => setGridMode(GRID_MODE.LARGE)}
+            onClick={toggleFilter}
           >
-            <IconGridSmall
-              fill={gridMode === GRID_MODE.LARGE ? "white" : "#94A7C6"}
-            />
-          </div>
-          <div
-            className={cx("p-2 hover:bg-layer-1 rounded-lg cursor-pointer", {
-              "bg-layer-1": gridMode === GRID_MODE.SMALL,
-            })}
-            onClick={() => setGridMode(GRID_MODE.SMALL)}
-          >
-            <IconGridLarge
-              fill={gridMode === GRID_MODE.SMALL ? "white" : "#94A7C6"}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-x-4">
-        {isFilterShown && (
-          <div className="col-span-3 sm:bg-layer-2 border border-solid border-stroke rounded-lg p-3 sm:h-fit sm:sticky sm:top-[228px] fixed top-0 bottom-0 left-0 right-0 bg-[#000000CC]">
-            {renderFilter()}
-          </div>
-        )}
-
-        <div
-          className={cx("grid gap-3", {
-            "col-span-12 sm:col-span-9": isFilterShown,
-            "col-span-12": !isFilterShown,
-          })}
-        >
-          {/* <div className="col-span-full flex items-center space-x-4">
-            <div className="bg-layer-3 rounded-lg font-medium w-fit px-2 py-[10px] flex items-center">
-              <span className="text-secondary mr-1 cursor-pointer">
-                Clothes:
-              </span>
-              <span className="text-white flex-1">Striped Pink Green</span>
-              <IconClose className="ml-4" />
+            <IconFilter fill={isFilterShown ? "#0F131C" : undefined} />
+          </Button>
+          <CustomInput
+            iconSearch
+            placeholder="Search..."
+            className="h-12"
+            onChange={onChangeSearchText}
+          />
+          <CustomSelect
+            value={paramsSearch.orderBy}
+            options={SORT_OPTION}
+            onChange={onChangeSort}
+            className="hidden sm:block"
+          />
+          <Button className="btn-secondary w-12 sm:hidden space-x-0 px-3">
+            <IconSort />
+          </Button>
+          <div className="bg-layer-3 rounded-lg flex items-center h-12 px-2 space-x-2">
+            <div
+              className={cx("p-2 hover:bg-layer-1 rounded-lg cursor-pointer", {
+                "bg-layer-1": gridMode === GRID_MODE.LARGE,
+              })}
+              onClick={() => setGridMode(GRID_MODE.LARGE)}
+            >
+              <IconGridSmall
+                fill={gridMode === GRID_MODE.LARGE ? "white" : "#94A7C6"}
+              />
             </div>
-            <span className="text-primary cursor-pointer">Reset</span>
-          </div> */}
-          <InfiniteScroll
-            dataLength={pagination.limit}
-            next={loadMoreNft}
-            hasMore={listNft.nextPage}
-            loader={<SkeletonLoadingGrid gridMode={gridMode} />}
+            <div
+              className={cx("p-2 hover:bg-layer-1 rounded-lg cursor-pointer", {
+                "bg-layer-1": gridMode === GRID_MODE.SMALL,
+              })}
+              onClick={() => setGridMode(GRID_MODE.SMALL)}
+            >
+              <IconGridLarge
+                fill={gridMode === GRID_MODE.SMALL ? "white" : "#94A7C6"}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-12 gap-x-4">
+          {isFilterShown && (
+            <div className="col-span-3 sm:bg-layer-2 border border-solid border-stroke rounded-lg p-3 sm:h-fit sm:sticky sm:top-[228px] fixed top-0 bottom-0 left-0 right-0 bg-[#000000CC]">
+              {renderFilter()}
+            </div>
+          )}
+
+          <div
             className={cx("grid gap-3", {
-              "2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1":
-                gridMode === GRID_MODE.LARGE,
-              "2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2":
-                gridMode === GRID_MODE.SMALL,
+              "col-span-12 sm:col-span-9": isFilterShown,
+              "col-span-12": !isFilterShown,
             })}
           >
-            {!listNft.data?.length && !loadingNft ? (
-              <div className="col-span-full mt-8">
-                <NoData />
-              </div>
-            ) : (
-              listNft.data?.map((item: any) => (
-                <ProductCard
-                  key={item.id}
-                  {...item}
-                  handleLikeNft={handleLikeNft}
-                  gridMode={gridMode}
-                />
-              ))
-            )}
-            {loadingNft && <SkeletonLoadingGrid gridMode={gridMode} />}
-          </InfiniteScroll>
+            <InfiniteScroll
+              dataLength={pagination.limit}
+              next={loadMoreNft}
+              hasMore={listNft.nextPage}
+              loader={<SkeletonLoadingGrid gridMode={gridMode} />}
+              className={cx("grid gap-3", {
+                "2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1":
+                  gridMode === GRID_MODE.LARGE,
+                "2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2":
+                  gridMode === GRID_MODE.SMALL,
+              })}
+            >
+              {!listNft.data?.length && !loadingNft ? (
+                <div className="col-span-full mt-8">
+                  <NoData />
+                </div>
+              ) : (
+                listNft.data?.map((item: any) => (
+                  <ProductCard
+                    key={item.id}
+                    {...item}
+                    handleLikeNft={handleLikeNft}
+                    gridMode={gridMode}
+                  />
+                ))
+              )}
+              {loadingNft && <SkeletonLoadingGrid gridMode={gridMode} />}
+            </InfiniteScroll>
+          </div>
         </div>
-      </div>
+      </div>}
+      {!hasTicket && (
+        <div className="py-10 flex justify-center">
+          <Button
+            onClick={() => handleMint()}
+            className="btn-primary"
+            loading={loadingTicket}
+          >
+            Mint Ticket
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

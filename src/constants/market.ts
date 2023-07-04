@@ -8,3 +8,5 @@ export const ADMIN = [
   "0x4b6a00c44c375befbc534166162ca1eeba9f5ad161001a376a7524a76bbf0b4d",
   "0xb4f44af0d29ce6fe0f76fc02351ae52773a61553dee7b3d7dc698869236d0871",
 ];
+
+export const TYPE_TICKET = "0xe5995bf7e0896ebec14fbb302ca66a6ba9b1b62ee8edc220bb35c9f3681c7426"

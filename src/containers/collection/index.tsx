@@ -16,6 +16,7 @@ import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useWalletKit } from "@mysten/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
+import { TYPE_TICKET } from "@/constants/market";
 
 const CollectionDetailContainer = () => {
   const { signAndExecuteTransactionBlock } = useWalletKit();
@@ -30,9 +31,7 @@ const CollectionDetailContainer = () => {
     collectionCMS,
   } = useCollectionDetailContext();
 
-  const type_ticket =
-    collectionCMS?.typeTicket ||
-    "0xe5995bf7e0896ebec14fbb302ca66a6ba9b1b62ee8edc220bb35c9f3681c7426";
+  const type_ticket = collectionCMS?.typeTicket || TYPE_TICKET;
   const hasTicket = userNFT.find((x: any) => x.type.includes(type_ticket));
   const handleMint = async () => {
     try {

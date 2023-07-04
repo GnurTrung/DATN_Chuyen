@@ -1,4 +1,5 @@
 import { DEFAULT_LIMIT } from "@/constants";
+import useProviderSigner from "@/contexts/useProviderSigner";
 import { useVenom } from "@/contexts/useVenom";
 import { explorerNFT } from "@/service/explorer";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
@@ -45,8 +46,10 @@ const ExploreContext = createContext<any>({});
 export const useExploreContext = () => useContext(ExploreContext);
 
 const ExploreProvider = ({ children }: { children: any }) => {
-  const { isInitializing } = useVenom();
+  const { account } = useVenom();
+  const { getNFTinWallet } = useProviderSigner();
   const [listNft, setListNft] = useState({ data: [], nextPage: false });
+  const [userNFT, setUserNFT] = useState<any>([]);
   const [paramsSearch, setParamsSearch] = useState({
     ...DEFAULT_SEARCH_PARAMS,
     orderBy: DEFAULT_SEARCH_PARAMS.orderBy,
@@ -76,6 +79,19 @@ const ExploreProvider = ({ children }: { children: any }) => {
     getListNft();
   }, [paramsSearch, pagination]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getListNftWallet = async () => {
+    try {
+      const walletNFTs = await getNFTinWallet(account);
+      setUserNFT(walletNFTs);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+  useEffect(() => {
+    account && getListNftWallet();
+  }, [account]);
+
   const value = useMemo(() => {
     const loadMoreNft = () => {
       setPagination({
@@ -91,8 +107,10 @@ const ExploreProvider = ({ children }: { children: any }) => {
       setLoadingNft,
       pagination,
       loadMoreNft,
+      userNFT,
+      getListNftWallet
     };
-  }, [listNft, paramsSearch, loadingNft, pagination]);
+  }, [listNft, paramsSearch, loadingNft, pagination, userNFT,getListNftWallet]);
   return (
     <ExploreContext.Provider value={value}>{children}</ExploreContext.Provider>
   );
