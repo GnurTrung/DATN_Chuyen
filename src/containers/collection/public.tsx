@@ -12,28 +12,30 @@ import { CLOCK } from "@/constants/market";
 
 const Public = () => {
   const { isConnected, signAndExecuteTransactionBlock } = useWalletKit();
-  const { collectionDetail } = useCollectionDetailContext();
+  const { collectionDetail,collectionCMS } = useCollectionDetailContext();
   const [loading, setLoading] = useState(false);
 
   const publicAccountLimit = 10000000;
   const maxPublicMint = 10000000;
-  const poolName = "Public";
+  const poolName = "Public Mint";
+
   const handleMint = async (type: any) => {
     try {
       setLoading(true);
       let value = 0;
-      let SC_FUNCTION = "";
-      let SO_INO = "";
+      let SC_MODULE = collectionCMS?.collectionCategory;
+      let SO_INO = collectionCMS?.SO_collection;
       const tx = new TransactionBlock();
       const [coin] = tx.splitCoins(tx.gas, [tx.pure(value)]);
       const args = [tx.pure(SO_INO), coin, tx.pure(CLOCK)];
       const data = {
         target: `${
           collectionDetail?.address
-        }::${"mint_nft_with_public"}::${SC_FUNCTION}`,
+        }::${SC_MODULE}::${"mint_nft_with_public"}`,
         typeArguments: [],
         arguments: args,
       } as any;
+      console.log(data)
       tx.moveCall(data);
       const response = await signAndExecuteTransactionBlock({
         transactionBlock: tx,

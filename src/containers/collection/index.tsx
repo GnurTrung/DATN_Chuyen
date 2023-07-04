@@ -12,12 +12,65 @@ import Activities from "./activities";
 import cx from "classnames";
 import Analysis from "./Analysis";
 import MintDetailContainer from "./ino";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
+import { useWalletKit } from "@mysten/wallet-kit";
+import { TransactionBlock } from "@mysten/sui.js";
 
 const CollectionDetailContainer = () => {
-  const { account } = useVenom();
-  const { collectionDetail, tab, onSelectTab, handleAddToWatchlist } =
-    useCollectionDetailContext();
+  const { signAndExecuteTransactionBlock } = useWalletKit();
+  const [loadingTicket, setLoadingTicket] = useState(false);
+  const {
+    collectionDetail,
+    tab,
+    onSelectTab,
+    handleAddToWatchlist,
+    userNFT,
+    getListNftWallet,
+    collectionCMS,
+  } = useCollectionDetailContext();
 
+  const type_ticket =
+    collectionCMS?.typeTicket ||
+    "0xe5995bf7e0896ebec14fbb302ca66a6ba9b1b62ee8edc220bb35c9f3681c7426";
+  const hasTicket = userNFT.find((x: any) => x.type.includes(type_ticket));
+  const handleMint = async () => {
+    try {
+      setLoadingTicket(true);
+      const PK = type_ticket;
+      const MODULE = "datn_dnft";
+      const SC_FUNCTION = "mint";
+      const tx = new TransactionBlock();
+      const args = [
+        tx.pure(collectionDetail?.name),
+        tx.pure(collectionDetail?.logo),
+        tx.pure("Ticket"),
+      ];
+      const data = {
+        target: `${PK}::${MODULE}::${SC_FUNCTION}`,
+        typeArguments: [],
+        arguments: args,
+      } as any;
+      tx.moveCall(data);
+      const response = await signAndExecuteTransactionBlock({
+        transactionBlock: tx,
+        options: {
+          showEffects: true,
+        },
+      });
+      console.log(response);
+      if (!response) toast.error("Opps! There are some errors");
+      else if (response?.effects?.status.status == "success") {
+        toast.success("Mint ticket successfully!");
+        await getListNftWallet();
+      } else toast.error(response?.effects?.status.error || "");
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message);
+    } finally {
+      setLoadingTicket(false);
+    }
+  };
   const collectionInfos = [
     {
       name: "Item",
@@ -152,14 +205,27 @@ const CollectionDetailContainer = () => {
           </div>
         </div>
       </div>
-      <div>
-        <Tabs
-          activeKey={tab}
-          onChange={onSelectTab}
-          items={tabs}
-          className="custom-tabs"
-        />
-      </div>
+      {hasTicket && (
+        <div>
+          <Tabs
+            activeKey={tab}
+            onChange={onSelectTab}
+            items={tabs}
+            className="custom-tabs"
+          />
+        </div>
+      )}
+      {!hasTicket && (
+        <div className="py-10 flex justify-center">
+          <Button
+            onClick={() => handleMint()}
+            className="btn-primary"
+            loading={loadingTicket}
+          >
+            Mint Ticket
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

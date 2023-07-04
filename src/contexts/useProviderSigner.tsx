@@ -128,7 +128,7 @@ const useProviderSigner = () => {
       } = await provider.getOwnedObjects(request);
       data = data.filter((x) => x.data);
       return {
-        data: data.filter((x: any) => !x.data.type.startsWith("0x2::coin")),
+        data: data.filter((x: any) => !x.data.type.startsWith("0x2::coin") && !x.data.type.includes("market_whitelist::Certificate")),
         hasNextPage,
         nextCursor,
       };
@@ -140,10 +140,10 @@ const useProviderSigner = () => {
 
   const getNFTinWallet = async (address: any) => {
     if (!address) return {};
+    let results = [];
     try {
       let hasNext = true;
       let cursor = "";
-      let results = [];
       while (hasNext) {
         const {
           data = [],
@@ -153,13 +153,13 @@ const useProviderSigner = () => {
         hasNext = hasNextPage;
         cursor = nextCursor;
         for (let nft of data) {
-          results.push(nft);
+          results.push(nft.data);
         }
       }
     } catch (ex) {
       console.log(ex);
     }
-    return [];
+    return results;
   };
 
   // const getBalanceByCoinType = async (address: any, type: any) => {

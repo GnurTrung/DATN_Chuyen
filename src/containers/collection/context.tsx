@@ -4,6 +4,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { getActivityApi } from "@/service/activity";
 import {
   addToWatchlistApi,
+  getCollectionCMS,
   getCollectionDetailApi,
   getNFTsByCollectionIdApi,
 } from "@/service/collection";
@@ -36,12 +37,16 @@ interface ICollectionDetailContext {
   loading?: boolean;
   onSelectTab?: any;
   handleAddToWatchlist?: any;
+  userNFT?: any;
+  getListNftWallet?: any;
+  collectionCMS?: any;
 }
 
 const CollectionDetailContext = createContext<ICollectionDetailContext>({});
 export const useCollectionDetailContext = () =>
   useContext(CollectionDetailContext);
 import React from "react";
+import useProviderSigner from "@/contexts/useProviderSigner";
 
 export const SORT_OPTION = [
   {
@@ -71,8 +76,11 @@ export const DEFAULT_SEARCH_PARAMS: any = {
 
 const CollectionDetailProvider = ({ children }: { children: any }) => {
   const router = useRouter();
-  const { isAuthenticated, login } = useVenom();
+  const { isAuthenticated, login, account } = useVenom();
+  const { getNFTinWallet } = useProviderSigner();
   const [collectionDetail, setCollectionDetail] = useState<any>(null);
+  const [userNFT, setUserNFT] = useState<any>([]);
+  const [collectionCMS, setCollectionCMS] = useState<any>([]);
   const [listNft, setListNft] = useState<any>({ data: [], nextPage: false });
   const [activity, setActivity] = useState({ data: [], nextPage: false });
   const [paramsSearch, setParamsSearch] = useState({
@@ -99,10 +107,32 @@ const CollectionDetailProvider = ({ children }: { children: any }) => {
       const res = await getCollectionDetailApi(router.query.id as string);
       if (res?.data) setCollectionDetail(res.data);
     };
+    const getCollectionMongo = async () => {
+      const options = {
+        SC_collection: router.query.id,
+      };
+      const resp = await getCollectionCMS(options);
+      if (resp?.data) setCollectionCMS(resp?.data);
+    };
     if (router.query.id) {
       getCollectionDetail();
+      getCollectionMongo();
     }
   }, [router.query.id, refreshState]);
+
+  const getListNftWallet = async () => {
+    try {
+      setLoading(true);
+      const walletNFTs = await getNFTinWallet(account);
+      setUserNFT(walletNFTs);
+      setLoading(false);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+  useEffect(() => {
+    account && getListNftWallet();
+  }, [account]);
 
   useEffect(() => {
     const getListNft = async () => {
@@ -223,6 +253,9 @@ const CollectionDetailProvider = ({ children }: { children: any }) => {
       activity,
       onSelectTab,
       handleAddToWatchlist,
+      userNFT,
+      getListNftWallet,
+      collectionCMS,
     };
   }, [
     collectionDetail,
@@ -236,6 +269,9 @@ const CollectionDetailProvider = ({ children }: { children: any }) => {
     loading,
     activity,
     handleAddToWatchlist,
+    userNFT,
+    getListNftWallet,
+    collectionCMS,
   ]);
   return (
     <CollectionDetailContext.Provider value={value}>
