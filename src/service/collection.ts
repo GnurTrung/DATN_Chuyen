@@ -71,6 +71,16 @@ export const creatCollection = async (params: any) => {
   }
 };
 
+export const creatCollectionAdmin = async (params: any) => {
+  try {
+    const res = await AxiosInstance.post("/collection/admin-create", params);
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getCollectionCMS = async (params: any) => {
   try {
     const res = await AxiosInstance.post("/cms/get-detail-cms-mongo", params);

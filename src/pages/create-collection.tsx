@@ -5,11 +5,12 @@ import { Button } from "antd";
 import { updateUserPro5 } from "@/service/user";
 import { useVenom } from "@/contexts/useVenom";
 import { ADMIN } from "@/constants/market";
-import { creatCollection } from "@/service/collection";
+import { creatCollection, creatCollectionAdmin } from "@/service/collection";
 
 const ProfileSetting = () => {
   const { account, profile } = useVenom();
   const [code, setCode] = useState("");
+  const [module, setModule] = useState("");
   const [publicStartTime, setpublicStartTime] = useState("");
   const [publicEndTime, setpublicEndTime] = useState("");
   const [collectionStatus, setcollectionStatus] = useState("");
@@ -73,6 +74,22 @@ const ProfileSetting = () => {
     try {
       setDisableClick(true);
       const { data } = await creatCollection(options);
+      await creatCollectionAdmin({
+        address: SC_collection, 
+        networkType: 1, 
+        creatorAddress: "0x2741f316e68793a63492a909ebe22399d35943ba079faadabde43a798d9a5929",
+        name: name,
+        logo: logo,
+        bannerImage: banner,
+        type:"internal",
+        verifyType:1,
+        moduleName:module,
+        mintEvent:"",
+        mintFunction:"",
+        objectType:"",
+        contractName:"collection",
+        nftAddress:""
+      })
       if (data) {
         toast.success("Create success!");
         handleReset()
@@ -99,6 +116,18 @@ const ProfileSetting = () => {
             placeholder="Code"
             value={code}
             onChange={(e: any) => setCode(e.target.value)}
+          />
+        </div>
+
+        <div className="sm:flex items-center justify-between mt-[2rem]">
+          <p className="text-[16px] max-sm:mb-[0.5rem] text-white font-[500]">
+            Function
+          </p>
+          <CustomInput
+            className="sm:w-[75%] px-[1.2rem]"
+            placeholder="Module"
+            value={module}
+            onChange={(e: any) => setModule(e.target.value)}
           />
         </div>
 

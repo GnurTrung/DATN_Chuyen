@@ -9,11 +9,11 @@ import CustomImage from "../custom-image";
 import VenomToken from "../../../public/images/token/venom.png";
 import Image from "next/image";
 import IconTrash from "@/assets/icons/IconTrash";
-import useAddToCard from "@/hooks/useAddToCart";
 import Blank from "../../../public/images/blank.png";
 import Link from "next/link";
 import { useApplicationContext } from "@/contexts/useApplication";
 import { formatBalance } from "@/utils";
+import { toast } from "react-hot-toast";
 const { Panel } = Collapse;
 
 interface IDrawerCartProps {
@@ -57,9 +57,9 @@ const DrawerCart = ({ open, onClose }: IDrawerCartProps) => {
           className="w-[50px] h-[50px] rounded-lg"
         />
         <div className="flex flex-col justify-between text-white flex-1">
-          <span className="text-lg font-medium flex-1">{title}</span>
+          <Link onClick={onClose} href={`/nft/${id}`} className="text-lg font-medium flex-1 hover:text-primary-hover">{title}</Link>
           <div className="flex items-center space-x-1">
-            <Image src={VenomToken} alt="token" />
+            <Image src={VenomToken} alt="token" className="w-5 h-5"/>
             <span className="font-medium text-xs">
               {formatBalance(listingPrice)} SUI
             </span>
@@ -91,6 +91,7 @@ const DrawerCart = ({ open, onClose }: IDrawerCartProps) => {
     removeListItems(listItemSelectedItem?.map((item) => item.id));
     setSelectedCollection([]);
   };
+  console.log(mappedListCart,"mappedListCart", items)
 
   const calculateTotalPrice = () => {
     const totalPrice = items?.reduce((prev, curr) => {
@@ -208,7 +209,7 @@ const DrawerCart = ({ open, onClose }: IDrawerCartProps) => {
                 <span>{calculateTotalPrice()} SUI</span>
               </div>
             </div>
-            <Button className="btn-primary w-full">Buy Now</Button>
+            <Button onClick={()=>toast.success("Coming soon!")} className="btn-primary w-full">Buy Now</Button>
           </div>
         ) : null}
       </div>
