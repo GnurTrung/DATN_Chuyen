@@ -129,7 +129,6 @@ const NftDetailContainer = () => {
         typeArguments: [typeNFT],
         arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nftId), coin],
       } as any;
-      console.log(request, price_sm);
       tx.moveCall(request);
       const response = await signAndExecuteTransactionBlock({
         transactionBlock: tx,

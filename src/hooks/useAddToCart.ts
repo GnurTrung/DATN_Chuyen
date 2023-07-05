@@ -22,7 +22,6 @@ const useAddToCart = () => {
     const { id } = item;
     if (!id || items.find((x: any) => x.id === id)) return;
     const newItems = [...items, item];
-    //console.log('newItems', items, newItems,newItems.map(x=>({...x})))
     setItems(newItems);
   };
 
@@ -44,7 +43,6 @@ const useAddToCart = () => {
     if (!addresses || addresses.length === 0) return;
     const listItem = items.map((x: any) => ({ ...x }));
     const list = listItem.filter((x: any) => !addresses.includes(x?.id));
-    // console.log('list', list, items, listItem)
     setItems([...list]);
   };
 

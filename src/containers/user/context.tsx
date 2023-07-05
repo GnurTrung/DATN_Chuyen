@@ -1,4 +1,5 @@
 import { DEFAULT_LIMIT } from "@/constants";
+import useProviderSigner from "@/contexts/useProviderSigner";
 import { useVenom } from "@/contexts/useVenom";
 import { getActivityApi } from "@/service/activity";
 import {
@@ -76,6 +77,7 @@ const UserContext = createContext<any>({});
 export const useUserContext = () => useContext(UserContext);
 
 const UserProvider = ({ children }: { children: any }) => {
+  const { getNFTinWallet } = useProviderSigner();
   const router = useRouter();
   const account = router.query.id;
   const [listNft, setListNft] = useState({ data: [], nextPage: false });
@@ -110,17 +112,27 @@ const UserProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     const getListNft = async () => {
-      setLoadingNft(true);
-      const res = await getUserNFT(account, {
-        ...paramsSearch,
-        ...pagination,
-      });
-      if (res.data.data) {
-        setListNft({
-          data: res.data.data.rows,
-          nextPage: res.data.data.nextPage,
+      try {
+        // setLoadingNft(true);
+        const res = await getUserNFT(account, {
+          ...paramsSearch,
+          ...pagination,
         });
-        setLoadingNft(false);
+        const walletNFTs = (await getNFTinWallet(account)) as any;
+        if (res.data) {
+          let data = res.data.data.rows || [];
+          if (walletNFTs && walletNFTs.length > 0) {
+            for (let nft of walletNFTs) {
+              if (!data.find((x: any) => x.nftId === nft.nftId)) {
+                data.push(nft);
+              }
+            }
+          }
+          setListNft({ data, nextPage: res.data.data.nextPage });
+        }
+        setLoading(false);
+      } catch (ex) {
+        console.log(ex);
       }
     };
 

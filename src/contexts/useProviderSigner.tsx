@@ -1,3 +1,4 @@
+import { NFT_STATUS } from "@/constants";
 import { JsonRpcProvider } from "@mysten/sui.js";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
@@ -128,7 +129,11 @@ const useProviderSigner = () => {
       } = await provider.getOwnedObjects(request);
       data = data.filter((x) => x.data);
       return {
-        data: data.filter((x: any) => !x.data.type.startsWith("0x2::coin") && !x.data.type.includes("market_whitelist::Certificate")),
+        data: data.filter(
+          (x: any) =>
+            !x.data.type.startsWith("0x2::coin") &&
+            !x.data.type.includes("market_whitelist::Certificate")
+        ),
         hasNextPage,
         nextCursor,
       };
@@ -138,7 +143,7 @@ const useProviderSigner = () => {
     return [];
   };
 
-  const getNFTinWallet = async (address: any) => {
+  const getNFTinWallet = async (address: any, hasFormat = true) => {
     if (!address) return {};
     let results = [];
     try {
@@ -149,17 +154,53 @@ const useProviderSigner = () => {
           data = [],
           hasNextPage,
           nextCursor,
-        } = await getNFT(address, cursor) as any;
+        } = (await getNFT(address, cursor)) as any;
         hasNext = hasNextPage;
         cursor = nextCursor;
         for (let nft of data) {
-          results.push(nft.data);
+          results.push(nft);
         }
       }
+      return hasFormat ? formatNFTResponse(results) : results;
     } catch (ex) {
       console.log(ex);
     }
     return results;
+  };
+
+  const formatNFTResponse = (nfts: any) => {
+    try {
+      nfts = nfts.filter((x: any) => x?.data?.display?.data);
+      return nfts.reduce((result: any, item: any) => {
+        const { data } = item;
+        const {
+          objectId: nftId,
+          owner: { AddressOwner, ObjectOwner },
+        } = data;
+        const {
+          display: {
+            data: { image_url: imageUrl, link, name: title, description },
+          },
+        } = data;
+        const collectionAddress = data.type.split("::")[0];
+        const ownerAddress = AddressOwner || ObjectOwner;
+        console.log(item);
+        result.push({
+          nftId,
+          ownerAddress,
+          imageUrl,
+          title,
+          isListing: false,
+          isOnWallet: true,
+          nftStatus: NFT_STATUS.CANCEL,
+          collectionAddress,
+        });
+        return result;
+      }, []);
+    } catch (ex) {
+      console.log(ex);
+    }
+    return [];
   };
 
   // const getBalanceByCoinType = async (address: any, type: any) => {

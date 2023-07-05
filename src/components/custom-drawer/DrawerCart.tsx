@@ -91,7 +91,6 @@ const DrawerCart = ({ open, onClose }: IDrawerCartProps) => {
     removeListItems(listItemSelectedItem?.map((item) => item.id));
     setSelectedCollection([]);
   };
-  console.log(mappedListCart,"mappedListCart", items)
 
   const calculateTotalPrice = () => {
     const totalPrice = items?.reduce((prev, curr) => {

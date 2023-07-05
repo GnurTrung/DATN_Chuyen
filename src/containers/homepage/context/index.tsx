@@ -72,7 +72,6 @@ export const Provider = ({ children }: any) => {
             Number(new Date(a.attributes.publicStartTime)) -
             Number(new Date(b.attributes.publicStartTime))
         );
-        console.log(all, allData, upcoming);
 
       setActive(actives || []);
       setUpcoming(upcoming || []);
