@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import cx from "classnames";
 import { useContexts } from "./context";
 import { formatBalance } from "@/utils";
-import CustomImage from "@/components/custom-image";
 import { Button, TableProps } from "antd";
 import Link from "next/link";
 import { SorterResult } from "antd/es/table/interface";
@@ -122,7 +121,7 @@ const Ranking = () => {
         <div className="flex items-center space-x-2 text-white">
           <img
             src={record?.logo}
-            alt="venom"
+            alt="SUI"
             className="w-11 h-11 object-cover rounded-lg aspect-square"
           />
           <IconVerified className="min-w-[19px] h-[min-20px]" />

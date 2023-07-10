@@ -9,7 +9,7 @@ import { createContext, useContext } from "react";
 export const DEFAULT_SEARCH_PARAMS = {
   name: "",
   typeFilter: "highest-volume",
-  time: "1d",
+  time: "all",
 };
 export const HomePageContext = createContext([]);
 export const useContexts = () => useContext(HomePageContext);
@@ -21,7 +21,7 @@ export const Provider = ({ children }: any) => {
 
   const [dataRank, setDataRank] = useState<any>([]);
   const [textSearch, setTextSearch] = useState<any>("");
-  const [categoryName, setCategoryName] = useState<any>("1d");
+  const [categoryName, setCategoryName] = useState<any>("all");
   const [paramsSearch, setParamsSearch] = useState<any>(DEFAULT_SEARCH_PARAMS);
   const [pagination, setPagination] = useState<any>({
     page: 1,

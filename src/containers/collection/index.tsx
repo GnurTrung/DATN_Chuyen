@@ -13,7 +13,7 @@ import cx from "classnames";
 import Analysis from "./Analysis";
 import MintDetailContainer from "./ino";
 import { toast } from "react-hot-toast";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useWalletKit } from "@mysten/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
 import { TYPE_TICKET } from "@/constants/market";
@@ -32,7 +32,7 @@ const CollectionDetailContainer = () => {
   } = useCollectionDetailContext();
 
   const type_ticket = collectionCMS?.typeTicket || TYPE_TICKET;
-  const hasTicket = userNFT.find((x: any) => x.type.includes(type_ticket));
+  const hasTicket = userNFT.find((x: any) => x?.collectionAddress?.includes(type_ticket));
   const handleMint = async () => {
     try {
       setLoadingTicket(true);

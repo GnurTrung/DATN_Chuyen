@@ -45,7 +45,7 @@ const ExploreContainer = () => {
     userNFT,
     getListNftWallet
   } = useExploreContext();
-  const hasTicket = userNFT.find((x: any) => x.type.includes(TYPE_TICKET));
+  const hasTicket = userNFT.find((x: any) => x?.collectionAddress?.includes(TYPE_TICKET));
   const debounceSearchText = useDebounce(searchText, 300);
 
   useEffect(() => {

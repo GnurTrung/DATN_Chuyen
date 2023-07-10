@@ -159,6 +159,7 @@ const ProductCard = (props: any) => {
       listingPrice,
       title,
     };
+    console.log(params);
     addItem(params);
   };
 
