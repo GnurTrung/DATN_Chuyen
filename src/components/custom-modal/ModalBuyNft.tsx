@@ -64,7 +64,7 @@ const ModalBuyNft = ({ open, onCancel, nft, handleBuy }: IModalBuyNft) => {
             <div className="bg-layer-2 rounded-lg p-4 flex items-center space-x-2 mt-5">
               {/* <Image src={Venom} alt="Venom" /> */}
               <div className="text-lg">
-                <span className="text-secondary">Sui</span>
+                <span className="text-secondary">Starknet</span>
                 <div className="text-white flex items-center font-medium space-x-2">
                   <span>{formatWallet(account)}</span>
                   <Tooltip title="Copied" placement="right" trigger={["click"]}>

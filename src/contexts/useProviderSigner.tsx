@@ -64,7 +64,7 @@ const useProviderSigner = () => {
   const requestFaucet = async (address: any) => {
     try {
       const provider = new JsonRpcProvider(getNetWork());
-      await provider.requestSuiFromFaucet(
+      await provider.requestStarknetFromFaucet(
         "https://faucet.testnet.sui.io/gas",
         address
       );

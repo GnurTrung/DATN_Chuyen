@@ -1,11 +1,13 @@
-import { DEFAULT_LIMIT } from "@/constants";
+import { CHAIN_VALUES_ENUM, DEFAULT_LIMIT } from "@/constants";
+import { useApplicationContext } from "@/contexts/useApplication";
 import useProviderSigner from "@/contexts/useProviderSigner";
 import { useVenom } from "@/contexts/useVenom";
 import { getActivityApi } from "@/service/activity";
+import { getCollectionOfferApi } from "@/service/collection";
 import {
-  getListOffer,
   getMoreNftApi,
   getNftDetailApi,
+  getOfferApi,
   likeNftApi,
 } from "@/service/nft";
 import { useRouter } from "next/router";
@@ -23,11 +25,12 @@ interface INftDetailContext {
   setCurrentTab?: any;
   loading?: boolean;
   nftDetail?: any;
-  nftOnchain?: any;
   moreNfts?: any[];
   handleLikeNft?: any;
   activity?: any;
-  dataOffers?: any;
+  handleGetNFTOnchain?: any;
+  nftOffer?: any;
+  collectionOffer?: any;
 }
 
 const NftDetailContext = createContext<INftDetailContext>({});
@@ -43,16 +46,20 @@ export enum NFT_DETAIL_TABS {
 
 const NftDetailProvider = ({ children }: { children: any }) => {
   const router = useRouter();
-  const { isAuthenticated, login } = useVenom();
+  const { login, isInitializing, provider } = useVenom();
+  const { isAuthenticated } = useApplicationContext();
   const [nftDetail, setNftDetail] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [nftOnchain, setNftOnchain] = useState({});
   const [moreNfts, setMoreNfts] = useState([]);
-  const [dataOffers, setDataOffers] = useState([]);
   const [activity, setActivity] = useState({ data: [], nextPage: false });
+  const [nftOffer, setNftOffer] = useState({ data: [], nextPage: false });
+  const [collectionOffer, setCollectionOffer] = useState({
+    data: [],
+    nextPage: false,
+  });
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: DEFAULT_LIMIT,
+    limit: 999,
   });
   const [currentTab, setCurrentTab] = useState(NFT_DETAIL_TABS.OVERVIEW);
 
@@ -68,11 +75,13 @@ const NftDetailProvider = ({ children }: { children: any }) => {
       setLoading(true);
       if (isReset) setNftDetail(null);
       const res = await getNftDetailApi(router.query.id as string);
-      if (res?.data) setNftDetail(res?.data);
+      if (res?.data) {
+        setNftDetail(res?.data);
+      } 
       setLoading(false);
     };
     if (router.query.id) getNftDetail();
-  }, [router.query.id]);
+  }, [router.query.id, provider]);
 
   useEffect(() => {
     const getMoreNfts = async () => {
@@ -82,6 +91,7 @@ const NftDetailProvider = ({ children }: { children: any }) => {
         {
           limit: 4,
           page: 1,
+          network: nftDetail?.networkType,
         }
       );
 
@@ -89,7 +99,7 @@ const NftDetailProvider = ({ children }: { children: any }) => {
     };
 
     if (nftDetail?.collectionAddress) getMoreNfts();
-  }, [nftDetail?.collectionAddress, router.query.id]);
+  }, [nftDetail?.collectionAddress, nftDetail?.networkType, router.query.id]);
 
   useEffect(() => {
     const getNftActivity = async () => {
@@ -97,22 +107,53 @@ const NftDetailProvider = ({ children }: { children: any }) => {
         searchBy: 1,
         address: router.query.id as string,
         ...pagination,
+        network: nftDetail?.networkType,
       });
       if (res.data)
         setActivity({ data: res.data.rows, nextPage: res.data.nextPage });
     };
-    if (router.query.id && currentTab === NFT_DETAIL_TABS.HISTORY)
+
+    const getNftOffer = async () => {
+      const res = await getOfferApi(router.query.id as string, {
+        ...pagination,
+      });
+      if (res.data)
+        setNftOffer({ data: res.data.rows, nextPage: res.data.nextPage });
+    };
+
+    const getCollectionOffer = async () => {
+      const res = await getCollectionOfferApi(nftDetail?.collectionAddress, {
+        ...pagination,
+      });
+      if (res.data)
+        setCollectionOffer({
+          data: res.data.rows,
+          nextPage: res.data.nextPage,
+        });
+    };
+
+    if (
+      router.query.id &&
+      currentTab === NFT_DETAIL_TABS.HISTORY &&
+      nftDetail?.networkType
+    )
       getNftActivity();
-  }, [currentTab, pagination, router.query.id]);
 
-  const getListNFTOffer = async () => {
-    const data = await getListOffer(router.query.id);
-    setDataOffers(data?.data?.rows);
-  };
-
-  useEffect(() => {
-    router.query.id && getListNFTOffer();
-  }, [router.query.id]);
+    if (
+      router.query.id &&
+      currentTab === NFT_DETAIL_TABS.OFFER &&
+      nftDetail?.networkType
+    ) {
+      getNftOffer();
+      getCollectionOffer();
+    }
+  }, [
+    currentTab,
+    pagination,
+    router.query.id,
+    nftDetail?.networkType,
+    nftDetail?.collectionAddress,
+  ]);
 
   const value = useMemo(() => {
     return {
@@ -121,18 +162,18 @@ const NftDetailProvider = ({ children }: { children: any }) => {
       nftDetail,
       moreNfts,
       handleLikeNft,
-      nftOnchain,
       activity,
-      dataOffers,
+      nftOffer,
+      collectionOffer,
     };
   }, [
     currentTab,
     nftDetail,
     moreNfts,
     handleLikeNft,
-    nftOnchain,
     activity,
-    dataOffers,
+    nftOffer,
+    collectionOffer,
   ]);
   return (
     <NftDetailContext.Provider value={value}>

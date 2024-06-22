@@ -1,124 +1,103 @@
 import CustomTable from "@/components/table";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNftDetailContext } from "./context";
-import moment from "moment";
-import { formatWallet } from "@/utils";
-import { useVenom } from "@/contexts/useVenom";
 import {
-  ACCEPT_OFFER_LISTED,
-  ACCEPT_OFFER_NOT_LIST,
-  CANCEL_OFFER,
-  SC_CONTRACT_MODULE,
-  SC_PACKAGE_MARKET,
-  SC_SHARED_MARKET,
-  SUI_OFFSET,
-} from "@/configs";
-import { useWalletKit } from "@mysten/wallet-kit";
-import { TransactionBlock } from "@mysten/sui.js";
-import useProviderSigner from "@/contexts/useProviderSigner";
+  formatBalanceByChain,
+  formatWallet,
+  getCurrencyByChain,
+} from "@/utils";
+import moment from "moment";
+import { useApplicationContext } from "@/contexts/useApplication";
+import ModalCancelOffer from "@/components/custom-modal/ModalCancelOffer";
+import useShowModal from "@/hooks/useShowModal";
+import ModalAcceptOffer from "@/components/custom-modal/ModalAcceptOffer";
+import { Tabs } from "antd";
+import FormatPrice from "@/components/FormatPrice";
 
 const OfferTab = () => {
-  const { dataOffers, nftDetail } = useNftDetailContext();
-  const { getObject } = useProviderSigner();
-  const { account } = useVenom();
+  const { currentConnectedAccount } = useApplicationContext();
+  const { nftOffer, nftDetail, collectionOffer } = useNftDetailContext();
+  const [offerData, setOfferData] = useState<any>({
+    offerId: 0,
+    price: 0,
+    quantity: undefined,
+    userAddress: undefined,
+    version: undefined,
+  });
+  const {
+    showModal: showModalCancelOffer,
+    onHide: onHideModalCancelOffer,
+    onShow: onShowModalCancelOffer,
+  } = useShowModal();
 
-  const { signAndExecuteTransactionBlock } = useWalletKit();
-  const onAcceptOffer = async (options:any) => {
-    const { price, userAddress } = options;
-    const itemID = nftDetail?.nftId;
-      if (!itemID || !price || price <= 0) return;
-      const object = await getObject(itemID);
+  const {
+    showModal: showModalAcceptOffer,
+    onHide: onHideModalAcceptOffer,
+    onShow: onShowModalAcceptOffer,
+  } = useShowModal();
 
-      const typeNFT = object?.data?.type;
-      if (!typeNFT) return;
-    try {
-      if (!itemID || !price || price <= 0 || !userAddress) return;
-      const functionAccept = nftDetail?.isListing
-        ? ACCEPT_OFFER_LISTED
-        : ACCEPT_OFFER_NOT_LIST;
-      const tx = new TransactionBlock();
-      const request = {
-        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${functionAccept}`,
-        typeArguments: [typeNFT],
-        arguments: [
-          tx.pure(SC_SHARED_MARKET),
-          tx.pure(itemID),
-          tx.pure(userAddress),
-          tx.pure(price.toString()),
-        ],
-      } as any;
-      tx.moveCall(request);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: { showEffects: true },
-      });
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
-        toast.success("Accept Offer success!");
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (ex) {
-      toast.error("Opps! There are some errors");
-      console.log(ex);
-    }
-  };
-  const onCancelOffer = async (options: any) => {
-    const { price } = options;
-    const itemID = nftDetail?.nftId;
-    try {
-      if (!itemID || !price || price <= 0) return;
-      const tx = new TransactionBlock();
-      const request = {
-        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${CANCEL_OFFER}`,
-        typeArguments: [],
-        arguments: [
-          tx.pure(SC_SHARED_MARKET),
-          tx.pure(itemID),
-          tx.pure(price.toString()),
-        ],
-      } as any;
-      tx.moveCall(request);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: { showEffects: true },
-      });
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
-        toast.success("Cancel Offer success!");
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (ex: any) {
-      toast.error(ex?.message);
-      console.log(ex);
-    }
+  const isOwner = useMemo(
+    () => currentConnectedAccount === nftDetail?.ownerAddress,
+    [currentConnectedAccount, nftDetail?.ownerAddress]
+  );
+
+  const onAction = (
+    offerId: number,
+    price: string,
+    userAddress: string,
+    quantity: number,
+    signatureR: string,
+    signatureS: string,
+    version: string
+  ) => {
+    setOfferData({
+      offerId,
+      price,
+      quantity,
+      userAddress,
+      signatureR,
+      signatureS,
+      version,
+    });
+
+    if (userAddress === currentConnectedAccount) return onCancelOffer();
+    else if (isOwner) return onAcceptOffer();
   };
 
-  const handleAction = async (record: any) => {
-    account == record?.userAddress && (await onCancelOffer(record));
-    account == nftDetail?.ownerAddress && (await onAcceptOffer(record));
+  const onCancelOffer = () => {
+    onShowModalCancelOffer();
+  };
+
+  const onAcceptOffer = () => {
+    onShowModalAcceptOffer();
   };
   const offerColumn = [
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (value: any) => (
-        <p className="font-medium">
-          {value / SUI_OFFSET} <span className="text-secondary">STRK</span>
-        </p>
-      ),
+      render: (value: any, record: any) => {
+        const getCurrency = getCurrencyByChain(
+          record?.networkType,
+          record?.tokenUnit
+        );
+        return (
+          <p className="font-medium flex gap-2">
+            <FormatPrice
+              number={Number(formatBalanceByChain(value, record?.networkType))}
+            />{" "}
+            <span className="text-secondary">{getCurrency.currency}</span>
+          </p>
+        );
+      },
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "quantity",
       render: (value: any) => (
-        <span className="font-medium text-white">{1}</span>
+        <span className="font-medium text-white">{value || 1}</span>
       ),
     },
     {
@@ -141,33 +120,89 @@ const OfferTab = () => {
     },
     {
       title: "Expiration",
-      dataIndex: "expiration",
-      key: "expiration",
+      dataIndex: "expireTime",
+      key: "expireTime",
       render: (value: any) => (
         <span className="text-white font-medium">
-          {!Number(value) ? "--" : moment.unix(value / 1000).toNow()}
+          {/* {moment.unix(value).fromNow()} */}
+          --
         </span>
       ),
     },
     {
       title: "Action",
-      dataIndex: "userAddress",
-      key: "userAddress",
-      render: (value: any, record: any) => (
-        <>
-          {(value == account || nftDetail?.ownerAddress == account) && (
-            <span
-              onClick={() => handleAction(record)}
-              className="text-primary hover:text-primary-hover font-medium cursor-pointer"
-            >
-              {value == account ? "Cancel Offer" : "Accept Offer"}
-            </span>
-          )}
-        </>
+      key: "action",
+      render: (value: any, record: any) => {
+        return (
+          <span
+            className="text-primary hover:text-primary-hover font-medium cursor-pointer"
+            onClick={() =>
+              onAction(
+                record?.nonce || record?.offerId,
+                record?.price,
+                record?.userAddress,
+                record?.quantity,
+                record?.signatureR,
+                record?.signatureS,
+                record?.version
+              )
+            }
+          >
+            {record?.userAddress === currentConnectedAccount
+              ? "Cancel"
+              : isOwner && "Accept"}
+          </span>
+        );
+      },
+    },
+  ];
+
+  const tabs = [
+    {
+      key: "1",
+      label: "Items",
+      children: (
+        <CustomTable
+          columns={offerColumn}
+          dataSource={nftOffer.data}
+          pagination={{ pageSize: 10 }}
+        />
+      ),
+    },
+    {
+      key: "2",
+      label: "Collection",
+      children: (
+        <CustomTable
+          columns={offerColumn}
+          dataSource={collectionOffer.data}
+          pagination={{ pageSize: 10 }}
+        />
       ),
     },
   ];
-  return <CustomTable columns={offerColumn} dataSource={dataOffers} />;
+
+  return (
+    <>
+      <Tabs
+        // defaultActiveKey="1"
+        items={tabs}
+        className="custom-tabs"
+      />
+      <ModalCancelOffer
+        open={showModalCancelOffer}
+        onCancel={onHideModalCancelOffer}
+        nft={nftDetail}
+        offerData={offerData}
+      />
+      <ModalAcceptOffer
+        open={showModalAcceptOffer}
+        onCancel={onHideModalAcceptOffer}
+        nft={nftDetail}
+        offerData={offerData}
+      />
+    </>
+  );
 };
 
 export default OfferTab;

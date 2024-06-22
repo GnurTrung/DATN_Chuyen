@@ -3,7 +3,7 @@ import {
   STARKNET_ETH_MARKET_CONTRACT,
   STARKNET_OFFSET,
   STARKNET_STRK_ADDRESS,
-  STARKNET_STRK_MARKET_CONTRACT_NEW
+  STARKNET_STRK_MARKET_CONTRACT_NEW,
 } from "@/constants";
 import ERC20StarknetAbi from "@/contexts/abi/ERC20_Starknet.json";
 import CollectionStarknetAbi from "@/contexts/abi/CollectionStarknet.abi.json";
@@ -32,7 +32,6 @@ import {
   offerNFTStarknet,
 } from "@/service/nft";
 
-
 const useStarknet = () => {
   const { address, account } = useAccount() as any;
   const { data: balance, isLoading: isLoadingBalance } = useBalance({
@@ -58,7 +57,6 @@ const useStarknet = () => {
     address: STARKNET_STRK_MARKET_CONTRACT_NEW,
     abi: MarketStarknetAbi,
   }) as any;
-
 
   const increaseAllowanceEth = async (
     amount: number,
@@ -131,10 +129,10 @@ const useStarknet = () => {
   const handleGetContract = (data: any) => {
     let contract = {} as any;
     let contract_addr = "" as any;
- if (!data?.signatureS) {
+    if (!data?.signatureS) {
       contract = marketSTRKContractNew;
       contract_addr = STARKNET_STRK_MARKET_CONTRACT_NEW;
-    } 
+    }
     return { contract, contract_addr };
   };
 
@@ -275,7 +273,7 @@ const useStarknet = () => {
   const handleListNftStarknet = async (data: any) => {
     await checkApprovedCollection(data, true);
     let contract = {} as any;
-contract = marketSTRKContractNew;
+    contract = marketSTRKContractNew;
     contract?.connect(account as any);
     const nonce = await getNonce({});
     const [signatureR, signatureS, msgHash] = await handleSignListing(
@@ -362,13 +360,11 @@ contract = marketSTRKContractNew;
   };
 
   const handleMakeOfferStarknet = async (data: any) => {
+    await increaseAllowanceStrk(
+      data?.price * STARKNET_OFFSET,
+      STARKNET_STRK_MARKET_CONTRACT_NEW
+    );
 
-      await increaseAllowanceStrk(
-        data?.price * STARKNET_OFFSET,
-         STARKNET_STRK_MARKET_CONTRACT_NEW
-          
-      );
-    
     handleGetContract(data).contract?.connect(account as any);
     const nonce = await getNonce({});
     const [signatureR, signatureS, msgHash] = await handleSignOffer(
@@ -393,7 +389,7 @@ contract = marketSTRKContractNew;
     return res;
   };
 
-  const handleCancelOfferStarknet = async (data: any) => {
+  const handleCancelOfferStarknet = async ({ ...data }: any) => {
     handleGetContract(data).contract?.connect(account as any);
     let sign = [];
     if (!data?.signatureS) {
@@ -457,13 +453,11 @@ contract = marketSTRKContractNew;
   };
 
   const handleMakeCollectionOfferStarknet = async (data: any) => {
-   
-      await increaseAllowanceStrk(
-        data?.price * STARKNET_OFFSET * data?.quantity,
-        STARKNET_STRK_MARKET_CONTRACT_NEW
-          
-      );
-   
+    await increaseAllowanceStrk(
+      data?.price * STARKNET_OFFSET * data?.quantity,
+      STARKNET_STRK_MARKET_CONTRACT_NEW
+    );
+
     handleGetContract(data).contract?.connect(account as any);
     const nonce = await getNonce({});
     const [signatureR, signatureS, msgHash] = await handleSignListingCollection(
@@ -555,8 +549,6 @@ contract = marketSTRKContractNew;
     ]);
     return res;
   };
-
-
 
   return {
     balance,

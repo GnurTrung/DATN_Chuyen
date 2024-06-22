@@ -4,9 +4,14 @@ import IconRefresh from "@/assets/icons/IconRefresh";
 import IconTwitter from "@/assets/icons/IconTwitter";
 import CustomImage from "@/components/custom-image";
 import { useVenom } from "@/contexts/useVenom";
-import { formatBalance, formatWallet } from "@/utils";
+import {
+  formatBalance,
+  formatBalanceByChain,
+  formatWallet,
+  getCurrencyByChain,
+} from "@/utils";
 import { Button } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import cx from "classnames";
 import { NFT_DETAIL_TABS, useNftDetailContext } from "./context";
 import OverviewTab from "./OverviewTab";
@@ -22,40 +27,44 @@ import Link from "next/link";
 import Image from "next/image";
 import ModalCancelNFT from "@/components/custom-modal/ModalDeList";
 import { NumericFormat } from "react-number-format";
+import { Address } from "everscale-inpage-provider";
 import ModalBuySuccess from "@/components/custom-modal/ModalBuySuccess";
 import ModalWaiting from "@/components/custom-modal/ModalWaiting";
-import { REFUNDABLE_FEE, TOP_RANK } from "@/constants";
+import { CHAIN_VALUES_ENUM, REFUNDABLE_FEE, TOP_RANK } from "@/constants";
 import { toast } from "react-hot-toast";
 import ModalMakeOffer from "@/components/custom-modal/ModalMakeOffer";
 import { useApplicationContext } from "@/contexts/useApplication";
 import IconRemoveCart from "@/assets/icons/IconRemoveCart";
-import { useWalletKit } from "@mysten/wallet-kit";
-import {
-  BUY_NFT,
-  SC_CONTRACT_MODULE,
-  SC_PACKAGE_MARKET,
-  SC_SHARED_MARKET,
-} from "@/configs";
-import useProviderSigner from "@/contexts/useProviderSigner";
-import { TransactionBlock } from "@mysten/sui.js";
+import useStarknet from "@/hooks/useStarknet";
+import IconPricetag from "@/assets/icons/IconPricetag";
+import IconTrash from "@/assets/icons/IconTrash";
+import FormatPrice from "@/components/FormatPrice";
+import { useStarkProfile } from "@starknet-react/core";
 
 const NftDetailContainer = () => {
-  const { account, login } = useVenom();
-  const { getObject } = useProviderSigner();
-  const { signAndExecuteTransactionBlock, isConnected } = useWalletKit();
+  const { provider } = useVenom();
   const {
     currentTab,
     setCurrentTab,
     nftDetail,
     moreNfts,
     handleLikeNft,
-    nftOnchain,
+    nftOffer,
   } = useNftDetailContext();
 
-  const { addItem, removeItem, items } = useApplicationContext();
+  const {
+    addItem,
+    removeItem,
+    items,
+    isAuthenticated,
+    onShowDrawerConnectWallet,
+    currentConnectedAccount,
+  } = useApplicationContext();
 
-  const isListing =
-    nftOnchain?.owner?._address != nftOnchain?.manager?._address;
+  const { handleBuyFromListingStarknet } = useStarknet();
+  const { data: starkProfile } = useStarkProfile({
+    address: nftDetail?.ownerAddress,
+  });
 
   const [isLikeState, setIsLikeState] = useState(nftDetail?.isLike);
   const [numberLikeState, setNumberLikeState] = useState(
@@ -109,52 +118,62 @@ const NftDetailContainer = () => {
     }
   };
 
-  const listingPrice = nftDetail?.listingPrice;
-  const nftId = nftDetail?.nftId;
+  const estimatedFund =
+    nftDetail?.networkType === CHAIN_VALUES_ENUM.VENOM
+      ? Number(nftDetail?.listingPrice) + REFUNDABLE_FEE
+      : Number(nftDetail?.listingPrice);
 
-  const handleBuy = async () => {
+  const getCurrency = useMemo(
+    () => getCurrencyByChain(nftDetail?.networkType, nftDetail?.tokenUnit),
+    [nftDetail?.networkType, nftDetail?.tokenUnit]
+  );
+
+  const onBuyNftVenom = async () => {
     onShowModalWaiting();
     onHideModalBuyNft();
     try {
-      if (!nftId || !listingPrice) return;
-      const object = await getObject(nftId);
-      const typeNFT = object?.data?.type;
-      if (!typeNFT) return;
+      const callData = {
+        sender: new Address(currentConnectedAccount),
+        recipient: new Address(nftDetail?.managerNft),
+        amount: estimatedFund.toString(),
+        bounce: true,
+      };
+      const res = await provider?.sendMessage(callData);
+      if (res) {
+        setTimeout(() => {
+          toast.success("Bought successfully!");
+          onShowModalBuySuccess();
+          onHideModalWaiting();
+        }, 2000);
+      }
+    } catch (error: any) {
+      console.log(error);
+      onHideModalWaiting();
+      toast.error(error.message);
+    }
+  };
 
-      const price_sm = listingPrice;
-      const tx = new TransactionBlock();
-      const [coin] = tx.splitCoins(tx.gas, [tx.pure(price_sm)]);
-      const request = {
-        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${BUY_NFT}`,
-        typeArguments: [typeNFT],
-        arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nftId), coin],
-      } as any;
-      tx.moveCall(request);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: { showEffects: true },
-      });
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
+  const onBuyNftStarknet = async () => {
+    onShowModalWaiting();
+    onHideModalBuyNft();
+    try {
+      const res = await handleBuyFromListingStarknet(nftDetail);
+      if (res?.transaction_hash) {
         toast.success("Bought successfully!");
         onShowModalBuySuccess();
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (ex: any) {
-      toast.error(ex.message);
-      console.log(ex);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       onHideModalWaiting();
     }
   };
 
-  const calculateTopRank = () => {
-    if (!nftDetail?.ranking) return 0;
-    if (nftDetail?.ranking <= Math.floor(nftDetail?.totalItems / 100))
-      return TOP_RANK.TOP_1;
-    if (nftDetail?.ranking <= Math.floor(nftDetail?.totalItems / 10))
-      return TOP_RANK.TOP_10;
-    if (nftDetail?.ranking <= Math.floor(nftDetail?.totalItems / 4))
-      return TOP_RANK.TOP_25;
+  const onConfirmBuy = async () => {
+    if (nftDetail?.networkType === CHAIN_VALUES_ENUM.VENOM)
+      return await onBuyNftVenom();
+    if (nftDetail?.networkType === CHAIN_VALUES_ENUM.STARKNET)
+      return await onBuyNftStarknet();
   };
 
   const isAddedToCart = !!items?.find((item) => item.id === nftDetail?.nftId);
@@ -168,6 +187,10 @@ const NftDetailContainer = () => {
       imageUrl: nftDetail?.imageUrl,
       listingPrice: nftDetail?.listingPrice,
       title: nftDetail?.title,
+      networkType: nftDetail?.networkType,
+      signatureR: nftDetail?.signatureR,
+      signatureS: nftDetail?.signatureS,
+      tokenUnit: nftDetail?.tokenUnit,
     };
     addItem(params);
   };
@@ -190,30 +213,19 @@ const NftDetailContainer = () => {
           <h1 className="text-[30px] sm:text-5xl font-medium text-white mb-3">
             {nftDetail?.title}
           </h1>
-          {nftDetail?.ranking && (
-            <span
-              className={cx("rounded-[4px] bg-primary px-3 py-1 leading-6", {
-                "top-1-rank": calculateTopRank() === TOP_RANK.TOP_1,
-                "top-10-rank": calculateTopRank() === TOP_RANK.TOP_10,
-                "top-25-rank": calculateTopRank() === TOP_RANK.TOP_25,
-              })}
-            >
-              #{nftDetail?.ranking || 0}
-            </span>
-          )}
-
           <div className="mt-8 space-y-4 sm:space-y-0 sm:space-x-3 md:space-x-10 flex sm:items-center sm:flex-row flex-col">
             <div>
               <span className="text-secondary">Owner</span>
               <div className="flex items-center space-x-3">
                 <CustomImage
-                  src="/images/demo_nft.png"
+                  src="/images/def_avt.png"
                   alt="avatar"
                   className="w-12 h-12 rounded-full"
                 />
                 <Link href={`/user/${nftDetail?.ownerAddress}?tab=items`}>
                   <span className="text-[18px] text-white hover:underline hover:underline-offset-2">
-                    {formatWallet(nftDetail?.ownerAddress)}
+                    {starkProfile?.name ||
+                      formatWallet(nftDetail?.ownerAddress)}
                   </span>
                 </Link>
               </div>
@@ -236,12 +248,21 @@ const NftDetailContainer = () => {
                     </Link>
                   </div>
 
-                  <p className=" text-secondary">
+                  <div className=" text-secondary flex items-center">
                     Floor:&nbsp;
-                    <span className="text-white">
-                      {formatBalance(nftDetail?.floorPriceListing)} STRK
-                    </span>
-                  </p>
+                    <div className="text-white flex items-center">
+                      <FormatPrice
+                        number={Number(
+                          formatBalanceByChain(
+                            nftDetail?.floorPriceListing,
+                            nftDetail?.networkType
+                          )
+                        )}
+                      />
+                      &nbsp;
+                      {getCurrency.currency}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -255,7 +276,7 @@ const NftDetailContainer = () => {
             >
               <IconHeart
                 className={cx({
-                  "fill-primary stroke-primary": isLikeState && isConnected,
+                  "fill-primary stroke-primary": isLikeState && isAuthenticated,
                 })}
               />
               <span className={cx("ml-3", { "text-primary": isLikeState })}>
@@ -275,26 +296,28 @@ const NftDetailContainer = () => {
           </div>
           <div className="border border-solid border-stroke p-5 rounded-lg space-y-4 mt-6">
             <div className="p-4 bg-layer-2 rounded-lg flex justify-between items-center">
-              {nftDetail?.isListing || isListing ? (
+              {nftDetail?.isListing ? (
                 <div>
                   <span className="text-secondary">Price</span>
                   <div className="flex items-center space-x-2">
                     <Image
-                      src="/images/token/venom.png"
+                      src={getCurrency.image}
                       alt="token"
                       width={24}
                       height={24}
                     />
-                    <span className="text-white text-[18px]">
-                      <NumericFormat
-                        value={formatBalance(
-                          nftOnchain?.price || nftDetail?.listingPrice
+                    <div className="text-white flex items-center text-[18px]">
+                      <FormatPrice
+                        number={Number(
+                          formatBalanceByChain(
+                            nftDetail?.listingPrice,
+                            nftDetail?.networkType
+                          )
                         )}
-                        displayType="text"
-                        thousandSeparator=","
-                      />{" "}
-                      STRK
-                    </span>
+                      />
+                      &nbsp;
+                      {getCurrency.currency}
+                    </div>
                   </div>
                   {/* <span className="text-sm text-secondary">$26,676</span> */}
                 </div>
@@ -303,33 +326,19 @@ const NftDetailContainer = () => {
                   Unlisted
                 </span>
               )}
-              {isConnected &&
-                (nftDetail?.ownerAddress != account ? (
+              {isAuthenticated &&
+                nftDetail?.ownerAddress != currentConnectedAccount && (
                   <Button
                     onClick={onShowModalMakeOffer}
                     className="btn-secondary self-end"
                   >
                     Make Offer
                   </Button>
-                ) : !isListing || !nftDetail?.isListing ? (
-                  <Button
-                    onClick={onShowModalListNft}
-                    className="btn-primary self-end"
-                  >
-                    List Now
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={onShowModalCancelNFT}
-                    className="btn-primary self-end"
-                  >
-                    Cancel Listing
-                  </Button>
-                ))}
+                )}
             </div>
-            {isConnected ? (
-              (nftDetail?.isListing || isListing) &&
-              nftDetail?.ownerAddress != account && (
+            {isAuthenticated &&
+              nftDetail?.isListing &&
+              nftDetail?.ownerAddress != currentConnectedAccount && (
                 <div className="flex space-x-3">
                   <Button
                     className="btn-secondary space-x-3 basis-1/2"
@@ -347,26 +356,64 @@ const NftDetailContainer = () => {
                     Buy now
                   </Button>
                 </div>
-              )
-            ) : (
-              <Button className="btn-primary w-full" onClick={login}>
-                Connect Wallet
-              </Button>
-            )}
+              )}
+            <div className="flex items-center gap-3 w-full">
+              {isAuthenticated &&
+                !nftDetail?.isListing &&
+                nftDetail?.ownerAddress === currentConnectedAccount && (
+                  <Button
+                    onClick={onShowModalListNft}
+                    className="btn-secondary basis-1/2"
+                  >
+                    <IconPricetag />
+                    <span className="ml-2 text-base">List for Sale</span>
+                  </Button>
+                )}
+              {isAuthenticated &&
+                nftDetail?.isListing &&
+                nftDetail?.ownerAddress === currentConnectedAccount && (
+                  <Button
+                    onClick={onShowModalCancelNFT}
+                    className="btn-secondary basis-1/2"
+                  >
+                    <IconTrash />
+                    <span className="ml-2 text-base">Remove Listing</span>
+                  </Button>
+                )}
+              {!isAuthenticated && (
+                <Button
+                  className="btn-primary w-full"
+                  onClick={onShowDrawerConnectWallet}
+                >
+                  Connect Wallet
+                </Button>
+              )}
+            </div>
+
             <div className="flex items-center space-x-4">
               <span className="text-secondary text-base">Top Offer</span>
               <div className="flex items-center space-x-2">
                 <Image
-                  src="/images/token/venom.png"
+                  src={getCurrency.image}
                   alt="token"
                   width={16}
                   height={16}
                 />
                 {nftDetail?.offerPrice ? (
-                  <p className="text-base font-medium text-white">
-                    {formatBalance(nftDetail?.offerPrice) || 0}{" "}
-                    <span className="text-secondary">STRK</span>
-                  </p>
+                  <div className="text-base font-medium text-white flex items-center">
+                    <FormatPrice
+                      number={Number(
+                        formatBalanceByChain(
+                          nftDetail?.offerPrice,
+                          nftDetail?.networkType
+                        )
+                      )}
+                    />
+                    &nbsp;
+                    {/* <span className="text-secondary">
+                      {getCurrency?.currency}
+                    </span> */}
+                  </div>
                 ) : (
                   <span className="text-secondary">--</span>
                 )}
@@ -443,7 +490,7 @@ const NftDetailContainer = () => {
         open={showModalBuyNft}
         onCancel={onHideModalBuyNft}
         nft={nftDetail}
-        handleBuy={handleBuy}
+        handleBuy={onConfirmBuy}
       />
       <ModalListNft
         open={showModalListNft}
@@ -454,7 +501,7 @@ const NftDetailContainer = () => {
         open={showModalCancelNFT}
         onCancel={onHideModalCancelNFT}
         nft={nftDetail}
-        manager={nftOnchain?.manager?._address}
+        manager={nftDetail?.managerNft}
       />
       <ModalBuySuccess
         open={showModalBuySuccess}

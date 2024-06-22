@@ -21,7 +21,7 @@ const OverviewTab = () => {
     // },
     {
       name: "Chain",
-      value: <span className="text-white font-medium">Sui</span>,
+      value: <span className="text-white font-medium">Starknet</span>,
     },
     {
       name: "Token Standard",

@@ -1,23 +1,19 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import CustomModal from ".";
 import CustomImage from "../custom-image";
 import IconVerified from "@/assets/icons/IconVerified";
 import Image from "next/image";
 import CustomInput from "../input";
 import CustomSelect from "../select";
-import { DURATION_OPTIONS } from "@/constants";
-import { formatBalance } from "@/utils";
-import { toast } from "react-hot-toast";
+import { CHAIN_VALUES_ENUM, DURATION_OPTIONS } from "@/constants";
 import {
-  MAKE_OFFER,
-  SC_CONTRACT_MODULE,
-  SC_PACKAGE_MARKET,
-  SC_SHARED_MARKET,
-  SUI_OFFSET,
-} from "@/configs";
-import useProviderSigner from "@/contexts/useProviderSigner";
-import { useWalletKit } from "@mysten/wallet-kit";
-import { TransactionBlock } from "@mysten/sui.js";
+  formatBalance,
+  formatBalanceByChain,
+  getCurrencyByChain,
+} from "@/utils";
+import { toast } from "react-hot-toast";
+import useStarknet from "@/hooks/useStarknet";
+import FormatPrice from "../FormatPrice";
 
 interface IModalMakeOffer {
   open: boolean;
@@ -25,75 +21,43 @@ interface IModalMakeOffer {
   nft?: any;
 }
 
-const CURRENCY_OPTIONS = [
-  {
-    label: (
-      <div className="flex items-center space-x-1">
-        <Image
-          src="/images/token/venom.png"
-          alt="token"
-          width={16}
-          height={16}
-        />
-        <span className="text-secondary">STRK</span>
-      </div>
-    ),
-    value: 1,
-  },
-];
-
 const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
   const [price, setPrice] = useState<any>("");
-  const [loading, setLoading] = useState<any>(false);
   const [date, setDate] = useState<any>(DURATION_OPTIONS[0].value);
-  const { getObject } = useProviderSigner();
-  const { signAndExecuteTransactionBlock } = useWalletKit();
+  const [loading, setLoading] = useState(false);
+  const { handleMakeOfferStarknet } = useStarknet();
 
-  const handleMakeOffer = async () => {
+  const getCurrency = useMemo(
+    () => getCurrencyByChain(nft?.networkType, nft?.tokenUnit),
+    [nft?.networkType, nft?.tokenUnit]
+  );
+
+  const onMakeOfferStarknet = async () => {
     try {
       setLoading(true);
-      const itemID = nft?.nftId;
-      if (!itemID || !price || price <= 0) return;
-      const object = await getObject(itemID);
-
-      const typeNFT = object?.data?.type;
-      if (!typeNFT) return;
-      const price_sm = price * SUI_OFFSET;
-      const tx = new TransactionBlock();
-      const [coin] = tx.splitCoins(tx.gas, [tx.pure(price_sm)]);
-
-      const request = {
-        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${MAKE_OFFER}`,
-        typeArguments: [typeNFT],
-        arguments: [
-          tx.pure(SC_SHARED_MARKET),
-          tx.pure(itemID),
-          tx.pure(price_sm.toString()),
-          coin,
-        ],
-      } as any;
-      tx.moveCall(request);
-      const response = (await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: { showEffects: true },
-      })) as any;
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
-        toast.success("Make Offer success!");
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (ex: any) {
-      toast.error(ex?.message);
-      console.log(ex);
+      const res = await handleMakeOfferStarknet({
+        price,
+        expireTime: Math.floor(
+          (Date.now() + 60 * 60 * 24 * date * 1000) / 1000
+        ),
+        ...nft,
+      });
+      if (res?.data == true) toast.success("Make offer successfully!");
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setLoading(false);
+      onCancel();
     }
+  };
+
+  const onConfirmMakeOffer = async () => {
+    await onMakeOfferStarknet();
   };
   const onChangeSort = (value: any) => {
     setDate(value);
   };
+
   return (
     <CustomModal
       title="Make Offer"
@@ -101,14 +65,15 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
       onCancel={onCancel}
       okText="Make Offer"
       width={504}
-      onOk={handleMakeOffer}
+      onOk={onConfirmMakeOffer}
       loading={loading}
+      zIndex={8889}
     >
       <div>
         <div className="rounded-lg border border-solid border-stroke bg-layer-2 p-2">
           <div className="flex items-center space-x-2">
             <CustomImage
-              src="/images/demo_nft.png"
+              src={nft?.imageUrl}
               alt="nft"
               className="w-[50px] h-[50px] rounded-lg"
             />
@@ -132,13 +97,25 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                 </span>
                 <div className="flex items-center space-x-1">
                   <Image
-                    src="/images/token/venom.png"
+                    src={getCurrency.image}
                     alt="token"
                     width={12}
                     height={12}
                   />
                   <span className="text-white font-medium text-xs">
-                    {`${formatBalance(nft?.listingPrice)} STRK`}
+                    {nft?.listingPrice ? (
+                      <FormatPrice
+                        number={Number(
+                          formatBalanceByChain(
+                            nft?.listingPrice,
+                            nft?.networkType
+                          )
+                        )}
+                      />
+                    ) : (
+                      "--"
+                    )}{" "}
+                    {/* {getCurrency.currency} */}
                   </span>
                 </div>
               </div>
@@ -150,21 +127,26 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
               <span className="text-secondary text-xs font-medium">
                 Top offer
               </span>
-              {nft?.offerPrice ? (
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src="/images/token/venom.png"
-                    alt="token"
-                    width={12}
-                    height={12}
-                  />
-                  <span className="text-white font-medium text-xs">
-                    {formatBalance(nft?.offerPrice) || 0} STRK
-                  </span>
-                </div>
-              ) : (
-                <span className="text-secondary">--</span>
-              )}
+              <div className="flex items-center space-x-1">
+                <Image
+                  src={getCurrency.image}
+                  alt="token"
+                  width={12}
+                  height={12}
+                />
+                <span className="text-white font-medium text-xs">
+                  {nft?.offerPrice ? (
+                    <FormatPrice
+                      number={Number(
+                        formatBalanceByChain(nft?.offerPrice, nft?.networkType)
+                      )}
+                    />
+                  ) : (
+                    "--"
+                  )}{" "}
+                  {/* {getCurrency.currency} */}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -173,7 +155,7 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
           <div className="space-x-4 flex items-center">
             <CustomInput
               placeholder="Price"
-              className="basis-2/3 h-[62px]"
+              className="h-[62px]"
               pattern="[0-9\.]*$"
               value={price}
               onChange={(e: any) => {
@@ -182,11 +164,17 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                   setPrice(e.target.value);
               }}
             />
-            <CustomSelect
-              options={CURRENCY_OPTIONS}
-              value={CURRENCY_OPTIONS[0].value}
-              className="flex-1 h-[62px]"
-            />
+            {/* <div className="rounded-lg bg-layer-3 flex-1 h-14 flex items-center justify-center">
+              <Image
+                src={getCurrency.image}
+                alt="token"
+                width={16}
+                height={16}
+              />
+              <span className="text-base text-secondary ml-1">
+                {getCurrency.currency}
+              </span>
+            </div> */}
           </div>
           <CustomSelect
             className="h-[62px]"

@@ -98,3 +98,15 @@ export const delistNft = async (params: {
   const { data } = res;
   return data;
 };
+
+export const getOfferApi = async (nftId: string, params: any) => {
+  try {
+    const res = await AxiosInstance.get(`/nft/get-offers/${nftId}`, {
+      params,
+    });
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,3 +1,4 @@
+import { CHAIN_VALUES_ENUM } from "@/constants";
 import AxiosInstance from "./api";
 
 export const getActivityApi = async (options: {
@@ -7,6 +8,7 @@ export const getActivityApi = async (options: {
   userAddress?: string;
   page: number;
   limit: number;
+  network?: CHAIN_VALUES_ENUM;
 }) => {
   try {
     const res = await AxiosInstance.post("/activity", options);

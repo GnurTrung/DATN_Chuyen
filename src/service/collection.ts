@@ -90,3 +90,19 @@ export const getCollectionCMS = async (params: any) => {
     console.log(error);
   }
 };
+
+export const getCollectionOfferApi = async (
+  collectionAddress: string,
+  params: any
+) => {
+  try {
+    const res = await AxiosInstance.get(
+      `/nft/get-collection-offers/${collectionAddress}`,
+      { params }
+    );
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
