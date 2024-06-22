@@ -91,7 +91,7 @@ const Watchlist = () => {
       render: (value: any) => (
         <div className="flex gap-1">
           <span className="text-white">{formatBalance(value)}</span>
-          <div className="text-secondary">SUI</div>
+          <div className="text-secondary">STRK</div>
         </div>
       ),
     },
@@ -117,7 +117,7 @@ const Watchlist = () => {
       render: (value: any) => (
         <div className="flex gap-1">
           <span className="text-white">{formatBalance(value)}</span>
-          <div className="text-secondary">SUI</div>
+          <div className="text-secondary">STRK</div>
         </div>
       ),
     },

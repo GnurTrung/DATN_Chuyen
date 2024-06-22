@@ -1,6 +1,6 @@
 export const AppConfig = {
-  site_name: "ChuyenDT",
-  title: "ChuyenDT",
-  description: "The best marketplace on Sui Network",
+  site_name: "HieuTT",
+  title: "HieuTT",
+  description: "The best marketplace on Starknet Network",
   locale: "en",
 };

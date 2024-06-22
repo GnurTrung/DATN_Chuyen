@@ -109,7 +109,7 @@ const OfferTab = () => {
       key: "price",
       render: (value: any) => (
         <p className="font-medium">
-          {value / SUI_OFFSET} <span className="text-secondary">SUI</span>
+          {value / SUI_OFFSET} <span className="text-secondary">STRK</span>
         </p>
       ),
     },

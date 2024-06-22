@@ -98,7 +98,7 @@ const DrawerNoti = ({
           content = (
             <p className="text-secondary">
               Listed for{" "}
-              <span className="text-primary">{formatBalance(price)} SUI</span>
+              <span className="text-primary">{formatBalance(price)} STRK</span>
             </p>
           );
           break;
@@ -109,7 +109,7 @@ const DrawerNoti = ({
           content = (
             <p className="text-secondary">
               Price updated to{" "}
-              <span className="text-primary">{formatBalance(price)} SUI</span>
+              <span className="text-primary">{formatBalance(price)} STRK</span>
             </p>
           );
           break;
@@ -118,14 +118,14 @@ const DrawerNoti = ({
             content = (
               <p className="text-secondary">
                 Offered with{" "}
-                <span className="text-primary">{formatBalance(price)} SUI</span>
+                <span className="text-primary">{formatBalance(price)} STRK</span>
               </p>
             );
           else
             content = (
               <p className="text-secondary">
                 You made an offer with{" "}
-                <span className="text-primary">{formatBalance(price)} SUI</span>{" "}
+                <span className="text-primary">{formatBalance(price)} STRK</span>{" "}
               </p>
             );
           break;

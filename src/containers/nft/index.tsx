@@ -239,7 +239,7 @@ const NftDetailContainer = () => {
                   <p className=" text-secondary">
                     Floor:&nbsp;
                     <span className="text-white">
-                      {formatBalance(nftDetail?.floorPriceListing)} SUI
+                      {formatBalance(nftDetail?.floorPriceListing)} STRK
                     </span>
                   </p>
                 </div>
@@ -293,7 +293,7 @@ const NftDetailContainer = () => {
                         displayType="text"
                         thousandSeparator=","
                       />{" "}
-                      SUI
+                      STRK
                     </span>
                   </div>
                   {/* <span className="text-sm text-secondary">$26,676</span> */}
@@ -365,7 +365,7 @@ const NftDetailContainer = () => {
                 {nftDetail?.offerPrice ? (
                   <p className="text-base font-medium text-white">
                     {formatBalance(nftDetail?.offerPrice) || 0}{" "}
-                    <span className="text-secondary">SUI</span>
+                    <span className="text-secondary">STRK</span>
                   </p>
                 ) : (
                   <span className="text-secondary">--</span>

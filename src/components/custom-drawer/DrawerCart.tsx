@@ -61,7 +61,7 @@ const DrawerCart = ({ open, onClose }: IDrawerCartProps) => {
           <div className="flex items-center space-x-1">
             <Image src={VenomToken} alt="token" className="w-5 h-5"/>
             <span className="font-medium text-xs">
-              {formatBalance(listingPrice)} SUI
+              {formatBalance(listingPrice)} STRK
             </span>
           </div>
         </div>
@@ -205,7 +205,7 @@ const DrawerCart = ({ open, onClose }: IDrawerCartProps) => {
               <span>Total Price</span>
               <div className="flex items-center space-x-2">
                 <Image src={VenomToken} alt="token" />
-                <span>{calculateTotalPrice()} SUI</span>
+                <span>{calculateTotalPrice()} STRK</span>
               </div>
             </div>
             <Button onClick={()=>toast.success("Coming soon!")} className="btn-primary w-full">Buy Now</Button>

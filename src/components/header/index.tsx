@@ -22,10 +22,17 @@ import DrawerWallet from "../custom-drawer/DrawerWallet";
 import useShowModal from "@/hooks/useShowModal";
 import Search from "./Search";
 import { ConnectButton, useWalletKit } from "@mysten/wallet-kit";
+import { useApplicationContext } from "@/contexts/useApplication";
+import DrawerConnectWallet from "../custom-drawer/DrawerConnectWallet";
 
 const Header = () => {
-  const { account, login } = useVenom();
-  const { status, currentAccount, isConnected } = useWalletKit();
+  const {
+    isAuthenticated,
+    currentConnectedAccount,
+    showDrawerConnectWallet,
+    onShowDrawerConnectWallet,
+    onHideDrawerConnectWallet,
+  } = useApplicationContext();
   const {
     showModal: showDrawerWallet,
     onShow: onShowDrawerWallet,
@@ -55,13 +62,13 @@ const Header = () => {
     <div className="md:layout sticky top-0 z-50 bg-layer-1">
       <Drawer
         title={
-          !isConnected ? (
+          !isAuthenticated ? (
             <ConnectButton className="btn-primary w-full !text-black" />
           ) : (
             <div className="bg-layer-1 rounded-lg flex items-center p-2 space-x-2">
               <Image src={DefaultAvatar} alt="Avatar" width={24} height={24} />
               <span className="text-white font-medium">
-                {formatWallet(currentAccount?.address)}
+                {formatWallet(currentConnectedAccount?.address)}
               </span>
             </div>
           )
@@ -90,7 +97,10 @@ const Header = () => {
               setOpen(false);
             }}
           >
-            <Link className="flex gap-[0.5rem]" href={`/settings/${account}`}>
+            <Link
+              className="flex gap-[0.5rem]"
+              href={`/settings/${currentConnectedAccount}`}
+            >
               <IconSetting />
               <p>Settings</p>
             </Link>
@@ -108,33 +118,34 @@ const Header = () => {
             <div className="flex px-[0.5rem] items-center space-x-2 border-r border-solid border-focus">
               <Image src={VenomToken} alt="Venom" />
               <div className="flex flex-col items-center">
-                <span className="text-white font-medium leading-6">SUI</span>
+                <span className="text-white font-medium leading-6">STRK</span>
               </div>
               <IconArrowDown />
             </div>
-            {/* {!isConnected && (
-              <Button className="btn-primary h-10" onClick={login}>
+            {!isAuthenticated && (
+              <Button
+                className="btn-primary h-10"
+                onClick={onShowDrawerConnectWallet}
+              >
                 Connect Wallet
               </Button>
-            )} */}
-            {status == "CONNECTED" && (
+            )}
+            {isAuthenticated && (
               <div
                 className="bg-layer-1 rounded-lg flex items-center p-2 space-x-2 cursor-pointer"
                 onClick={onShowDrawerWallet}
               >
-                <Image
-                  src={DefaultAvatar}
+                <img
+                  src={"/images/default_avatar.png"}
                   alt="Avatar"
-                  width={24}
-                  height={24}
+                  className="rounded-lg w-6"
                 />
-                <span className="text-white font-medium">
-                  {formatWallet(currentAccount?.address)}
-                </span>
+                <div className="flex flex-col items-start justify-between">
+                  <span className="text-white font-medium text-xs">
+                    {formatWallet(currentConnectedAccount)}
+                  </span>
+                </div>
               </div>
-            )}
-            {status == "DISCONNECTED" && (
-              <ConnectButton className="btn-primary" />
             )}
           </div>
         </div>
@@ -181,6 +192,10 @@ const Header = () => {
         ))}
       </div>
       <DrawerWallet open={showDrawerWallet} onClose={onHideDrawerWallet} />
+      <DrawerConnectWallet
+        open={showDrawerConnectWallet}
+        onClose={onHideDrawerConnectWallet}
+      />
     </div>
   );
 };

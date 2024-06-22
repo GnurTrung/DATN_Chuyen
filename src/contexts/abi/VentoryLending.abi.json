@@ -1,0 +1,548 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"ownerPubkey","type":"uint256"},
+				{"name":"ownerPubkeySign","type":"uint256"},
+				{"name":"offerCode","type":"cell"},
+				{"name":"leftOnOfferAfterFinish","type":"uint128"},
+				{"name":"withdrawalAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "orderCollectionOffer",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"quantity","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "cancelCollectionOffer",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"quantity","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onRegisterCollection",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"apy","type":"uint128"},
+				{"name":"timeClose","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onNftChangeManager",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"owner","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"newManager","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"sendGasTo","type":"address"},
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onAcceptRequest",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"owner","type":"address"},
+				{"name":"data","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"newOwner","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"startTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onOfferCancel",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"owner","type":"address"},
+				{"name":"data","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"sendGasTo","type":"address"},
+				{"name":"price","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onAcepptCollectionOffer",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"ownerAccept","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"loaner","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"startTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onForeclose",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addCallForeclose","type":"address"},
+				{"name":"startTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"},
+				{"name":"priceFloor","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onRepay",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"priceRepay","type":"uint128"},
+				{"name":"currentPayment","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onRefundNft",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addrClaim","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onClaimPriceLending",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addrClaim","type":"address"},
+				{"name":"priceClaim","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onAuctionOrClaimNft",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addrCallFunction","type":"address"},
+				{"name":"checkAuctionOrClaimNft","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "generatePayload",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"check","type":"uint8"},
+				{"name":"loaner","type":"address"},
+				{"name":"priceOrder","type":"uint128"},
+				{"name":"priceFloor","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"payload","type":"cell"}
+			]
+		},
+		{
+			"name": "getOwnerPubkeySign",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"ownerPubkeySign","type":"uint256"}
+			]
+		},
+		{
+			"name": "getFeePercentage",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"feePercentage","type":"uint16"}
+			]
+		},
+		{
+			"name": "getFeeService",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"feeService","type":"uint16"}
+			]
+		},
+		{
+			"name": "readPayload",
+			"inputs": [
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+				{"name":"check","type":"uint8"},
+				{"name":"loaner","type":"address"},
+				{"name":"priceOrder","type":"uint128"},
+				{"name":"priceFloor","type":"uint128"}
+			]
+		},
+		{
+			"name": "updateContractCode",
+			"inputs": [
+				{"name":"newcode","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "buildKey",
+			"inputs": [
+				{"name":"userAddress","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"price","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
+			"name": "getCollectionOffer",
+			"inputs": [
+				{"name":"userAddress","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"price","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"quantity","type":"uint16"}
+			]
+		},
+		{
+			"name": "setLeftOnOfferAfterFinish",
+			"inputs": [
+				{"name":"value","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setMarketActiveStatus",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setOfferCode",
+			"inputs": [
+				{"name":"newCode","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "withdraw",
+			"inputs": [
+				{"name":"value","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "changeWithdrawalAddress",
+			"inputs": [
+				{"name":"newAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "changePubkeyOwner",
+			"inputs": [
+				{"name":"owner","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "destroy",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getOwner",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"ownerPubkey","type":"uint256"}
+			]
+		},
+		{
+			"name": "getWithdrawalAddress",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"withdrawalAddress","type":"address"}
+			]
+		},
+		{
+			"name": "getFeesInfo",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"leftOnOfferAfterFinish","type":"uint128"}
+			]
+		},
+		{
+			"name": "getMarketStatus",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"marketIsActive","type":"bool"}
+			]
+		},
+		{
+			"name": "offerCode",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"code","type":"cell"}
+			]
+		},
+		{
+			"name": "offerCodeHash",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"codeHash","type":"uint256"}
+			]
+		},
+		{
+			"name": "offerAddress",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"id","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"offer","type":"address"}
+			]
+		},
+		{
+			"name": "supportsInterface",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"interfaceID","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+		{
+			"name": "CollectionOfferLendingCreated",
+			"inputs": [
+				{"name":"userAddress","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"quantity","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "CancelCollectionOfferLending",
+			"inputs": [
+				{"name":"userAddress","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"quantity","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "AcceptCollectionOfferLending",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"nowManager","type":"address"},
+				{"name":"addrOffer","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"startTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ListingRequest",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"nowManager","type":"address"},
+				{"name":"addrOffer","type":"address"},
+				{"name":"price","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "AcceptRequestConfirmed",
+			"inputs": [
+				{"name":"offer","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"newOwner","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"startTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "RequestCancelled",
+			"inputs": [
+				{"name":"offer","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"price","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Foreclose",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addCallForeclose","type":"address"},
+				{"name":"positionLending","type":"address"},
+				{"name":"startTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"},
+				{"name":"priceFloor","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Repay",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"positionLending","type":"address"},
+				{"name":"priceRepay","type":"uint128"},
+				{"name":"currentPayment","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "RefundNft",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addrClaim","type":"address"},
+				{"name":"positionLending","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ClaimPriceLending",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addrClaim","type":"address"},
+				{"name":"positionLending","type":"address"},
+				{"name":"priceClaim","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "AuctionOrClaimNft",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"addrCall","type":"address"},
+				{"name":"checkAuctionOrClaimNft","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "SellRejected",
+			"inputs": [
+				{"name":"addrNft","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"oldManager","type":"address"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_supportedInterfaces","type":"optional(cell)"},
+		{"name":"_ownerPubkey","type":"uint256"},
+		{"name":"_ownerPubkeySign","type":"uint256"},
+		{"name":"_feePercentage","type":"uint16"},
+		{"name":"_feeService","type":"uint16"},
+		{"name":"_leftOnOfferAfterFinish","type":"uint128"},
+		{"name":"_withdrawalAddress","type":"address"},
+		{"name":"_LendingCode","type":"cell"},
+		{"name":"_totalDeployed","type":"uint256"},
+		{"name":"_ventoryLendingActive","type":"bool"},
+		{"components":[{"name":"apy","type":"uint128"},{"name":"timeClose","type":"uint64"},{"name":"status","type":"bool"}],"name":"_registerLendingCollection","type":"map(address,tuple)"},
+		{"name":"_userCollectionOffer","type":"optional(cell)"}
+	]
+}

@@ -121,7 +121,7 @@ const Ranking = () => {
         <div className="flex items-center space-x-2 text-white">
           <img
             src={record?.logo}
-            alt="SUI"
+            alt="STRK"
             className="w-11 h-11 object-cover rounded-lg aspect-square"
           />
           <IconVerified className="min-w-[19px] h-[min-20px]" />
@@ -145,7 +145,7 @@ const Ranking = () => {
       render: (value: any) => (
         <div className="flex gap-1">
           <span className="text-white">{formatBalance(value)}</span>
-          <div className="text-secondary">SUI</div>
+          <div className="text-secondary">STRK</div>
         </div>
       ),
       sorter: true,
@@ -182,7 +182,7 @@ const Ranking = () => {
       render: (value: any) => (
         <div className="flex gap-1">
           <span className="text-white">{formatBalance(value)}</span>
-          <div className="text-secondary">SUI</div>
+          <div className="text-secondary">STRK</div>
         </div>
       ),
       sorter: true,

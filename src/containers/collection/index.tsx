@@ -21,55 +21,9 @@ import { TYPE_TICKET } from "@/constants/market";
 const CollectionDetailContainer = () => {
   const { signAndExecuteTransactionBlock } = useWalletKit();
   const [loadingTicket, setLoadingTicket] = useState(false);
-  const {
-    collectionDetail,
-    tab,
-    onSelectTab,
-    handleAddToWatchlist,
-    userNFT,
-    getListNftWallet,
-    collectionCMS,
-  } = useCollectionDetailContext();
+  const { collectionDetail, tab, onSelectTab, handleAddToWatchlist } =
+    useCollectionDetailContext();
 
-  const type_ticket = collectionCMS?.typeTicket || TYPE_TICKET;
-  const hasTicket = userNFT.find((x: any) => x?.collectionAddress?.includes(type_ticket));
-  const handleMint = async () => {
-    try {
-      setLoadingTicket(true);
-      const PK = type_ticket;
-      const MODULE = "datn_dnft";
-      const SC_FUNCTION = "mint";
-      const tx = new TransactionBlock();
-      const args = [
-        tx.pure(collectionDetail?.name),
-        tx.pure(collectionDetail?.logo),
-        tx.pure("Ticket"),
-      ];
-      const data = {
-        target: `${PK}::${MODULE}::${SC_FUNCTION}`,
-        typeArguments: [],
-        arguments: args,
-      } as any;
-      tx.moveCall(data);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: {
-          showEffects: true,
-        },
-      });
-      console.log(response);
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
-        toast.success("Mint ticket successfully!");
-        await getListNftWallet();
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (error: any) {
-      console.log(error.message);
-      toast.error(error.message);
-    } finally {
-      setLoadingTicket(false);
-    }
-  };
   const collectionInfos = [
     {
       name: "Item",
@@ -85,11 +39,11 @@ const CollectionDetailContainer = () => {
     },
     {
       name: "Total Volume",
-      value: `${formatBalance(collectionDetail?.totalVolume) || 0} SUI`,
+      value: `${formatBalance(collectionDetail?.totalVolume) || 0} STRK`,
     },
     {
       name: "Floor Price",
-      value: `${formatBalance(collectionDetail?.floorPriceListing) || 0} SUI`,
+      value: `${formatBalance(collectionDetail?.floorPriceListing) || 0} STRK`,
     },
   ];
 
@@ -204,7 +158,7 @@ const CollectionDetailContainer = () => {
           </div>
         </div>
       </div>
-      {hasTicket && (
+      {
         <div>
           <Tabs
             activeKey={tab}
@@ -213,18 +167,7 @@ const CollectionDetailContainer = () => {
             className="custom-tabs"
           />
         </div>
-      )}
-      {!hasTicket && (
-        <div className="py-10 flex justify-center">
-          <Button
-            onClick={() => handleMint()}
-            className="btn-primary"
-            loading={loadingTicket}
-          >
-            Mint Ticket
-          </Button>
-        </div>
-      )}
+      }
     </div>
   );
 };

@@ -69,7 +69,7 @@ const Public = () => {
               <span className="text-[18px] text-white mt-1 font-display font-semibold flex items-center">
                 <Image src={VenomToken} alt="Venom" className="mr-2" />
                 {Number(0) == -1 ? `TBA` : 0}{" "}
-                <div className="text-secondary ml-1 hidden sm:block">SUI</div>
+                <div className="text-secondary ml-1 hidden sm:block">STRK</div>
               </span>
             </div>
             <div className="flex flex-col bg-layer-2 basis-[33.33%] p-2 rounded-lg items-center">

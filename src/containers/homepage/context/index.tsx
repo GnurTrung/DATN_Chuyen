@@ -34,6 +34,7 @@ export const Provider = ({ children }: any) => {
   useEffect(() => {
     const getListNft = async () => {
       const res = await getRankingData({
+        network: 5,
         ...paramsSearch,
         ...pagination,
       });

@@ -1,21 +1,20 @@
-import CustomModal from ".";
-import { useState } from "react";
-import { TransactionBlock } from "@mysten/sui.js";
-import { toast } from "react-hot-toast";
-import useProviderSigner from "@/contexts/useProviderSigner";
-import CustomImage from "../custom-image";
 import IconVerified from "@/assets/icons/IconVerified";
+import { CHAIN_VALUES_ENUM } from "@/constants";
+import { useApplicationContext } from "@/contexts/useApplication";
+import useProviderSigner from "@/contexts/useProviderSigner";
+import { useVenom } from "@/contexts/useVenom";
+import { delay } from "@/helper/delay";
+import useStarknet from "@/hooks/useStarknet";
+import { formatBalanceByChain, getCurrencyByChain } from "@/utils";
+import { Address } from "everscale-inpage-provider";
 import Image from "next/image";
-import VenomToken from "../../../public/images/token/venom.png";
+import { useMemo, useState } from "react";
+import { toast } from "react-hot-toast";
 import { NumericFormat } from "react-number-format";
-import { formatBalance } from "@/utils";
-import {
-  DELIST_NFT,
-  SC_CONTRACT_MODULE,
-  SC_PACKAGE_MARKET,
-  SC_SHARED_MARKET,
-} from "@/configs";
-import { useWalletKit } from "@mysten/wallet-kit";
+import CustomModal from ".";
+import Sell from "../../contexts/abi/Sell.abi.json";
+import CustomImage from "../custom-image";
+import { delistNft } from "@/service/nft";
 
 interface IModalCancelNFT {
   open: boolean;
@@ -23,56 +22,54 @@ interface IModalCancelNFT {
   nft: any;
   manager: any;
 }
-const ModalCancelNFT = ({ open, onCancel, nft }: IModalCancelNFT) => {
+const ModalCancelNFT = ({ open, onCancel, nft, manager }: IModalCancelNFT) => {
   const [loading, setLoading] = useState(false);
-  const { getObject } = useProviderSigner();
-  const { signAndExecuteTransactionBlock } = useWalletKit();
-  const nft_adress = nft?.nftId;
-  const handleListing = async () => {
+
+  const getCurrency = useMemo(
+    () => getCurrencyByChain(nft?.networkType, nft?.tokenUnit),
+    [nft?.networkType, nft?.tokenUnit]
+  );
+
+
+  const onCancelListingStarknetOffchain = async () => {
     try {
       setLoading(true);
-      if (!nft_adress) return;
-      const object = await getObject(nft_adress);
-
-      const typeNFT = object?.data?.type;
-      if (!typeNFT) return;
-
-      const tx = new TransactionBlock();
-      const request = {
-        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${DELIST_NFT}`,
-        typeArguments: [typeNFT],
-        arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nft_adress)],
-      } as any;
-      tx.moveCall(request);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: { showEffects: true },
+      const res = await delistNft({
+        nftAddress: nft?.nftId,
+        tokenUnit: nft?.tokenUnit,
       });
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
-        toast.success("Delist success!");
+      if (res?.data == true) {
+        toast.success("Delist successfully!");
+        setLoading(false);
         if (typeof window !== "undefined") {
           window.location.reload();
         }
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (ex: any) {
-      toast.error(ex.message);
-      console.log(ex);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      toast.error(error?.message);
     } finally {
       setLoading(false);
       onCancel();
     }
   };
+
+
+  const onCancelListing = async () => {
+ await onCancelListingStarknetOffchain();
+
+  };
+
   return (
     <CustomModal
-      title="Remove Listing"
+      title="Delist Items"
       open={open}
       onCancel={onCancel}
       destroyOnClose={true}
       loading={loading}
       width={500}
-      okText="Remove Listing"
-      onOk={handleListing}
+      okText="Delist"
+      onOk={onCancelListing}
     >
       <div className="pt-5">
         <div className="text-white flex justify-between items-center space-x-2 pb-8 border-b border-solid border-stroke">
@@ -94,24 +91,33 @@ const ModalCancelNFT = ({ open, onCancel, nft }: IModalCancelNFT) => {
           </div>
           {
             <div className="space-x-1 flex items-center">
-              <Image src={VenomToken} alt="token" width={14} height={14} />
+              <Image
+                src={getCurrency.image}
+                alt="token"
+                width={14}
+                height={14}
+              />
               <span className="text-sm">
                 <NumericFormat
-                  value={formatBalance(nft?.listingPrice || 0)}
+                  value={formatBalanceByChain(
+                    nft?.listingPrice || 0,
+                    nft?.networkType
+                  )}
                   displayType="text"
                   thousandSeparator=","
                 />{" "}
-                SUI
+                {/* {getCurrency.currency} */}
               </span>
             </div>
           }
         </div>
         <h4 className="text-base font-semibold text-[white] leading-6 mb-3 mt-3">
-          Remove Listing?
+          Delist Items?
         </h4>
         <p className="text-[#BABAC7] leading-5">
-          Canceling your listing will unpublish this sale from ChuyenDT and
-          requires a transaction to make sure it will never be fulfillable.
+          By canceling your listing, you will remove the sale from Market and
+          requires a transaction to ensure that it cannot be fulfilled in the
+          future.
         </p>
       </div>
     </CustomModal>

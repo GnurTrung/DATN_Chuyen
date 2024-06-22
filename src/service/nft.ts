@@ -48,3 +48,53 @@ export const getListOffer = async (address: any) => {
   }
   return { data: { rows: [], total: 0 } };
 };
+export const getNonce = async (params: any) => {
+  try {
+    const res = await AxiosInstance.get(`/nft/get-nonce`, {
+      params,
+    });
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const listNFTStarknet = async (params: any) => {
+  try {
+    const res = await AxiosInstance.post(`/nft/listing`, params);
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const offerNFTStarknet = async (params: any) => {
+  try {
+    const res = await AxiosInstance.post(`/nft/make-offer`, params);
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const collectionOfferNFTStarknet = async (params: any) => {
+  try {
+    const res = await AxiosInstance.post(`/collection/make-offer`, params);
+    const { data } = res;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const delistNft = async (params: {
+  nftAddress: string;
+  tokenUnit: string;
+}) => {
+  const res = await AxiosInstance.post("/nft/delist", params);
+  const { data } = res;
+  return data;
+};

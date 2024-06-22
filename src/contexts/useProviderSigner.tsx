@@ -51,7 +51,7 @@ const useProviderSigner = () => {
     }
     return results;
   };
-  const getBalanceByAddress = async (address: any, type = "0x2::sui::SUI") => {
+  const getBalanceByAddress = async (address: any, type = "0x2::sui::STRK") => {
     if (!address) return false;
     const provider = new JsonRpcProvider(getNetWork());
     const totalBalance = await provider.getBalance({
@@ -81,7 +81,7 @@ const useProviderSigner = () => {
       const provider = new JsonRpcProvider(getNetWork());
       const objectInfos = await provider.getOwnedObjects({
         owner: address,
-        // filter: '0x2::sui::SUI'
+        // filter: '0x2::sui::STRK'
         options: { showType: true },
       });
       return objectInfos;

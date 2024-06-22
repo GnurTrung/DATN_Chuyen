@@ -1,44 +1,22 @@
+import { CHAIN_VALUES } from ".";
+
 export const RPC_NODE = "https://jrpc-testnet.venom.foundation/rpc";
 // export const RPC_NODE = "https://jrpc-devnet.venom.foundation";
-
-export const wallets = [
+export const LIST_WALLETS = {
+  starknet: [
     {
-      name: "Sui Wallet",
-      src: "../../public/images/wallets/sui.png",
-      tag: "suiWallet",
-      ext: "https://chrome.google.com/webstore/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil",
+      name: "Braavos",
+      image: "/images/wallets/braavos_wallet.png",
+      token: "STRK",
+      id: "braavos",
+      type: CHAIN_VALUES.STARKNET,
     },
     {
-      name: "OKX Wallet",
-      src: "../../public/images/wallets/okx_wallet.png",
-      tag: "okx",
-      permissions: ["viewAccount", "suggestTransactions"],
-      ext: "https://chrome.google.com/webstore/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge/related",
+      name: "Argent X",
+      image: "/images/wallets/argent_wallet.png",
+      token: "STRK",
+      id: "argentX",
+      type: CHAIN_VALUES.STARKNET,
     },
-    {
-      name: "Suiet",
-      src: "../../public/images/wallets/suiet.svg",
-      tag: "__suiet__",
-      permissions: ["viewAccount", "suggestTransactions"],
-      ext: "https://chrome.google.com/webstore/detail/suiet-sui-wallet/khpkpbbcccdmmclmpigdgddabeilkdpd",
-    },
-    {
-      name: "Martian Sui Wallet",
-      src: "../../public/images/wallets/martian.png",
-      tag: "martian",
-      permissions: ["viewAccount", "suggestTransactions"],
-      ext: "https://chrome.google.com/webstore/detail/martian-wallet-aptos-sui/efbglgofoippbgcjepnhiblaibcnclgk",
-    },
-    {
-      name: "Ethos Wallet",
-      src: "../../public/images/wallets/ethos.svg",
-      tag: "ethosWallet",
-      ext: "https://chrome.google.com/webstore/detail/ethos-sui-wallet/mcbigmjiafegjnnogedioegffbooigli",
-    },
-    {
-      name: "Morphis Wallet",
-      src: "../../public/images/wallets/morphis.png",
-      tag: "morphisWallet",
-      ext: "https://chrome.google.com/webstore/detail/morphis-wallet/heefohaffomkkkphnlpohglngmbcclhi",
-    },
-  ];
+  ],
+};

@@ -35,7 +35,7 @@ const CURRENCY_OPTIONS = [
           width={16}
           height={16}
         />
-        <span className="text-secondary">SUI</span>
+        <span className="text-secondary">STRK</span>
       </div>
     ),
     value: 1,
@@ -138,7 +138,7 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                     height={12}
                   />
                   <span className="text-white font-medium text-xs">
-                    {`${formatBalance(nft?.listingPrice)} SUI`}
+                    {`${formatBalance(nft?.listingPrice)} STRK`}
                   </span>
                 </div>
               </div>
@@ -159,7 +159,7 @@ const ModalMakeOffer = ({ open, onCancel, nft }: IModalMakeOffer) => {
                     height={12}
                   />
                   <span className="text-white font-medium text-xs">
-                    {formatBalance(nft?.offerPrice) || 0} SUI
+                    {formatBalance(nft?.offerPrice) || 0} STRK
                   </span>
                 </div>
               ) : (

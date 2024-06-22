@@ -1,578 +1,376 @@
 {
-    "ABI version": 2,
-    "data": [
-        {
-            "key": 1,
-            "name": "nonce_",
-            "type": "uint64"
-        }
-    ],
-    "events": [
-        {
-            "inputs": [
-                {
-                    "name": "oldOwner",
-                    "type": "address"
-                },
-                {
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "OwnershipTransferred",
-            "outputs": []
-        },
-        {
-            "inputs": [
-                {
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "name": "nft",
-                    "type": "address"
-                },
-                {
-                    "name": "owner",
-                    "type": "address"
-                },
-                {
-                    "name": "manager",
-                    "type": "address"
-                },
-                {
-                    "name": "creator",
-                    "type": "address"
-                }
-            ],
-            "name": "NftCreated",
-            "outputs": []
-        },
-        {
-            "inputs": [
-                {
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "name": "nft",
-                    "type": "address"
-                },
-                {
-                    "name": "owner",
-                    "type": "address"
-                },
-                {
-                    "name": "manager",
-                    "type": "address"
-                }
-            ],
-            "name": "NftBurned",
-            "outputs": []
-        }
-    ],
-    "fields": [
-        {
-            "name": "_pubkey",
-            "type": "uint256"
-        },
-        {
-            "name": "_timestamp",
-            "type": "uint64"
-        },
-        {
-            "name": "_constructorFlag",
-            "type": "bool"
-        },
-        {
-            "name": "_supportedInterfaces",
-            "type": "optional(cell)"
-        },
-        {
-            "name": "_codeNft",
-            "type": "cell"
-        },
-        {
-            "name": "_totalSupply",
-            "type": "uint128"
-        },
-        {
-            "name": "_json",
-            "type": "string"
-        },
-        {
-            "name": "_codeIndex",
-            "type": "cell"
-        },
-        {
-            "name": "_codeIndexBasis",
-            "type": "cell"
-        },
-        {
-            "name": "_indexDeployValue",
-            "type": "uint128"
-        },
-        {
-            "name": "_indexDestroyValue",
-            "type": "uint128"
-        },
-        {
-            "name": "_deployIndexBasisValue",
-            "type": "uint128"
-        },
-        {
-            "name": "owner_",
-            "type": "address"
-        },
-        {
-            "name": "nonce_",
-            "type": "uint64"
-        },
-        {
-            "name": "address_owner",
-            "type": "address"
-        },
-        {
-            "name": "_remainOnNft",
-            "type": "uint128"
-        },
-        {
-            "components": [
-                {
-                    "name": "name",
-                    "type": "string"
-                },
-                {
-                    "name": "description",
-                    "type": "string"
-                },
-                {
-                    "name": "previewUrl",
-                    "type": "string"
-                },
-                {
-                    "name": "previewMimeType",
-                    "type": "string"
-                },
-                {
-                    "name": "fileUrl",
-                    "type": "string"
-                },
-                {
-                    "name": "fileMimeType",
-                    "type": "string"
-                },
-                {
-                    "components": [
-                        {
-                            "name": "trait_type",
-                            "type": "string"
-                        },
-                        {
-                            "name": "value",
-                            "type": "string"
-                        }
-                    ],
-                    "name": "attributes",
-                    "type": "tuple[]"
-                },
-                {
-                    "name": "externalUrl",
-                    "type": "string"
-                }
-            ],
-            "name": "_patterns",
-            "type": "tuple[]"
-        }
-    ],
-    "functions": [
-        {
-            "inputs": [
-                {
-                    "name": "codeNft",
-                    "type": "cell"
-                },
-                {
-                    "name": "codeIndex",
-                    "type": "cell"
-                },
-                {
-                    "name": "codeIndexBasis",
-                    "type": "cell"
-                },
-                {
-                    "name": "owner",
-                    "type": "address"
-                },
-                {
-                    "name": "remainOnNft",
-                    "type": "uint128"
-                },
-                {
-                    "name": "json",
-                    "type": "string"
-                },
-                {
-                    "components": [
-                        {
-                            "name": "name",
-                            "type": "string"
-                        },
-                        {
-                            "name": "description",
-                            "type": "string"
-                        },
-                        {
-                            "name": "previewUrl",
-                            "type": "string"
-                        },
-                        {
-                            "name": "previewMimeType",
-                            "type": "string"
-                        },
-                        {
-                            "name": "fileUrl",
-                            "type": "string"
-                        },
-                        {
-                            "name": "fileMimeType",
-                            "type": "string"
-                        },
-                        {
-                            "components": [
-                                {
-                                    "name": "trait_type",
-                                    "type": "string"
-                                },
-                                {
-                                    "name": "value",
-                                    "type": "string"
-                                }
-                            ],
-                            "name": "attributes",
-                            "type": "tuple[]"
-                        },
-                        {
-                            "name": "externalUrl",
-                            "type": "string"
-                        }
-                    ],
-                    "name": "patterns",
-                    "type": "tuple[]"
-                }
-            ],
-            "name": "constructor",
-            "outputs": []
-        },
-        {
-            "inputs": [
-                {
-                    "name": "_owner",
-                    "type": "address"
-                },
-                {
-                    "name": "_id",
-                    "type": "uint256"
-                },
-                {
-                    "name": "_sendGasTo",
-                    "type": "address"
-                }
-            ],
-            "name": "mintNft",
-            "outputs": []
-        },
-        {
-            "inputs": [],
-            "name": "mintNftPublic",
-            "outputs": []
-        },
-        {
-            "inputs": [],
-            "name": "drainGas",
-            "outputs": []
-        },
-        {
-            "inputs": [
-                {
-                    "name": "remainOnNft",
-                    "type": "uint128"
-                }
-            ],
-            "name": "setRemainOnNft",
-            "outputs": []
-        },
-        {
-            "inputs": [
-                {
-                    "name": "collection",
-                    "type": "address"
-                },
-                {
-                    "name": "owner",
-                    "type": "address"
-                }
-            ],
-            "name": "resolveIndexCodeHash",
-            "outputs": [
-                {
-                    "name": "hash",
-                    "type": "uint256"
-                }
-            ]
-        },
-        {
-            "inputs": [],
-            "name": "owner",
-            "outputs": [
-                {
-                    "name": "value0",
-                    "type": "address"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "transferOwnership",
-            "outputs": []
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "indexBasisCode",
-            "outputs": [
-                {
-                    "name": "code",
-                    "type": "cell"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "indexBasisCodeHash",
-            "outputs": [
-                {
-                    "name": "hash",
-                    "type": "uint256"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "resolveIndexBasis",
-            "outputs": [
-                {
-                    "name": "indexBasis",
-                    "type": "address"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "indexCode",
-            "outputs": [
-                {
-                    "name": "code",
-                    "type": "cell"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "indexCodeHash",
-            "outputs": [
-                {
-                    "name": "hash",
-                    "type": "uint256"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "getJson",
-            "outputs": [
-                {
-                    "name": "json",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "totalSupply",
-            "outputs": [
-                {
-                    "name": "count",
-                    "type": "uint128"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "nftCode",
-            "outputs": [
-                {
-                    "name": "code",
-                    "type": "cell"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                }
-            ],
-            "name": "nftCodeHash",
-            "outputs": [
-                {
-                    "name": "codeHash",
-                    "type": "uint256"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                },
-                {
-                    "name": "id",
-                    "type": "uint256"
-                }
-            ],
-            "name": "nftAddress",
-            "outputs": [
-                {
-                    "name": "nft",
-                    "type": "address"
-                }
-            ]
-        },
-        {
-            "inputs": [
-                {
-                    "name": "answerId",
-                    "type": "uint32"
-                },
-                {
-                    "name": "interfaceID",
-                    "type": "uint32"
-                }
-            ],
-            "name": "supportsInterface",
-            "outputs": [
-                {
-                    "name": "value0",
-                    "type": "bool"
-                }
-            ]
-        },
-        {
-            "inputs": [],
-            "name": "_patterns",
-            "outputs": [
-                {
-                    "components": [
-                        {
-                            "name": "name",
-                            "type": "string"
-                        },
-                        {
-                            "name": "description",
-                            "type": "string"
-                        },
-                        {
-                            "name": "previewUrl",
-                            "type": "string"
-                        },
-                        {
-                            "name": "previewMimeType",
-                            "type": "string"
-                        },
-                        {
-                            "name": "fileUrl",
-                            "type": "string"
-                        },
-                        {
-                            "name": "fileMimeType",
-                            "type": "string"
-                        },
-                        {
-                            "components": [
-                                {
-                                    "name": "trait_type",
-                                    "type": "string"
-                                },
-                                {
-                                    "name": "value",
-                                    "type": "string"
-                                }
-                            ],
-                            "name": "attributes",
-                            "type": "tuple[]"
-                        },
-                        {
-                            "name": "externalUrl",
-                            "type": "string"
-                        }
-                    ],
-                    "name": "_patterns",
-                    "type": "tuple[]"
-                }
-            ]
-        }
-    ],
-    "header": [
-        "pubkey",
-        "time",
-        "expire"
-    ],
-    "version": "2.2"
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"codeNft","type":"cell"},
+				{"name":"codeIndex","type":"cell"},
+				{"name":"codeIndexBasis","type":"cell"},
+				{"name":"owner","type":"address"},
+				{"name":"_addClaim","type":"address"},
+				{"name":"remainOnNft","type":"uint128"},
+				{"name":"json","type":"string"},
+				{"components":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"previewUrl","type":"string"},{"name":"previewMimeType","type":"string"},{"name":"fileUrl","type":"string"},{"name":"fileMimeType","type":"string"},{"components":[{"name":"trait_type","type":"string"},{"name":"value","type":"string"}],"name":"attributes","type":"tuple[]"},{"name":"externalUrl","type":"string"}],"name":"patterns","type":"tuple"},
+				{"name":"_totalSupplys","type":"uint128"},
+				{"name":"_pubKey","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "mintNftPublic",
+			"inputs": [
+				{"name":"dataCell","type":"cell"},
+				{"name":"signature","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "batchMintNft",
+			"inputs": [
+				{"name":"dataCell","type":"cell"},
+				{"name":"signature","type":"cell"},
+				{"name":"total","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "nftPrivate",
+			"inputs": [
+				{"name":"total","type":"uint256"},
+				{"name":"owner","type":"address"},
+				{"name":"pool","type":"uint8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkSumPoolMint",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "checkUserMintMax",
+			"inputs": [
+				{"name":"user","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "drainGas",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setRemainOnNft",
+			"inputs": [
+				{"name":"remainOnNft","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTime",
+			"inputs": [
+				{"name":"pool","type":"uint256"},
+				{"name":"time","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setMintMax",
+			"inputs": [
+				{"name":"pool","type":"uint256"},
+				{"name":"mintmax","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setPoolMintMax",
+			"inputs": [
+				{"name":"pool","type":"uint256"},
+				{"name":"mintmax","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setPoolMinted",
+			"inputs": [
+				{"name":"pool","type":"uint256"},
+				{"name":"mint","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setSumSupply",
+			"inputs": [
+				{"name":"supply","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resolveIndexCodeHash",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"owner","type":"address"}
+			],
+			"outputs": [
+				{"name":"hash","type":"uint256"}
+			]
+		},
+		{
+			"name": "owner",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "transferOwnership",
+			"inputs": [
+				{"name":"newOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "indexBasisCode",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"code","type":"cell"}
+			]
+		},
+		{
+			"name": "indexBasisCodeHash",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"hash","type":"uint256"}
+			]
+		},
+		{
+			"name": "resolveIndexBasis",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"indexBasis","type":"address"}
+			]
+		},
+		{
+			"name": "indexCode",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"code","type":"cell"}
+			]
+		},
+		{
+			"name": "indexCodeHash",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"hash","type":"uint256"}
+			]
+		},
+		{
+			"name": "getJson",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"json","type":"string"}
+			]
+		},
+		{
+			"name": "totalSupply",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"count","type":"uint128"}
+			]
+		},
+		{
+			"name": "nftCode",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"code","type":"cell"}
+			]
+		},
+		{
+			"name": "nftCodeHash",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"codeHash","type":"uint256"}
+			]
+		},
+		{
+			"name": "nftAddress",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"id","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"nft","type":"address"}
+			]
+		},
+		{
+			"name": "supportsInterface",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"interfaceID","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "_patterns",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"previewUrl","type":"string"},{"name":"previewMimeType","type":"string"},{"name":"fileUrl","type":"string"},{"name":"fileMimeType","type":"string"},{"components":[{"name":"trait_type","type":"string"},{"name":"value","type":"string"}],"name":"attributes","type":"tuple[]"},{"name":"externalUrl","type":"string"}],"name":"_patterns","type":"tuple"}
+			]
+		},
+		{
+			"name": "sumTotalSupply",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"sumTotalSupply","type":"uint128"}
+			]
+		},
+		{
+			"name": "userMintMax",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"userMintMax","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "poolMintMax",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"poolMintMax","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "sumPoolMint",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"sumPoolMint","type":"uint256[]"}
+			]
+		},
+		{
+			"name": "pricePoolMint",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"pricePoolMint","type":"uint128[]"}
+			]
+		},
+		{
+			"name": "timePoolMint",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"timePoolMint","type":"uint64[]"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"nonce_","type":"uint64"}
+	],
+	"events": [
+		{
+			"name": "OwnershipTransferred",
+			"inputs": [
+				{"name":"oldOwner","type":"address"},
+				{"name":"newOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "NftCreated",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"nft","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"manager","type":"address"},
+				{"name":"creator","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "NftBurned",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"nft","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"manager","type":"address"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_supportedInterfaces","type":"optional(cell)"},
+		{"name":"_codeNft","type":"cell"},
+		{"name":"_totalSupply","type":"uint128"},
+		{"name":"_json","type":"string"},
+		{"name":"_codeIndex","type":"cell"},
+		{"name":"_codeIndexBasis","type":"cell"},
+		{"name":"_indexDeployValue","type":"uint128"},
+		{"name":"_indexDestroyValue","type":"uint128"},
+		{"name":"_deployIndexBasisValue","type":"uint128"},
+		{"name":"owner_","type":"address"},
+		{"name":"nonce_","type":"uint64"},
+		{"name":"_remainOnNft","type":"uint128"},
+		{"components":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"previewUrl","type":"string"},{"name":"previewMimeType","type":"string"},{"name":"fileUrl","type":"string"},{"name":"fileMimeType","type":"string"},{"components":[{"name":"trait_type","type":"string"},{"name":"value","type":"string"}],"name":"attributes","type":"tuple[]"},{"name":"externalUrl","type":"string"}],"name":"_patterns","type":"tuple"},
+		{"name":"sumTotalSupply","type":"uint128"},
+		{"name":"pubKey","type":"uint256"},
+		{"name":"addClaim","type":"address"},
+		{"name":"checkMaxMint","type":"map(address,uint256[])"},
+		{"name":"userMintMax","type":"uint256[]"},
+		{"name":"poolMintMax","type":"uint256[]"},
+		{"name":"sumPoolMint","type":"uint256[]"},
+		{"name":"pricePoolMint","type":"uint128[]"},
+		{"name":"timePoolMint","type":"uint64[]"}
+	]
 }

@@ -18,14 +18,9 @@ import { isMobile } from "react-device-detect";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoData from "@/components/NoData";
 import SkeletonLoadingGrid from "@/components/product-card/SkeletonLoadingGrid";
-import { TYPE_TICKET } from "@/constants/market";
-import { toast } from "react-hot-toast";
-import { useWalletKit } from "@mysten/wallet-kit";
-import { TransactionBlock } from "@mysten/sui.js";
 const { Panel } = Collapse;
 
 const ExploreContainer = () => {
-  const { signAndExecuteTransactionBlock } = useWalletKit();
   const [gridMode, setGridMode] = useState(GRID_MODE.LARGE);
   const { isFilterShown, toggleFilter, onShow } = useToggleFilter(false);
   const [searchText, setSearchText] = useState("");
@@ -33,7 +28,6 @@ const ExploreContainer = () => {
   const [status, setStatus] = useState<any>("buy-now,not-for-sale");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [loadingTicket, setLoadingTicket] = useState(false);
   const {
     listNft,
     setParamsSearch,
@@ -42,10 +36,7 @@ const ExploreContainer = () => {
     loadMoreNft,
     pagination,
     handleLikeNft,
-    userNFT,
-    getListNftWallet
   } = useExploreContext();
-  const hasTicket = userNFT.find((x: any) => x?.collectionAddress?.includes(TYPE_TICKET));
   const debounceSearchText = useDebounce(searchText, 300);
 
   useEffect(() => {
@@ -93,44 +84,6 @@ const ExploreContainer = () => {
       minPrice: minPrice,
       maxPrice: maxPrice,
     });
-  };
-
-  const handleMint = async () => {
-    try {
-      setLoadingTicket(true);
-      const PK = TYPE_TICKET;
-      const MODULE = "datn_dnft";
-      const SC_FUNCTION = "mint";
-      const tx = new TransactionBlock();
-      const args = [
-        tx.pure("https://ipfs.io/ipfs/bafybeidnpruwfc2e4vb2sedsrltq2axidw5ioryzqqmbyl6uxg4giiidqi/362.png"),
-        tx.pure("Ticket"),
-        tx.pure("Ticket"),
-      ];
-      const data = {
-        target: `${PK}::${MODULE}::${SC_FUNCTION}`,
-        typeArguments: [],
-        arguments: args,
-      } as any;
-      tx.moveCall(data);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: {
-          showEffects: true,
-        },
-      });
-      console.log(response);
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
-        toast.success("Mint ticket successfully!");
-        await getListNftWallet();
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (error: any) {
-      console.log(error.message);
-      toast.error(error.message);
-    } finally {
-      setLoadingTicket(false);
-    }
   };
 
   const renderFilter = () => {
@@ -221,10 +174,10 @@ const ExploreContainer = () => {
           Explore
         </h1>
         <p className="text-xl text-secondary leading-5">
-          Buy and Sell NFTs on Sui Blockchain.
+          Buy and Sell NFTs on Starknet Blockchain.
         </p>
       </div>
-      {hasTicket && <div>
+      {<div>
         <div className="flex items-end sm:items-start space-x-0 md:space-x-4 md:space-y-0 pb-4 sticky top-[136px] sm:top-[164px] bg-layer-1 z-10 md:flex-nowrap flex-nowrap sm:flex-wrap gap-2 justify-center space-y-2">
           <Button
             className={cx("btn-secondary w-12", {
@@ -316,17 +269,6 @@ const ExploreContainer = () => {
           </div>
         </div>
       </div>}
-      {!hasTicket && (
-        <div className="py-10 flex justify-center">
-          <Button
-            onClick={() => handleMint()}
-            className="btn-primary"
-            loading={loadingTicket}
-          >
-            Mint Ticket
-          </Button>
-        </div>
-      )}
     </div>
   );
 };

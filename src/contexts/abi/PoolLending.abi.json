@@ -1,0 +1,187 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"collectionRootAddr","type":"address"},
+				{"name":"addrOwner","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"sendGasTo","type":"address"},
+				{"name":"offerAddressLending","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"priceFloor","type":"uint128"},
+				{"name":"leftOnOfferAfterFinish","type":"uint128"},
+				{"name":"check_status","type":"uint8"},
+				{"name":"startTime","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptRequest",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptCollectionOffer",
+			"inputs": [
+				{"name":"collection","type":"address"},
+				{"name":"loaner","type":"address"},
+				{"name":"priceOrder","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "foreclose",
+			"inputs": [
+				{"name":"dataCell","type":"cell"},
+				{"name":"signature","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "repay",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "refundNft",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "auctionOrClaimNft",
+			"inputs": [
+				{"name":"check","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "claimPriceLending",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "cancelOrder",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getOfferInfo",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"nft","type":"address"},
+				{"name":"lendingRootAddr","type":"address"},
+				{"name":"collectionAddr","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"sendGasTo","type":"address"},
+				{"name":"offerAddressLending","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"priceFloor","type":"uint128"},
+				{"name":"currentPayment","type":"uint128"},
+				{"name":"isActive","type":"uint8"},
+				{"name":"createdTime","type":"uint64"},
+				{"name":"endTime","type":"uint64"},
+				{"name":"checkRefundNft","type":"bool"},
+				{"name":"checkClaimPrice","type":"bool"}
+			]
+		},
+		{
+			"name": "getFeesInfo",
+			"inputs": [
+				{"name":"answerId","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"leftOnOfferAfterFinish","type":"uint128"}
+			]
+		},
+		{
+			"name": "supportsInterface",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"interfaceID","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_ventoryLendingRootAddr","type":"address"},
+		{"key":2,"name":"_id","type":"uint256"}
+	],
+	"events": [
+		{
+			"name": "IPoolLendingCreated",
+			"inputs": [
+				{"name":"marketRoot","type":"address"},
+				{"name":"collection","type":"address"},
+				{"name":"owner","type":"address"},
+				{"name":"addrNft","type":"address"},
+				{"name":"oldManager","type":"address"},
+				{"name":"price","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "AcceptConfirmed",
+			"inputs": [
+				{"name":"newOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "SellCancelled",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_supportedInterfaces","type":"optional(cell)"},
+		{"name":"_ventoryLendingRootAddr","type":"address"},
+		{"name":"_id","type":"uint256"},
+		{"name":"_price","type":"uint128"},
+		{"name":"_priceFloor","type":"uint128"},
+		{"name":"_currentPayment","type":"uint128"},
+		{"name":"_addrNft","type":"address"},
+		{"name":"_collectionRootAddr","type":"address"},
+		{"name":"_owner","type":"address"},
+		{"name":"_oldManager","type":"address"},
+		{"name":"_sendGasTo","type":"address"},
+		{"name":"_offerAddressLending","type":"address"},
+		{"name":"_createdTime","type":"uint64"},
+		{"name":"_endTime","type":"uint64"},
+		{"name":"_leftOnOfferAfterFinish","type":"uint128"},
+		{"name":"_isActive","type":"uint8"},
+		{"name":"_checkRefundNft","type":"bool"},
+		{"name":"_checkClaimPrice","type":"bool"}
+	]
+}

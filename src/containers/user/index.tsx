@@ -17,9 +17,10 @@ import Activity from "./activity";
 import Watchlist from "./Watchlist";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useApplicationContext } from "@/contexts/useApplication";
 
 const UserContainer = () => {
-  const { account, profile } = useVenom();
+  const { currentConnectedAccount, profile } = useApplicationContext();
   const router = useRouter();
   const { Paragraph } = Typography;
   const { listNft, onSelectTab, tab } = useUserContext();
@@ -28,10 +29,10 @@ const UserContainer = () => {
       name: "Address",
       value: (
         <div className="flex">
-          {`${formatWallet(account)}`}
+          {`${formatWallet(currentConnectedAccount)}`}
           <Paragraph
             copyable={{
-              text: account,
+              text: currentConnectedAccount,
               icon: [
                 <IconCopy key="copy-icon" />,
                 <IconCopy key="copied-icon" />,
@@ -90,10 +91,10 @@ const UserContainer = () => {
   };
 
   // useEffect(() => {
-  //   if (!account) {
+  //   if (!currentConnectedAccount) {
   //     router.push("/");
   //   }
-  // }, [account]);
+  // }, [currentConnectedAccount]);
 
   return (
     <div className="w-full pb-20">
@@ -115,14 +116,14 @@ const UserContainer = () => {
             />
             <div className="flex-1">
               <div className="text-white font-semibold text-xl flex items-center space-x-2">
-                <span>{profile?.userName || "ChuyenDT"}</span>
+                <span>{profile?.userName || "HieuTT"}</span>
                 {/* <IconVerified /> */}
               </div>
               <div className="text-secondary font-medium flex items-center">
-                {formatWallet(account)}
+                {formatWallet(currentConnectedAccount)}
                 <Paragraph
                   copyable={{
-                    text: account,
+                    text: currentConnectedAccount,
                     icon: [
                       <IconCopy key="copy-icon" />,
                       <IconCopy key="copied-icon" />,
@@ -132,7 +133,7 @@ const UserContainer = () => {
               </div>
               <div className="flex items-center space-x-4 mt-2">
                 <Button
-                  onClick={() => router.push(`/settings/${account}`)}
+                  onClick={() => router.push(`/settings/${currentConnectedAccount}`)}
                   className="btn-secondary space-x-2"
                 >
                   <IconEdit />
@@ -140,7 +141,7 @@ const UserContainer = () => {
                 </Button>
                 <TwitterShareButton
                   url={getURL()}
-                  title={`My profile on ChuyenDT`}
+                  title={`My profile on HieuTT`}
                 >
                   <div className="btn-secondary space-x-2 px-4">
                     <IconTwitter width={24} height={24} />

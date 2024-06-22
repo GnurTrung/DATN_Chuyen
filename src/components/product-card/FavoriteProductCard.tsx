@@ -21,7 +21,7 @@ const ProductCard = (props: any) => {
         <div className="flex items-center space-x-1">
           <Image src={VenomToken} alt="Venom" width={12} height={12} />
           <span className="text-white text-xs font-medium">
-            {formatBalance(listingPrice)} SUI
+            {formatBalance(listingPrice)} STRK
           </span>
         </div>
       </div>

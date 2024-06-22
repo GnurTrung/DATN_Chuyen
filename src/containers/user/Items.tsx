@@ -132,7 +132,7 @@ const Items = () => {
                 placeholder="MAX"
                 onChange={(e: any) => setMaxPrice(e?.target?.value || "")}
               />
-              <span>SUI</span>
+              <span>STRK</span>
             </div>
             <Button className="btn-primary" onClick={() => setSearchStatus()}>
               Apply

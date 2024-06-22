@@ -1,39 +1,31 @@
 import IconCart from "@/assets/icons/IconCart";
-import IconVerified from "@/assets/icons/IconVerified";
-import { GRID_MODE, REFUNDABLE_FEE, TOP_RANK } from "@/constants";
-import { Button, Tooltip } from "antd";
-import Image from "next/image";
-import VenomToken from "../../../public/images/token/venom.png";
-import CustomImage from "../custom-image";
-import Link from "next/link";
-import { useVenom } from "@/contexts/useVenom";
-import { formatBalance } from "@/utils";
+import IconRemoveCart from "@/assets/icons/IconRemoveCart";
 import ModalBuyNft from "@/components/custom-modal/ModalBuyNft";
-import useShowModal from "@/hooks/useShowModal";
 import ModalListNft from "@/components/custom-modal/ModalListNft";
+import {
+  CHAIN_VALUES_ENUM,
+  GRID_MODE,
+  REFUNDABLE_FEE,
+  TOP_RANK,
+} from "@/constants";
+import { useApplicationContext } from "@/contexts/useApplication";
+import { useVenom } from "@/contexts/useVenom";
+import useShowModal from "@/hooks/useShowModal";
+import useStarknet from "@/hooks/useStarknet";
+import { formatBalanceByChain, getCurrencyByChain } from "@/utils";
+import { Button, Tooltip } from "antd";
+import { Address } from "everscale-inpage-provider";
+import Image from "next/image";
+import { useMemo } from "react";
+import { toast } from "react-hot-toast";
+import FormatPrice from "../FormatPrice";
+import CustomImage from "../custom-image";
+import ModalBuySuccess from "../custom-modal/ModalBuySuccess";
 import ModalCancelNFT from "../custom-modal/ModalDeList";
 import ModalMakeOffer from "../custom-modal/ModalMakeOffer";
-import ModalBuySuccess from "../custom-modal/ModalBuySuccess";
 import ModalWaiting from "../custom-modal/ModalWaiting";
-import { TransactionBlock } from "@mysten/sui.js";
-import { toast } from "react-hot-toast";
-import cx from "classnames";
-import { useApplicationContext } from "@/contexts/useApplication";
-import IconRemoveCart from "@/assets/icons/IconRemoveCart";
-import {
-  BUY_NFT,
-  SC_CONTRACT_MODULE,
-  SC_PACKAGE_MARKET,
-  SC_SHARED_MARKET,
-  SUI_OFFSET,
-} from "@/configs";
-import { useWalletKit } from "@mysten/wallet-kit";
-import useProviderSigner from "@/contexts/useProviderSigner";
-interface IProductCardProps {
-  gridMode?: GRID_MODE;
-}
 
-const ProductCard = (props: any) => {
+const ProductCardPro = (props: any) => {
   const {
     collectionName,
     nftId,
@@ -45,18 +37,42 @@ const ProductCard = (props: any) => {
     collectionAddress,
     ranking,
     top = 0,
+    isOnBulkAction,
+    onSelectNft,
+    selectedNft,
+    disabledCheckbox,
     offerPrice,
+    id,
+    managerNft,
     gridMode,
+    networkType,
+    version,
+    onClick,
+    tokenUnit,
+    signatureR,
+    signatureS,
   } = props;
+  const { provider } = useVenom();
+  const {
+    addItem,
+    items,
+    removeItem,
+    isAuthenticated,
+    currentConnectedAccount,
+    onShowDrawerConnectWallet,
+  } = useApplicationContext();
+  const { handleBuyFromListingStarknet } = useStarknet();
 
-  const { account } = useVenom();
-  const { addItem, items, removeItem } = useApplicationContext();
+  const getCurrency = useMemo(
+    () => getCurrencyByChain(networkType, tokenUnit),
+    [networkType, tokenUnit]
+  );
 
   const renderPrice = () => {
     if (!isListing)
       return (
         <div className="flex items-center space-x-1">
-          <Image src={VenomToken} alt="Venom" width={12} height={12} />
+          <Image src={getCurrency.image} alt="Venom" width={12} height={12} />
           <span className="text-white text-xs font-medium">Unlisted</span>
         </div>
       );
@@ -64,9 +80,12 @@ const ProductCard = (props: any) => {
       <div className="flex justify-between leading-[18px]">
         <span className="text-secondary text-xs font-medium">Price</span>
         <div className="flex items-center space-x-1">
-          <Image src={VenomToken} alt="Venom" width={12} height={12} />
+          <Image src={getCurrency.image} alt="Venom" width={12} height={12} />
           <span className="text-white text-xs font-medium">
-            {formatBalance(listingPrice)} SUI
+            <FormatPrice
+              number={Number(formatBalanceByChain(listingPrice, networkType))}
+            />{" "}
+            {/* {getCurrency.currency} */}
           </span>
         </div>
       </div>
@@ -104,53 +123,36 @@ const ProductCard = (props: any) => {
     onShow: onShowModalWaiting,
   } = useShowModal();
 
-  const { signAndExecuteTransactionBlock } = useWalletKit();
-  const { getObject } = useProviderSigner();
-
-  const handleBuy = async () => {
+  const onBuyNftStarknet = async () => {
     onShowModalWaiting();
     onHideModalBuyNft();
     try {
-      if (!nftId || !listingPrice) return;
-      const object = await getObject(nftId);
-      const typeNFT = object?.data?.type;
-      if (!typeNFT) return;
-
-      const price_sm = listingPrice;
-      const tx = new TransactionBlock();
-      const [coin] = tx.splitCoins(tx.gas, [tx.pure(price_sm)]);
-      const request = {
-        target: `${SC_PACKAGE_MARKET}::${SC_CONTRACT_MODULE}::${BUY_NFT}`,
-        typeArguments: [typeNFT],
-        arguments: [tx.pure(SC_SHARED_MARKET), tx.pure(nftId), coin],
-      } as any;
-      tx.moveCall(request);
-      const response = await signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-        options: { showEffects: true },
-      });
-      if (!response) toast.error("Opps! There are some errors");
-      else if (response?.effects?.status.status == "success") {
+      const res = await handleBuyFromListingStarknet(props);
+      if (res?.transaction_hash) {
         toast.success("Bought successfully!");
         onShowModalBuySuccess();
-      } else toast.error(response?.effects?.status.error || "");
-    } catch (ex: any) {
-      toast.error(ex.message);
-      console.log(ex);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       onHideModalWaiting();
     }
   };
 
   const onClickBuy = (e: any) => {
-    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) return onShowDrawerConnectWallet();
     onShowModalBuyNft();
+  };
+
+  const onConfirmBuy = async () => {
+    await onBuyNftStarknet();
   };
 
   const isAddedToCart = !!items?.find((item) => item.id === nftId);
 
   const onAddToCart = (e: any) => {
-    e.preventDefault();
+    e.stopPropagation();
     const params = {
       id: nftId,
       collectionAddress,
@@ -158,21 +160,28 @@ const ProductCard = (props: any) => {
       imageUrl,
       listingPrice,
       title,
+      networkType,
+      signatureR,
+      signatureS,
+      tokenUnit,
     };
-    console.log(params);
     addItem(params);
   };
 
   const onRemoveFromCart = (e: any) => {
-    e.preventDefault();
+    e.stopPropagation();
     removeItem({ id: nftId });
   };
 
   return (
     <div>
-      <Link href={`/nft/${nftId}`}>
-        <div className="bg-layer-2 border border-solid rounded-lg p-2 border-stroke cursor-pointer group">
-          <div className="flex flex-col space-y-2">
+      {/* <Link href={`/nft/${nftId}`}> */}
+      <div
+        onClick={onClick}
+        className="bg-layer-2 cursor-pointer border border-solid rounded-lg p-2 border-stroke group"
+      >
+        <div className="flex flex-col space-y-2">
+          <div className="relative">
             <div className="aspect-square w-full overflow-hidden relative rounded-lg">
               <CustomImage
                 src={imageUrl}
@@ -180,134 +189,114 @@ const ProductCard = (props: any) => {
                 className="object-cover w-full h-full group-hover:scale-110 !transition !duration-300 !ease-in-out group-hover:blur-sm"
                 wrapperClassName="w-full h-full"
               />
-
-              {isListing ? (
-                <>
-                  {account !== ownerAddress ? (
-                    <div className="items-center space-x-2 w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
-                      <Button
-                        className="btn-secondary w-12 px-0"
-                        onClick={isAddedToCart ? onRemoveFromCart : onAddToCart}
-                      >
-                        {isAddedToCart ? <IconRemoveCart /> : <IconCart />}
-                      </Button>
-                      <Button
-                        onClick={onClickBuy}
-                        className="btn-primary flex-1"
-                      >
-                        Buy
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="items-center space-x-2 w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onShowModalCancelNFT();
-                        }}
-                        className="btn-primary flex-1"
-                      >
-                        Cancel List
-                      </Button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  {account !== ownerAddress ? (
-                    <div className="items-center w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onShowModalMakeOffer();
-                        }}
-                        className="btn-primary flex-1"
-                      >
-                        Make Offer
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="items-center w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          onShowModalListNft();
-                        }}
-                        className="btn-primary flex-1"
-                      >
-                        List for Sale
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
             </div>
-            <div className="flex flex-col space-y-1">
-              <div className="flex items-center justify-between space-x-1 w-full truncate">
-                <IconVerified />
-                <Tooltip title={collectionName}>
-                  <span className="text-secondary text-sm leading-5 flex-1 flex justify-start truncate">
-                    {collectionName}
-                  </span>
-                </Tooltip>
 
-                {!!ranking && (
-                  <div
-                    className={cx(
-                      "rounded-[4px] bg-primary text-semi-black font-medium text-xs p-1 min-w-[44px] text-center",
-                      {
-                        "top-1-rank": top === TOP_RANK.TOP_1,
-                        "top-10-rank": top === TOP_RANK.TOP_10,
-                        "top-25-rank": top === TOP_RANK.TOP_25,
-                      }
-                    )}
-                  >
-                    {`#${ranking}`}
+            {isListing ? (
+              <>
+                {currentConnectedAccount !== ownerAddress ? (
+                  <div className="items-center space-x-2 w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
+                    <Button
+                      className="btn-secondary w-12 px-0"
+                      onClick={isAddedToCart ? onRemoveFromCart : onAddToCart}
+                    >
+                      {isAddedToCart ? <IconRemoveCart /> : <IconCart />}
+                    </Button>
+                    <Button onClick={onClickBuy} className="btn-primary flex-1">
+                      Buy
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="items-center space-x-2 w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onShowModalCancelNFT();
+                      }}
+                      className="btn-primary flex-1"
+                    >
+                      Remove Listing
+                    </Button>
                   </div>
                 )}
-              </div>
-              <Tooltip title={title}>
-                <span className="text-white text-base font-medium leading-6 truncate">
-                  {title}
-                </span>
-              </Tooltip>
-            </div>
-            <>
-              {gridMode === GRID_MODE.SMALL && renderPrice()}
-              {(gridMode === GRID_MODE.LARGE || !gridMode) && (
-                <div className="bg-layer-3 rounded-lg p-2 flex flex-col space-y-2">
-                  {renderPrice()}
-                  <div className="flex justify-between leading-[18px]">
-                    <span className="text-secondary text-xs font-medium">
-                      Top offer
-                    </span>
-                    {offerPrice ? (
-                      <div className="flex items-center space-x-1">
-                        <Image
-                          src={VenomToken}
-                          alt="Sui"
-                          width={12}
-                          height={12}
-                        />
-                        <span className="text-white text-xs font-medium">
-                          {formatBalance(offerPrice)} SUI
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-secondary">--</span>
-                    )}
+              </>
+            ) : (
+              <>
+                {currentConnectedAccount !== ownerAddress ? (
+                  <div className="items-center w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onShowModalMakeOffer();
+                      }}
+                      className="btn-primary flex-1"
+                    >
+                      Make Offer
+                    </Button>
                   </div>
-                </div>
-              )}
-            </>
+                ) : (
+                  <div className="items-center w-[90%] hidden group-hover:flex absolute bottom-3 right-1/2 translate-x-1/2 z-5">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onShowModalListNft();
+                      }}
+                      className="btn-primary flex-1"
+                    >
+                      List for Sale
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
+          <div className="flex flex-col space-y-1">
+            <Tooltip title={title}>
+              <span className="text-white text-base font-medium leading-6 truncate">
+                {title}
+              </span>
+            </Tooltip>
+          </div>
+          <>
+            {gridMode === GRID_MODE.SMALL && renderPrice()}
+            {(gridMode === GRID_MODE.LARGE || !gridMode) && (
+              <div className="bg-layer-3 rounded-lg p-2 flex flex-col space-y-2">
+                {renderPrice()}
+                <div className="flex justify-between leading-[18px]">
+                  <span className="text-secondary text-xs font-medium">
+                    Top offer
+                  </span>
+                  {offerPrice ? (
+                    <div className="flex items-center space-x-1">
+                      <Image
+                        src={getCurrency.image}
+                        alt="Venom"
+                        width={12}
+                        height={12}
+                      />
+                      <span className="text-white text-xs font-medium">
+                        <FormatPrice
+                          number={Number(
+                            formatBalanceByChain(offerPrice, networkType)
+                          )}
+                        />{" "}
+                        {/* {getCurrency.currency} */}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-secondary">--</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         </div>
-      </Link>
+      </div>
+      {/* </Link> */}
       <ModalBuyNft
         open={showModalBuyNft}
         onCancel={onHideModalBuyNft}
         nft={props}
-        handleBuy={handleBuy}
+        handleBuy={onConfirmBuy}
       />
       <ModalBuySuccess
         open={showModalBuySuccess}
@@ -335,4 +324,4 @@ const ProductCard = (props: any) => {
   );
 };
 
-export default ProductCard;
+export default ProductCardPro;

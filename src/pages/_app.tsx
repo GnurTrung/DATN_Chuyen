@@ -15,6 +15,7 @@ import Meta from "@/layout/Meta";
 import Script from "next/script";
 import ApplicationProvider from "@/contexts/useApplication";
 import { WalletKitProvider } from "@mysten/wallet-kit";
+import StarknetProvider from "@/contexts/useStarknetConnect";
 
 const public_sans = Public_Sans({ subsets: ["latin"] });
 
@@ -22,15 +23,16 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <WalletKitProvider>
       <VenomProvider>
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-M7D54BBLR2"
-        />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
+        <StarknetProvider>
+          <Script
+            strategy="afterInteractive"
+            src="https://www.googletagmanager.com/gtag/js?id=G-M7D54BBLR2"
+          />
+          <Script
+            id="google-analytics"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -38,32 +40,33 @@ export default function App({ Component, pageProps }: AppProps) {
         page_path: window.location.pathname,
         });
         `,
-          }}
-        />
-        <ApplicationProvider>
-          <main
-            className={cx(
-              public_sans.className,
-              "min-h-screen flex flex-col justify-between w-full"
-            )}
-          >
-            <Meta
-              title="ChuyenDT"
-              description="ChuyenDT | The best marketplace on Sui Network"
-            />
-            <Header />
-            <div className="flex items-start justify-between flex-1 px-2 sm:layout pt-4">
-              <MobileSideMenu />
-              <LeftSideMenu />
-              <div className="px-2 sm:px-8 flex-1 w-0">
-                <Toaster />
-                <Component {...pageProps} />
+            }}
+          />
+          <ApplicationProvider>
+            <main
+              className={cx(
+                public_sans.className,
+                "min-h-screen flex flex-col justify-between w-full"
+              )}
+            >
+              <Meta
+                title="HieuTT"
+                description="HieuTT | The best marketplace on Starknet Network"
+              />
+              <Header />
+              <div className="flex items-start justify-between flex-1 px-2 sm:layout pt-4">
+                <MobileSideMenu />
+                <LeftSideMenu />
+                <div className="px-2 sm:px-8 flex-1 w-0">
+                  <Toaster />
+                  <Component {...pageProps} />
+                </div>
+                {<RightSideMenu />}
               </div>
-              {<RightSideMenu />}
-            </div>
-            <Footer />
-          </main>
-        </ApplicationProvider>
+              <Footer />
+            </main>
+          </ApplicationProvider>
+        </StarknetProvider>
       </VenomProvider>
     </WalletKitProvider>
   );

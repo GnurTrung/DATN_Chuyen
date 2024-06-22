@@ -54,7 +54,7 @@ const ModalBuyNft = ({ open, onCancel, nft, handleBuy }: IModalBuyNft) => {
           <div className="space-x-1 flex items-center">
             <Image src={VenomToken} alt="token" width={14} height={14} />
             <span className="text-sm ">
-              {formatBalance(nft?.listingPrice)} SUI
+              {formatBalance(nft?.listingPrice)} STRK
             </span>
           </div>
         </div>
@@ -87,20 +87,20 @@ const ModalBuyNft = ({ open, onCancel, nft, handleBuy }: IModalBuyNft) => {
             <div className="space-x-1 flex items-center font-medium text-base">
               <Image src={VenomToken} alt="token" width={14} height={14} />
               <span className="text-sm ">
-                {formatBalance(REFUNDABLE_FEE)} SUI
+                {formatBalance(REFUNDABLE_FEE)} STRK
               </span>
             </div>
           </div>
         </div>
         {Number(balance * 10 ** 9) <= Number(estimatedFund) ? (
-          <p className="mt-4 text-secondary">Not enough fund in SUI</p>
+          <p className="mt-4 text-secondary">Not enough fund in STRK</p>
         ) : (
           <div className="flex items-center justify-between text-white mt-4">
             <span>You will pay</span>
             <div className="space-x-1 flex items-center font-medium text-base">
               <Image src={VenomToken} alt="token" width={14} height={14} />
               <span className="text-sm ">
-                {formatBalance(estimatedFund)} SUI
+                {formatBalance(estimatedFund)} STRK
               </span>
             </div>
           </div>

@@ -67,12 +67,12 @@ function Banner() {
     try {
       const pricePublic = idx?.pricePublic;
       if (pricePublic == -1) return "TBA";
-      else if (pricePublic == 0) return "0 SUI";
-      else if (pricePublic) return `${pricePublic} SUI`;
+      else if (pricePublic == 0) return "0 STRK";
+      else if (pricePublic) return `${pricePublic} STRK`;
     } catch (ex) {
       console.log(ex);
     }
-    return "-- SUI";
+    return "-- STRK";
   };
   useEffect(() => {
     getDataBanner();

@@ -64,6 +64,7 @@ const ExploreProvider = ({ children }: { children: any }) => {
     const getListNft = async () => {
       setLoadingNft(true);
       const res = await explorerNFT({
+        network: 5,
         ...paramsSearch,
         ...pagination,
       });
@@ -108,9 +109,16 @@ const ExploreProvider = ({ children }: { children: any }) => {
       pagination,
       loadMoreNft,
       userNFT,
-      getListNftWallet
+      getListNftWallet,
     };
-  }, [listNft, paramsSearch, loadingNft, pagination, userNFT,getListNftWallet]);
+  }, [
+    listNft,
+    paramsSearch,
+    loadingNft,
+    pagination,
+    userNFT,
+    getListNftWallet,
+  ]);
   return (
     <ExploreContext.Provider value={value}>{children}</ExploreContext.Provider>
   );

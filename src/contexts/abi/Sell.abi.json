@@ -6,17 +6,17 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"tokenRootAddr","type":"address"},
+				{"name":"collectionRootAddr","type":"address"},
 				{"name":"addrOwner","type":"address"},
 				{"name":"addrNft","type":"address"},
 				{"name":"oldManager","type":"address"},
 				{"name":"sendGasTo","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"marketFee","type":"uint128"},
-				{"name":"leftOnOfferAfterFinish","type":"uint128"},
+				{"name":"royaltyFee","type":"uint128"},
 				{"name":"nftTransferFee","type":"uint128"},
 				{"name":"methodsCallsFee","type":"uint128"},
-				{"name":"marketFeeDecimals","type":"uint8"}
+				{"name":"ownerMarket","type":"address"}
 			],
 			"outputs": [
 			]
@@ -37,26 +37,15 @@
 			]
 		},
 		{
-			"name": "getFeesValues",
+			"name": "getBounce",
 			"inputs": [
-				{"name":"answerId","type":"uint32"}
-			],
-			"outputs": [
-				{"name":"totalFeeValue","type":"uint128"},
-				{"name":"royalties","type":"map(address,uint128)"},
-				{"name":"marketFeeValue","type":"uint128"}
-			]
-		},
-		{
-			"name": "setRoyalty",
-			"inputs": [
-				{"name":"royalty","type":"map(address,uint8)"}
+				{"name":"sendGas","type":"address"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getOfferInfo",
+			"name": "getListingInfo",
 			"inputs": [
 				{"name":"answerId","type":"uint32"}
 			],
@@ -78,19 +67,9 @@
 			],
 			"outputs": [
 				{"name":"marketFee","type":"uint128"},
-				{"name":"marketFeeDecimals","type":"uint8"},
-				{"name":"leftOnOfferAfterFinish","type":"uint128"},
 				{"name":"nftTransferFee","type":"uint128"},
-				{"name":"methodsCallsFee","type":"uint128"}
-			]
-		},
-		{
-			"name": "royaltyInfo",
-			"inputs": [
-				{"name":"answerId","type":"uint32"}
-			],
-			"outputs": [
-				{"name":"royalty","type":"map(address,uint8)"}
+				{"name":"methodsCallsFee","type":"uint128"},
+				{"name":"royaltyFee","type":"uint128"}
 			]
 		},
 		{
@@ -161,16 +140,16 @@
 		{"name":"_id","type":"uint256"},
 		{"name":"_price","type":"uint128"},
 		{"name":"_addrNft","type":"address"},
-		{"name":"_tokenRootAddr","type":"address"},
+		{"name":"_collectionRootAddr","type":"address"},
 		{"name":"_owner","type":"address"},
 		{"name":"_oldManager","type":"address"},
 		{"name":"_sendGasTo","type":"address"},
-		{"name":"_leftOnOfferAfterFinish","type":"uint128"},
 		{"name":"_nftTransferFee","type":"uint128"},
 		{"name":"_methodsCallsFee","type":"uint128"},
 		{"name":"_marketFee","type":"uint128"},
-		{"name":"_marketFeeDecimals","type":"uint8"},
+		{"name":"_royaltyFee","type":"uint128"},
 		{"name":"_isActive","type":"bool"},
+		{"name":"_ownerMarket","type":"address"},
 		{"name":"_royalty","type":"map(address,uint8)"}
 	]
 }

@@ -1,0 +1,790 @@
+[
+  {
+    "name": "MarketplaceImpl",
+    "type": "impl",
+    "interface_name": "nft_marketplace::marketplace::IMarketplace"
+  },
+  {
+    "name": "core::integer::u256",
+    "type": "struct",
+    "members": [
+      {
+        "name": "low",
+        "type": "core::integer::u128"
+      },
+      {
+        "name": "high",
+        "type": "core::integer::u128"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::Marketplace::RoyaltyInfo",
+    "type": "struct",
+    "members": [
+      {
+        "name": "royalty_fee",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "total_earned",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "royalty_receiver",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::Marketplace::Listing",
+    "type": "struct",
+    "members": [
+      {
+        "name": "token_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "seller",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "status",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::Marketplace::MakeOffer",
+    "type": "struct",
+    "members": [
+      {
+        "name": "token_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "offeror",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "seller",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "expiration_timestamp",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "status",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::Marketplace::MakeCollectionOffer",
+    "type": "struct",
+    "members": [
+      {
+        "name": "quantity",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "total_accepted",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "offeror",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "expiration_timestamp",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "status",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::IMarketplace",
+    "type": "interface",
+    "items": [
+      {
+        "name": "getMarketFeeEarned",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getRoyaltyFeeEarned",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getRoyaltyInfo",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "nft_marketplace::marketplace::Marketplace::RoyaltyInfo"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getMarketFee",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u256"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getOwner",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getBlockTimestamp",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u64"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getLisitngData",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "listingCounter",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "nft_marketplace::marketplace::Marketplace::Listing"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getOfferData",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "offerId",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "nft_marketplace::marketplace::Marketplace::MakeOffer"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "getCollectionOfferData",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "collectionOfferId",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "nft_marketplace::marketplace::Marketplace::MakeCollectionOffer"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "createListing",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "tokenId",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "price",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "updateListing",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "newPrice",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "listingCounter",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "cancelListing",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "listingCounter",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "buyFromListing",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "listingCounter",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "sweep",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "listingCounters",
+            "type": "core::array::Array::<core::integer::u256>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "updateOwner",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "newOwner",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "updateMarketFee",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "newFee",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "claimMarketFee",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "amountToClaim",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "claimRoyaltyFee",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "amountToClaim",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "setRoyaltyInfo",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "royaltyFee",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "royaltyReceiver",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "makeOffer",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "tokenId",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "price",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "expirationTimestamp",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "cancelOffer",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "offerId",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "acceptOffer",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "offerId",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "makeCollectionOffer",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "assetContract",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "quantity",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "price",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "expirationTimestamp",
+            "type": "core::integer::u64"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "cancelCollectionOffer",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "collectionOfferId",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "acceptCollectionOffer",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "collectionOfferId",
+            "type": "core::integer::u256"
+          },
+          {
+            "name": "tokenId",
+            "type": "core::integer::u256"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "name": "constructor",
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventListing",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "listing_counter",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "listing_data",
+        "type": "nft_marketplace::marketplace::Marketplace::Listing"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventCancelListing",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "listing_counter",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "listing_data",
+        "type": "nft_marketplace::marketplace::Marketplace::Listing"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::Marketplace::ListingBought",
+    "type": "struct",
+    "members": [
+      {
+        "name": "token_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "buyer",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "status",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventListingBought",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "listing_counter",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "listing_data",
+        "type": "nft_marketplace::marketplace::Marketplace::ListingBought"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventMakeOffer",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "offer_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "offer_data",
+        "type": "nft_marketplace::marketplace::Marketplace::MakeOffer"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventCancelOffer",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "offer_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "offer_data",
+        "type": "nft_marketplace::marketplace::Marketplace::MakeOffer"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventAcceptOffer",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "offer_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "offer_data",
+        "type": "nft_marketplace::marketplace::Marketplace::MakeOffer"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventMakeCollectionOffer",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "collection_offer_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "collection_offer_data",
+        "type": "nft_marketplace::marketplace::Marketplace::MakeCollectionOffer"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventCancelCollectionOffer",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "collection_offer_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "collection_offer_data",
+        "type": "nft_marketplace::marketplace::Marketplace::MakeCollectionOffer"
+      }
+    ]
+  },
+  {
+    "name": "nft_marketplace::marketplace::Marketplace::CollectionOfferAccept",
+    "type": "struct",
+    "members": [
+      {
+        "name": "asset_contract",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "token_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "price",
+        "type": "core::integer::u256"
+      },
+      {
+        "name": "offeror",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "seller",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "expiration_timestamp",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "status",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventAcceptCollectionOffer",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "collection_offer_id",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "collection_offer_data",
+        "type": "nft_marketplace::marketplace::Marketplace::CollectionOfferAccept"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "nft_marketplace::marketplace::Marketplace::EventUpgraded",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash"
+      }
+    ]
+  },
+  {
+    "kind": "enum",
+    "name": "nft_marketplace::marketplace::Marketplace::Event",
+    "type": "event",
+    "variants": [
+      {
+        "kind": "nested",
+        "name": "EventListing",
+        "type": "nft_marketplace::marketplace::Marketplace::EventListing"
+      },
+      {
+        "kind": "nested",
+        "name": "EventCancelListing",
+        "type": "nft_marketplace::marketplace::Marketplace::EventCancelListing"
+      },
+      {
+        "kind": "nested",
+        "name": "EventListingBought",
+        "type": "nft_marketplace::marketplace::Marketplace::EventListingBought"
+      },
+      {
+        "kind": "nested",
+        "name": "EventMakeOffer",
+        "type": "nft_marketplace::marketplace::Marketplace::EventMakeOffer"
+      },
+      {
+        "kind": "nested",
+        "name": "EventCancelOffer",
+        "type": "nft_marketplace::marketplace::Marketplace::EventCancelOffer"
+      },
+      {
+        "kind": "nested",
+        "name": "EventAcceptOffer",
+        "type": "nft_marketplace::marketplace::Marketplace::EventAcceptOffer"
+      },
+      {
+        "kind": "nested",
+        "name": "EventMakeCollectionOffer",
+        "type": "nft_marketplace::marketplace::Marketplace::EventMakeCollectionOffer"
+      },
+      {
+        "kind": "nested",
+        "name": "EventCancelCollectionOffer",
+        "type": "nft_marketplace::marketplace::Marketplace::EventCancelCollectionOffer"
+      },
+      {
+        "kind": "nested",
+        "name": "EventAcceptCollectionOffer",
+        "type": "nft_marketplace::marketplace::Marketplace::EventAcceptCollectionOffer"
+      },
+      {
+        "kind": "nested",
+        "name": "EventUpgraded",
+        "type": "nft_marketplace::marketplace::Marketplace::EventUpgraded"
+      }
+    ]
+  }
+]

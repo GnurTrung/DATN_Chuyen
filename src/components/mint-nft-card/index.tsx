@@ -72,7 +72,7 @@ const ItemMintNFT = ({ data }: IMintNFTCardProps) => {
                   <div>Price:</div>
                   <div className="flex justify-center gap-1">
                     <Image src={VenomToken} alt="Venom" className="w-4 h-4" />
-                    <div>{`${data?.pricePublic} SUI`}</div>
+                    <div>{`${data?.pricePublic} STRK`}</div>
                   </div>
                 </div>
                 <div className="flex justify-between mt-1">

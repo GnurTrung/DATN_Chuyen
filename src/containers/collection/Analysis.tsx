@@ -122,7 +122,7 @@ const Analysis = () => {
       y: {
         formatter: function (y: any) {
           if (typeof y !== "undefined") {
-            return y + " SUI";
+            return y + " STRK";
           }
           return y;
         },
@@ -186,7 +186,7 @@ const Analysis = () => {
       y: {
         formatter: function (y: any) {
           if (typeof y !== "undefined") {
-            return y + " SUI";
+            return y + " STRK";
           }
           return y;
         },

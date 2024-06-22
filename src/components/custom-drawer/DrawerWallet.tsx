@@ -1,25 +1,26 @@
+import IconArrowForward from "@/assets/icons/IconArrowForward";
 import IconBookmarkOutline from "@/assets/icons/IconBookmarkOutline";
+import IconCopy from "@/assets/icons/IconCopy";
+import IconOff from "@/assets/icons/IconOff";
 import IconPersonOutline from "@/assets/icons/IconPersonOutline";
 import IconPieOutline from "@/assets/icons/IconPieOutline";
 import IconSettingOutline from "@/assets/icons/IconSettingOutline";
 import IconTrophyOutline from "@/assets/icons/IconTrophyOutline";
-import IconWalletOutline from "@/assets/icons/IconWalletOutline";
-import CustomDrawer from ".";
-import IconArrowForward from "@/assets/icons/IconArrowForward";
-import { useVenom } from "@/contexts/useVenom";
-import { formatWallet } from "@/utils";
-import IconCopy from "@/assets/icons/IconCopy";
-import { Button, Tooltip } from "antd";
-import IconOff from "@/assets/icons/IconOff";
-import Image from "next/image";
-import CustomImage from "../custom-image";
-import Venom from "../../../public/images/venom.png";
-import VenomToken from "../../../public/images/token/venom.png";
-import Link from "next/link";
+import { CHAIN_VALUES } from "@/constants";
+import { LIST_WALLETS } from "@/constants/wallet";
+import { useApplicationContext } from "@/contexts/useApplication";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
-import { NumericFormat } from "react-number-format";
-import { useWalletKit } from "@mysten/wallet-kit";
+import { formatWallet, getCurrencyByChain } from "@/utils";
+import { useAccount, useStarkProfile } from "@starknet-react/core";
+import { Button, Tooltip } from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
 import { toast } from "react-hot-toast";
+import { NumericFormat } from "react-number-format";
+import CustomDrawer from ".";
+import CustomImage from "../custom-image";
+import FormatPrice from "../FormatPrice";
 
 interface IDrawerWalletProps {
   open?: boolean;
@@ -27,61 +28,91 @@ interface IDrawerWalletProps {
 }
 
 const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
-  const { account, balance, profile } = useVenom();
+  const {
+    profile,
+    onLogout,
+    currentConnectedChain,
+    currentConnectedAccountBalance,
+    activeChain,
+  } = useApplicationContext();
   const [copiedValue, copy] = useCopyToClipboard();
-  const { disconnect, currentAccount } = useWalletKit();
+
+  const { currentConnectedAccountNotFull } = useApplicationContext();
+  const { connector } = useAccount();
+  const { data: starkProfile } = useStarkProfile({
+    address: currentConnectedAccountNotFull,
+  });
   const menus = [
     {
       icon: <IconPersonOutline />,
       name: "My Profile",
-      href: `/user/${account}?tab=items`,
+      href: `/user/${currentConnectedAccountNotFull}?tab=items`,
     },
-    {
-      icon: <IconBookmarkOutline />,
-      name: "Watchlist",
-      href: `/user/${account}?tab=watchlist`,
-    },
+    // {
+    //   icon: <IconBookmarkOutline />,
+    //   name: "Watchlist",
+    //   href: `/user/${currentConnectedAccountNotFull}?tab=watchlist`,
+    // },
     {
       icon: <IconTrophyOutline />,
       name: "Rewards",
       href: "/",
+      onClick: (e: any) => {
+        e.preventDefault();
+        toast.success("Comming soon");
+      },
     },
     {
       icon: <IconPieOutline />,
       name: "Portfolio",
       href: "/",
+      onClick: (e: any) => {
+        e.preventDefault();
+        toast.success("Comming soon");
+      },
     },
     {
       icon: <IconSettingOutline />,
       name: "Setting",
-      href: "/",
+      href: `/settings`,
     },
   ];
+
+  const getCurrentConnectedWallet = useMemo(() => {
+    if (currentConnectedChain === CHAIN_VALUES.STARKNET) {
+      const wallet = LIST_WALLETS.starknet.find(
+        (item: any) => item.id === connector?.id
+      );
+      return wallet;
+    }
+  }, [connector?.id, currentConnectedChain]);
   return (
     <CustomDrawer title="My Wallet" open={open} onClose={onClose}>
       <div className="flex flex-col items-start justify-between h-full">
-        <div className="flex items-center space-x-4">
-          <CustomImage
-            src="/images/default_avatar.png"
-            className="rounded-full"
-            alt="avatar"
-            width={60}
-            height={60}
-          />
-          <div className="flex flex-col items-start">
-            <span className="text-white text-xl font-semibold">
-              {profile?.userName || "ChuyenDT"}
-            </span>
-            <div className="flex items-center space-x-3">
-              <span className="text-secondary font-medium">
-                {formatWallet(currentAccount?.address)}
+        <div className="flex items-center justify-between bg-layer-2 w-full p-2 rounded-lg">
+          <div className="flex items-center space-x-4">
+            <CustomImage
+              src={profile?.avatarUrl || "/images/default_avatar.png"}
+              className="rounded-full"
+              alt="avatar"
+              width={60}
+              height={60}
+            />
+            <div className="flex flex-col items-start">
+              <span className="text-white text-xl font-semibold">
+                {starkProfile?.name || profile?.userName || "Ventory"}
               </span>
-              <Tooltip title="Copied" placement="right" trigger={["click"]}>
-                <IconCopy
-                  className="cursor-pointer "
-                  onClick={(e) => copy(account)}
-                />
-              </Tooltip>
+              <div className="flex items-center space-x-3">
+                <span className="text-secondary font-medium">
+                  {formatWallet(currentConnectedAccountNotFull)}
+                </span>
+                <Tooltip title="Copied" placement="right" trigger={["click"]}>
+                  <IconCopy
+                    className="cursor-pointer "
+                    onClick={(e) => copy(currentConnectedAccountNotFull)}
+                  />
+                </Tooltip>
+              </div>
             </div>
           </div>
         </div>
@@ -91,7 +122,10 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
               className="flex items-center justify-between space-x-3 w-full px-2 py-3 rounded-lg cursor-pointer hover:bg-layer-3"
               key={index}
               href={menu.href}
-              onClick={onClose}
+              onClick={(e: any) => {
+                menu?.onClick && menu?.onClick(e);
+                onClose && onClose();
+              }}
             >
               {menu.icon}
               <span className="flex-1 text-secondary text-lg font-medium">
@@ -105,17 +139,25 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
           <h4 className="text-xl text-white font-semibold">Connected Wallet</h4>
           <div className="rounded-lg border border-solid border-stroke p-4 mt-5 w-full">
             <div className="flex items-center space-x-2 justify-between">
-              <Image src={Venom} alt="Venom" />
+              <Image
+                src={getCurrentConnectedWallet?.image as string}
+                alt="Venom"
+                width={50}
+                height={50}
+                className="rounded-full"
+              />
               <div className="flex-1">
-                <span className="text-secondary">Sui</span>
+                <span className="text-secondary">
+                  {getCurrentConnectedWallet?.name}
+                </span>
                 <div className="flex items-center space-x-3">
                   <span className="text-white font-medium">
-                    {formatWallet(currentAccount?.address)}
+                    {formatWallet(currentConnectedAccountNotFull)}
                   </span>
                   <Tooltip title="Copied" placement="right" trigger={["click"]}>
                     <IconCopy
                       className="cursor-pointer"
-                      onClick={(e) => copy(account)}
+                      onClick={(e) => copy(currentConnectedAccountNotFull)}
                     />
                   </Tooltip>
                 </div>
@@ -123,28 +165,55 @@ const DrawerWallet = ({ open, onClose }: IDrawerWalletProps) => {
               <Button
                 className="w-12 btn-secondary"
                 onClick={() => {
-                  disconnect();
+                  onLogout();
                   onClose && onClose();
                 }}
               >
                 <IconOff />
               </Button>
             </div>
-            <div className="rounded-lg bg-layer-1 p-4 flex items-center space-x-1 mt-3">
-              <Image src={VenomToken} alt="token" />
-              <span className="text-white font-medium">
-                <NumericFormat
-                  value={Number(balance)}
-                  displayType="text"
-                  thousandSeparator=","
-                  decimalScale={2}
-                />{" "}
-                SUI
-              </span>
+            <div className="rounded-lg bg-layer-1 p-4 space-y-2 mt-3">
+              {activeChain != CHAIN_VALUES.MINT && (
+                <div className="flex items-center space-x-1">
+                  <Image
+                    src={getCurrencyByChain(currentConnectedChain)?.image}
+                    alt="token"
+                    width={20}
+                    height={20}
+                  />
+                  <div className="text-white font-medium">
+                    <FormatPrice
+                      number={Number(currentConnectedAccountBalance?.strk)}
+                    />
+                    &nbsp;
+                    {getCurrencyByChain(currentConnectedChain)?.currency}
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center space-x-1">
+                <Image
+                  src={getCurrencyByChain(currentConnectedChain, 0)?.image}
+                  alt="token"
+                  width={20}
+                  height={20}
+                />
+                <span className="text-white font-medium">
+                  <FormatPrice
+                    number={Number(currentConnectedAccountBalance?.eth)}
+                  />
+                  &nbsp;
+                  {getCurrencyByChain(currentConnectedChain, 0)?.currency}
+                </span>
+              </div>
             </div>
             <div className="flex space-x-2 mt-3">
-              <Button onClick={()=>toast.success("Coming soon!")} className="btn-secondary basis-1/2">Swap SUI</Button>
-              <Button onClick={()=>toast.success("Coming soon!")} className="btn-secondary basis-1/2">Add funds</Button>
+              <Button
+                onClick={() => toast.success("Coming soon!")}
+                className="btn-secondary basis-1/2"
+              >
+                Swap ETH
+              </Button>
+              <Button className="btn-secondary basis-1/2">Add funds</Button>
             </div>
           </div>
         </div>

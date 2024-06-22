@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants/authentication";
 import { cookieSetting, setCookie } from "@/utils/cookie";
+import {} from "react-cookie";
 import axios from "axios";
 
 function getCookie(name = ACCESS_TOKEN) {
@@ -11,7 +12,7 @@ function getCookie(name = ACCESS_TOKEN) {
 
 const HEADERS = {
   "Content-Type": "application/json",
-  Authorization: `Bearer ${getCookie()}`,
+  Authorization: getCookie() ? `Bearer ${getCookie()}` : undefined,
 };
 
 let refreshTokenRequest: any = null;
@@ -22,9 +23,17 @@ const AxiosInstance = axios.create({
   headers: HEADERS,
 });
 
-export const setToken = (token: string) => {
+export const setToken = (token?: string) => {
   if (token) {
     HEADERS["Authorization"] = `Bearer ${token}`;
+    AxiosInstance.interceptors.request.use((config) => {
+      config.headers["Content-Type"] = HEADERS["Content-Type"];
+      config.headers.Authorization = HEADERS.Authorization;
+      return config;
+    });
+  }
+  if (!token) {
+    HEADERS["Authorization"] = undefined;
     AxiosInstance.interceptors.request.use((config) => {
       config.headers["Content-Type"] = HEADERS["Content-Type"];
       config.headers.Authorization = HEADERS.Authorization;
@@ -36,16 +45,12 @@ export const setToken = (token: string) => {
 async function refreshToken() {
   try {
     const refreshToken = getCookie(REFRESH_TOKEN);
-    const accessToken = getCookie(ACCESS_TOKEN);
-    // console.log('ACCOUNT_ADDRESS', address);
-    const data = {
-      accessToken,
-      refreshToken,
-    };
     return axios({
       method: "POST",
-      url: process.env.NEXT_PUBLIC_API_URL + "/auth/refresh_token",
-      data,
+      url: process.env.NEXT_PUBLIC_API_URL + "/user/refresh-token",
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
     });
   } catch (ex) {
     console.log(ex);
@@ -82,22 +87,7 @@ AxiosInstance.interceptors.response.use(
   async (error) => {
     const { response, config } = error;
     if (response) {
-      const { status } = response;
-      if (status === 401 && getCookie(REFRESH_TOKEN)) {
-        // 401
-        // get new token
-        refreshTokenRequest = refreshTokenRequest
-          ? refreshTokenRequest
-          : refreshTokenFunc;
-        const newTokenData = await refreshTokenRequest();
-        if (newTokenData.data) {
-          setToken(newTokenData.data.access_token);
-          config.headers = HEADERS;
-          return AxiosInstance.request(config);
-        }
-      } else {
-        return response;
-      }
+      return Promise.reject(response.data);
     } else return Promise.reject(error);
   }
 );
