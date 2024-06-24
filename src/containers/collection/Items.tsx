@@ -329,9 +329,9 @@ const Items = () => {
             className="h-12 max-lg:w-full"
             onChange={onChangeSearchText}
           />
-          <Button className="btn-secondary text-base hidden lg:block">
+          {/* <Button className="btn-secondary text-base hidden lg:block">
             Sweep
-          </Button>
+          </Button> */}
           <CustomSelect
             options={SORT_OPTIONS}
             value={paramsSearch.orderBy}
@@ -365,9 +365,9 @@ const Items = () => {
               />
             </div>
           </div>
-          <Button className="btn-secondary text-base lg:hidden px-11 py-3">
+          {/* <Button className="btn-secondary text-base lg:hidden px-11 py-3">
             Sweep
-          </Button>
+          </Button> */}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-x-4">

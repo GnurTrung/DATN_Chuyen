@@ -18,6 +18,7 @@ import Watchlist from "./Watchlist";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useApplicationContext } from "@/contexts/useApplication";
+import Offer from "./offer";
 
 const UserContainer = () => {
   const { currentConnectedAccount, profile } = useApplicationContext();
@@ -79,8 +80,9 @@ const UserContainer = () => {
     },
     {
       key: "5",
-      label: `More`,
-      children: `Content of Tab Pane 5`,
+      label: `Offer`,
+      children: <Offer />,
+      visible: true,
     },
   ];
   const getURL = () => {

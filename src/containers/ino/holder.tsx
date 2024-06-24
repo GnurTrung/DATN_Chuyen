@@ -31,7 +31,7 @@ const KeyHolder = () => {
     ventoryVerify,
   }: any = useContexts();
 
-  const { handleMint, handleMintStarknet, handleMintEvm } = useFunctionIDO();
+  const { handleMintStarknet } = useFunctionIDO();
 
   const attributes = dataCMS?.attributes;
   const priceKeyHolder = attributes?.priceKeyHolder;
@@ -52,9 +52,6 @@ const KeyHolder = () => {
   const keyHolderEndTime = attributes?.keyHolderEndTime;
   const poolName = attributes?.mintPoolHolderName || "KeyHolder";
   const mintNFT = async (type: any) => {
-    attributes?.chainNetwork == CHAIN_VALUES.MINT &&
-      (await handleMintEvm(type, 1));
-    attributes?.chainNetwork == CHAIN_VALUES.VENOM && (await handleMint(type));
     attributes?.chainNetwork?.includes("starknet") &&
       (await handleMintStarknet(type, 1));
   };

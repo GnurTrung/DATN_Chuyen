@@ -31,7 +31,7 @@ const Mintlist = () => {
     ventoryVerify,
   }: any = useContexts();
 
-  const { handleMint, handleMintStarknet, handleMintEvm } = useFunctionIDO();
+  const {  handleMintStarknet} = useFunctionIDO();
 
   const attributes = dataCMS?.attributes;
   const priceWhitelist = attributes?.priceWhitelist;
@@ -47,9 +47,6 @@ const Mintlist = () => {
   const whitelistEndTime = attributes?.whitelistEndTime;
   const poolName = attributes?.mintPoolWhitelistName || "Whitelist";
   const mintNFT = async (type: any) => {
-    attributes?.chainNetwork == CHAIN_VALUES.MINT &&
-      (await handleMintEvm(type, 1));
-    attributes?.chainNetwork == CHAIN_VALUES.VENOM && (await handleMint(type));
     attributes?.chainNetwork?.includes("starknet") &&
       (await handleMintStarknet(type, 1));
   };

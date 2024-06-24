@@ -14,15 +14,11 @@ console.log(process.env.NEXT_PUBLIC_MARKETPLACE_URL);
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      "cms-dev.tocen.co",
-      "cms-staging.tocen.co",
-      "cms.tocen.co",
-      "gateway.pinata.cloud",
-      "dev-assets.tocen.co",
-      "assets.tocen.co",
-      "i.seadn.io",
-      "pbs.twimg.com",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
 };

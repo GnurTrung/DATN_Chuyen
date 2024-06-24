@@ -1,5 +1,6 @@
 import { getAsync, getAsyncCMS, postAsync } from "@/helper/request";
 const URLCMS = process.env.NEXT_PUBLIC_CMS_URL;
+const verifyUrl = "https://verify.ventory.gg/ventory-api/web/";
 
 export const getProjectCMSByCode = async (code: any) => {
   try {
@@ -37,5 +38,18 @@ export const updateCurrentNFT = async ({ ...params }) => {
   return await postAsync(`ino/mint-nft`, params);
 };
 
-
-
+export const signMintINOStarknet = async (params: {
+  project: string;
+  pool: number;
+  contract: string;
+}) => {
+  const url = `https://api.dragark.net/dragark-api/nft/sign-mint`;
+  try {
+    const response = await postAsync(url, params);
+    const { data } = response;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
+};

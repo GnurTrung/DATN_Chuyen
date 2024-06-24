@@ -17,12 +17,20 @@ import { use, useState } from "react";
 import { useWalletKit } from "@mysten/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
 import { TYPE_TICKET } from "@/constants/market";
+import useShowModal from "@/hooks/useShowModal";
+import ModalMakeCollectionOffer from "@/components/custom-modal/ModalMakeCollectionOffer";
 
 const CollectionDetailContainer = () => {
   const { signAndExecuteTransactionBlock } = useWalletKit();
   const [loadingTicket, setLoadingTicket] = useState(false);
   const { collectionDetail, tab, onSelectTab, handleAddToWatchlist } =
     useCollectionDetailContext();
+
+  const {
+    showModal: showModalMakeCollectionOffer,
+    onHide: onHideModalMakeCollectionOffer,
+    onShow: onShowModalMakeCollectionOffer,
+  } = useShowModal();
 
   const collectionInfos = [
     {
@@ -117,7 +125,10 @@ const CollectionDetailContainer = () => {
                   )}
                   <span className="ml-2">Watchlist</span>
                 </Button>
-                <Button className="btn-secondary">
+                <Button
+                  onClick={onShowModalMakeCollectionOffer}
+                  className="btn-secondary"
+                >
                   <IconPricetag />
                   <span className="ml-2">Make Collection Offer</span>
                 </Button>
@@ -143,7 +154,10 @@ const CollectionDetailContainer = () => {
               )}
               <span className="ml-2">Watchlist</span>
             </Button>
-            <Button className="btn-secondary">
+            <Button
+              onClick={onShowModalMakeCollectionOffer}
+              className="btn-secondary"
+            >
               <IconPricetag />
               <span className="ml-2">Make Collection Offer</span>
             </Button>
@@ -168,6 +182,11 @@ const CollectionDetailContainer = () => {
           />
         </div>
       }
+      <ModalMakeCollectionOffer
+        open={showModalMakeCollectionOffer}
+        onCancel={onHideModalMakeCollectionOffer}
+        collection={collectionDetail}
+      />
     </div>
   );
 };

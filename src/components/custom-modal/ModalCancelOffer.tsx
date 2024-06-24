@@ -33,18 +33,16 @@ const ModalCancelOffer = ({
       setLoading(true);
       let res: any;
       console.log(offerData);
-      // if (offerData?.quantity) {
-      //   res = await handleCancelCollectionOfferStarknet({
-      //     collectionOfferId: offerData?.offerId,
-      //     quantity: offerData?.quantity,
-      //     offerPrice: offerData?.price,
-      //     collectionAddress: nft?.collectionAddress,
-      //     signatureR: offerData?.signatureR,
-      //     signatureS: offerData?.signatureS,
-      //   });
-      // }
-      // else
-      res = await handleCancelOfferStarknet({ ...nft, ...offerData });
+      if (offerData?.quantity) {
+        res = await handleCancelCollectionOfferStarknet({
+          collectionOfferId: offerData?.offerId,
+          quantity: offerData?.quantity,
+          offerPrice: offerData?.price,
+          collectionAddress: nft?.collectionAddress,
+          signatureR: offerData?.signatureR,
+          signatureS: offerData?.signatureS,
+        });
+      } else res = await handleCancelOfferStarknet({ ...nft, ...offerData });
       if (res.transaction_hash) {
         await provider.waitForTransaction(res?.transaction_hash);
         setLoading(false);

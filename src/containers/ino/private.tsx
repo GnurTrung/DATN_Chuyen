@@ -31,7 +31,7 @@ const Private = () => {
     ventoryVerify,
   }: any = useContexts();
 
-  const { handleMint, handleMintStarknet, handleMintEvm } = useFunctionIDO();
+  const { handleMintStarknet } = useFunctionIDO();
 
   const attributes = dataCMS?.attributes;
   const pricePrivate = attributes?.pricePrivate;
@@ -54,9 +54,6 @@ const Private = () => {
   const privateEndTime = attributes?.privateEndTime;
   const poolName = attributes?.mintPoolName || "Private";
   const mintNFT = async (type: any) => {
-    attributes?.chainNetwork == CHAIN_VALUES.MINT &&
-      (await handleMintEvm(type, 1));
-    attributes?.chainNetwork == CHAIN_VALUES.VENOM && (await handleMint(type));
     attributes?.chainNetwork?.includes("starknet") &&
       (await handleMintStarknet(type, 1));
   };

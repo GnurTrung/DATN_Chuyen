@@ -32,7 +32,7 @@ const Mintlist = () => {
     ventoryVerify,
   }: any = useContexts();
 
-  const { handleMint, handleMintStarknet, handleMintEvm } = useFunctionIDO();
+  const { handleMintStarknet } = useFunctionIDO();
 
   const attributes = dataCMS?.attributes;
   const pricePublic = attributes?.pricePublic;
@@ -52,9 +52,6 @@ const Mintlist = () => {
   const mintNFT = async (type: any) => {
     if (currentAccountMint + quantityMint > publicAccountLimit)
       return toast.error("Quantity is higher than Limit!");
-    attributes?.chainNetwork == CHAIN_VALUES.MINT &&
-      (await handleMintEvm(type, quantityMint));
-    attributes?.chainNetwork == CHAIN_VALUES.VENOM && (await handleMint(type));
     attributes?.chainNetwork?.includes("starknet") &&
       (await handleMintStarknet(type, quantityMint));
   };

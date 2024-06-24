@@ -332,3 +332,20 @@
     }
   }
 }
+
+.custom-radio {
+  .ant-radio {
+    .ant-radio-inner {
+      @apply w-5 h-5 border-focus bg-transparent;
+    }
+  }
+  .ant-radio-checked {
+    .ant-radio-inner {
+      @apply bg-primary border-none;
+    }
+    .ant-radio-inner::after {
+      @apply bg-white;
+      transform: scale(0.65);
+    }
+  }
+}

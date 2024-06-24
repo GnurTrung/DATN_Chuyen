@@ -3,6 +3,13 @@ export enum GRID_MODE {
   LARGE = "large",
 }
 
+export enum POOL_TYPE {
+  PUBLIC = 1,
+  PRIVATE = 2,
+  WHITELIST = 3,
+  HOLDER = 4,
+}
+
 export const SORT_OPTIONS = [
   {
     value: 1,
