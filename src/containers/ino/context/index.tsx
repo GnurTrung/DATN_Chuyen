@@ -1,10 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useVenom } from "@/contexts/useVenom";
-import {
-  getINOPool,
-  getINOUser,
-  getProjectCMSByCode,
-} from "@/service/ino";
+import { getINOPool, getINOUser, getProjectCMSByCode } from "@/service/ino";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { createContext, useContext } from "react";
@@ -20,6 +16,9 @@ import useMounted from "@/hooks/useMounted";
 import { getStoreKeyRT } from "../TaskRetweet";
 import { getStoreKeyVT } from "../TaskVentory";
 import toast from "react-hot-toast";
+import ventorians from "../../../json/ventorians.json";
+import dragarkelementnft from "../../../json/dragarkelementnft.json";
+import madape from "../../../json/madape.json";
 
 export const INOContext = createContext([]);
 export const useContexts = () => useContext(INOContext);
@@ -61,8 +60,15 @@ export const Provider = ({ children }: any) => {
 
   const getDataCMS = async () => {
     try {
-      const allData = await getProjectCMSByCode(id);
-      const all = allData?.data || [];
+      // const allData = await getProjectCMSByCode(id);
+      let all = [] as any;
+      if (id == "ventorians") {
+        all = ventorians;
+      } else if (id == "dragarkelementnft") {
+        all = dragarkelementnft;
+      } else if (id == "madape") {
+        all = madape;
+      }
       setDataCMS(all);
       setDiscordVerify(
         !!localStorage.getItem(getStoreKey(all?.attributes?.code))
@@ -129,7 +135,6 @@ export const Provider = ({ children }: any) => {
             .totalSupply({ answerId: 0 })
             .call();
           total = id;
-        
         }
         setNFTDataPool(total);
       }

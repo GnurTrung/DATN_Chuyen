@@ -5,6 +5,9 @@ import { getLaunchpad } from "@/service/homepage";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { createContext, useContext } from "react";
+import ventorians from "../../../json/ventorians.json";
+import dragarkelementnft from "../../../json/dragarkelementnft.json";
+import madape from "../../../json/madape.json";
 
 export const DEFAULT_SEARCH_PARAMS = {
   name: "",
@@ -15,7 +18,7 @@ export const HomePageContext = createContext([]);
 export const useContexts = () => useContext(HomePageContext);
 export const Provider = ({ children }: any) => {
   const router = useRouter();
-  const [dataLaunchpad, setDataLaunchpad] = useState([]);
+  const [dataLaunchpad, setDataLaunchpad] = useState<any>([]);
   const [active, setActive] = useState<any>([]);
   const [upcoming, setUpcoming] = useState<any>([]);
 
@@ -54,9 +57,10 @@ export const Provider = ({ children }: any) => {
 
   const getDataLaunchpad = async () => {
     try {
-      const allData = await getLaunchpad([]);
+      const allData = [ventorians, dragarkelementnft, madape];
+      // await getLaunchpad([]);
       const all =
-        allData?.data.filter(
+        allData?.filter(
           (x: any) => x.attributes.collectionStatus != "Completed"
         ) || [];
       const actives = all

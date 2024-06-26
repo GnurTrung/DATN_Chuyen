@@ -28,7 +28,7 @@ const ItemLaunchpad: FC<IGameCardProps> = ({
           <CustomImage
             src={image}
             alt="game"
-            className="w-full h-full aspect-video object-cover rounded-lg group-hover:scale-110 !transition !ease-in-out !duration-200"
+            className="w-full h-full aspect-square object-cover rounded-lg group-hover:scale-110 !transition !ease-in-out !duration-200"
             wrapperClassName="w-full"
           />
         </div>

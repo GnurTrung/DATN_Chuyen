@@ -1,0 +1,269 @@
+{
+    "id": 15,
+    "attributes": {
+        "name": "Ventorians NFT Collection ",
+        "description": "Ventorians is a unique NFT collection that features stunning artworks of 3333 warriors who are slated to fight for the Starknet ecosystem. Each Ventorian is a powerful and fearless fighter who possesses a rare skill or ability that makes her stand out from the rest. ",
+        "longDescription": null,
+        "creator": null,
+        "collectionCategory": "LaunchpadDrops",
+        "collectionStatus": "Active",
+        "isFeatured": null,
+        "collectionType": "Collectibles",
+        "code": "ventorians",
+        "whitelistStartTime": "2024-02-28T15:00:00.000Z",
+        "whitelistEndTime": "2024-02-28T15:30:00.000Z",
+        "publicStartTime": "2024-02-28T15:30:00.000Z",
+        "publicEndTime": "2024-10-29T00:00:00.000Z",
+        "privateStartTime": null,
+        "privateEndTime": null,
+        "splittingPrizeTime": null,
+        "totalPrize": null,
+        "botPrevention": null,
+        "keyHolderStartTime": null,
+        "keyHolderEndTime": null,
+        "mintPoolName": "Private Mint",
+        "listingStartTime": "2024-02-28T15:15:00.000Z",
+        "royaltyPercentage": null,
+        "SC_collection": "0x064f76d32edd460a30b4acf62bfb2e0e76f450d61994ab698224f0fe6ae72ee5",
+        "mintPoolHolderName": "Key Holder Mint",
+        "mintPoolWhitelistName": "Whitelist Round",
+        "mintPoolPublicName": "Public Round",
+        "royaltyReceiverAddress": null,
+        "createdAt": "2024-02-26T08:52:15.929Z",
+        "updatedAt": "2024-03-22T07:24:41.530Z",
+        "publishedAt": "2024-02-27T03:23:13.416Z",
+        "website": "https://ventory.gg/",
+        "telegramLink": "https://t.me/ventorychannel",
+        "discordLink": "https://discord.gg/W6aCg9sU3e",
+        "twitterLink": "https://twitter.com/Ventory_gg",
+        "itemCount": "3333",
+        "crossPoolMint": null,
+        "maxWhitelistMint": "666",
+        "maxPrivateMint": null,
+        "maxPublicMint": "2667",
+        "maxKeyHolderMint": null,
+        "whitelistAccountLimit": "1",
+        "privateAccountLimit": null,
+        "publicAccountLimit": "3",
+        "keyHolderAccountLimit": null,
+        "reserved": null,
+        "priceWhitelist": 12,
+        "pricePublic": 15,
+        "pricePrivate": null,
+        "priceKeyHolder": null,
+        "enableFollowsCheck": false,
+        "chainNetwork": "starknet",
+        "enableDiscordFollowsCheck": false,
+        "discordRolename": null,
+        "enableRetweetCheck": null,
+        "retweetUrl": null,
+        "enableVentoryFollowsCheck": null,
+        "logo": {
+            "data": {
+                "id": 17,
+                "attributes": {
+                    "name": "Order-43.gif",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 2400,
+                    "height": 2400,
+                    "formats": {
+                        "large": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/large_Order_43_3dc3512996.gif",
+                            "hash": "large_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "large_Order-43.gif",
+                            "path": null,
+                            "size": 153.54,
+                            "width": 1000,
+                            "height": 1000
+                        },
+                        "small": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/small_Order_43_3dc3512996.gif",
+                            "hash": "small_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "small_Order-43.gif",
+                            "path": null,
+                            "size": 57.15,
+                            "width": 500,
+                            "height": 500
+                        },
+                        "medium": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/medium_Order_43_3dc3512996.gif",
+                            "hash": "medium_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "medium_Order-43.gif",
+                            "path": null,
+                            "size": 101.64,
+                            "width": 750,
+                            "height": 750
+                        },
+                        "thumbnail": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/thumbnail_Order_43_3dc3512996.gif",
+                            "hash": "thumbnail_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "thumbnail_Order-43.gif",
+                            "path": null,
+                            "size": 10.79,
+                            "width": 156,
+                            "height": 156
+                        }
+                    },
+                    "hash": "Order_43_3dc3512996",
+                    "ext": ".gif",
+                    "mime": "image/gif",
+                    "size": 9901.89,
+                    "url": "https://ipfs.ventory.gg/ventory/upload/Order_43_3dc3512996.gif",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-02-26T09:28:02.095Z",
+                    "updatedAt": "2024-02-26T09:28:08.170Z"
+                }
+            }
+        },
+        "banner": {
+            "data": {
+                "id": 6,
+                "attributes": {
+                    "name": "Twitter-26.jpg",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1500,
+                    "height": 500,
+                    "formats": {
+                        "large": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/large_Twitter_26_93f431a549.jpg",
+                            "hash": "large_Twitter_26_93f431a549",
+                            "mime": "image/jpeg",
+                            "name": "large_Twitter-26.jpg",
+                            "path": null,
+                            "size": 21.61,
+                            "width": 1000,
+                            "height": 333
+                        },
+                        "small": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/small_Twitter_26_93f431a549.jpg",
+                            "hash": "small_Twitter_26_93f431a549",
+                            "mime": "image/jpeg",
+                            "name": "small_Twitter-26.jpg",
+                            "path": null,
+                            "size": 8.74,
+                            "width": 500,
+                            "height": 167
+                        },
+                        "medium": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/medium_Twitter_26_93f431a549.jpg",
+                            "hash": "medium_Twitter_26_93f431a549",
+                            "mime": "image/jpeg",
+                            "name": "medium_Twitter-26.jpg",
+                            "path": null,
+                            "size": 14.97,
+                            "width": 750,
+                            "height": 250
+                        },
+                        "thumbnail": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/thumbnail_Twitter_26_93f431a549.jpg",
+                            "hash": "thumbnail_Twitter_26_93f431a549",
+                            "mime": "image/jpeg",
+                            "name": "thumbnail_Twitter-26.jpg",
+                            "path": null,
+                            "size": 3.47,
+                            "width": 245,
+                            "height": 82
+                        }
+                    },
+                    "hash": "Twitter_26_93f431a549",
+                    "ext": ".jpg",
+                    "mime": "image/jpeg",
+                    "size": 37.56,
+                    "url": "https://ipfs.ventory.gg:443/ventory/upload/Twitter_26_93f431a549.jpg",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-02-06T04:05:36.721Z",
+                    "updatedAt": "2024-02-06T04:05:36.721Z"
+                }
+            }
+        },
+        "otherImages": {
+            "data": null
+        },
+        "featuredImage": {
+            "data": {
+                "id": 17,
+                "attributes": {
+                    "name": "Order-43.gif",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 2400,
+                    "height": 2400,
+                    "formats": {
+                        "large": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/large_Order_43_3dc3512996.gif",
+                            "hash": "large_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "large_Order-43.gif",
+                            "path": null,
+                            "size": 153.54,
+                            "width": 1000,
+                            "height": 1000
+                        },
+                        "small": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/small_Order_43_3dc3512996.gif",
+                            "hash": "small_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "small_Order-43.gif",
+                            "path": null,
+                            "size": 57.15,
+                            "width": 500,
+                            "height": 500
+                        },
+                        "medium": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/medium_Order_43_3dc3512996.gif",
+                            "hash": "medium_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "medium_Order-43.gif",
+                            "path": null,
+                            "size": 101.64,
+                            "width": 750,
+                            "height": 750
+                        },
+                        "thumbnail": {
+                            "ext": ".gif",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/thumbnail_Order_43_3dc3512996.gif",
+                            "hash": "thumbnail_Order_43_3dc3512996",
+                            "mime": "image/gif",
+                            "name": "thumbnail_Order-43.gif",
+                            "path": null,
+                            "size": 10.79,
+                            "width": 156,
+                            "height": 156
+                        }
+                    },
+                    "hash": "Order_43_3dc3512996",
+                    "ext": ".gif",
+                    "mime": "image/gif",
+                    "size": 9901.89,
+                    "url": "https://ipfs.ventory.gg/ventory/upload/Order_43_3dc3512996.gif",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-02-26T09:28:02.095Z",
+                    "updatedAt": "2024-02-26T09:28:08.170Z"
+                }
+            }
+        }
+    }
+}

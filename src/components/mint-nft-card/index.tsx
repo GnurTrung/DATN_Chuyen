@@ -9,51 +9,35 @@ import CustomImage from "../custom-image";
 import { isDateGreater } from "@/utils";
 
 interface IMintNFTCardProps {
-  data: any;
+  dataX: any;
 }
-
-const ItemMintNFT = ({ data }: IMintNFTCardProps) => {
+const ItemMintNFT = ({ dataX }: IMintNFTCardProps) => {
+  let data = dataX?.attributes;
   const getUnixTime = (idx: any) => {
     return idx * 1000;
   };
   const getStartTime = (idx: any) => {
     try {
-      const arr = [
-        getUnixTime(idx?.publicStartTime),
-        getUnixTime(idx?.keyHolderStartTime),
-        getUnixTime(idx?.whitelistStartTime),
-        getUnixTime(idx?.privateStartTime),
-      ];
-      const arrSort = arr.filter((x) => x != 0).sort();
-      return arrSort[0];
+      return new Date(idx?.publicStartTime).getTime();
     } catch (ex) {
       console.log(ex);
     }
   };
   const getEndTime = (idx: any) => {
     try {
-      const arr = [
-        getUnixTime(idx?.publicEndTime),
-        getUnixTime(idx?.keyHolderEndTime),
-        getUnixTime(idx?.whitelistEndTime),
-        getUnixTime(idx?.privateEndTime),
-      ];
-      const arrSort = arr
-        .filter((x) => x != 0)
-        .sort()
-        .reverse();
-      return arrSort[0];
+      return new Date(idx?.publicEndTime).getTime();
     } catch (ex) {
       console.log(ex);
     }
   };
+
   return (
     <Link href={`/ino/${data?.code}`}>
       <div className="bg-layer-2 border border-solid rounded-lg p-2 border-stroke cursor-pointer group">
         <div className="flex flex-col space-y-2">
           <div className="aspect-square w-full overflow-hidden relative">
             <CustomImage
-              src={data?.logo}
+              src={data?.logo?.data?.attributes?.url}
               alt="Nft"
               className="object-cover aspect-square rounded-lg !w-full h-full group-hover:scale-110 !transition !duration-300 !ease-in-out"
               wrapperClassName="w-full"

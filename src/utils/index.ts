@@ -16,7 +16,7 @@ export const isDateGreater = (date1: any, date2: any) => {
 export const getFullImageSrc = (src: string) => {
   if (!src) return undefined;
   let fullSrc = src;
-  if (src.startsWith("ipfs://")) {
+  if (src?.startsWith("ipfs://")) {
     fullSrc = `https://ipfs.io/ipfs/${src.slice(7)}`;
   }
   return fullSrc;

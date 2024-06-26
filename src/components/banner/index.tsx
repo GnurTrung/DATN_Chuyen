@@ -22,9 +22,9 @@ function Banner() {
   const [dataBanner, setDataBanner] = useState([]);
   const getDataBanner = async () => {
     try {
-      const allData = await getBannerFeature([]);
-      const all = allData?.data || [];
-      setDataBanner(all);
+      // const allData = await getBannerFeature([]);
+      // const all = allData?.data || [];
+      // setDataBanner(all);
     } catch (ex) {
       console.log(ex);
     }
@@ -122,9 +122,7 @@ function Banner() {
                         <div className="stat lg:w-[70%] rounded-lg p-3 w-[95%] 2xl:w-[60%]">
                           <div className="flex justify-between items-center gap-0 max-sm:w-full sm:gap-4 flex-col sm:flex-row">
                             <CustomImage
-                              src={getLogoURL(
-                                item?.logo
-                              )}
+                              src={getLogoURL(item?.logo)}
                               alt={"title"}
                               className="hidden sm:block rounded-lg cursor-pointer !object-cover aspect-square border-2 h-[131px] w-[131px] border-white border-solid max-w-none ml-1"
                             />
@@ -132,8 +130,7 @@ function Banner() {
                               <div className="flex gap-2 sm:gap-0">
                                 <CustomImage
                                   src={getLogoURL(
-                                    item?.logo?.data?.attributes
-                                      ?.url
+                                    item?.logo?.data?.attributes?.url
                                   )}
                                   alt={"title"}
                                   className="sm:hidden rounded-lg cursor-pointer !object-cover aspect-square border-2 h-[73px] w-[73px] border-white border-solid max-w-none"
@@ -143,7 +140,7 @@ function Banner() {
                                     href={`/ino/${item?.code}`}
                                     className="flex items-center gap-1 sm:gap-2 hover:text-primary"
                                   >
-                                    <IconVerified className="min-h-[16.66px] min-w-[16.66px]"/>
+                                    <IconVerified className="min-h-[16.66px] min-w-[16.66px]" />
                                     <div className="font-[600] sm:font-[500] text-[16px] sm:text-[20px] three_dot_1_line">
                                       {item?.name}
                                     </div>
@@ -160,11 +157,9 @@ function Banner() {
                                       Items
                                     </div>
                                     <div className="text-sm font-semibold">
-                                      {Number(item?.itemCount) ==
-                                      0 ? (
+                                      {Number(item?.itemCount) == 0 ? (
                                         `TBA`
-                                      ) : Number(item?.itemCount) >=
-                                        1000000 ? (
+                                      ) : Number(item?.itemCount) >= 1000000 ? (
                                         "∞"
                                       ) : (
                                         <NumericFormat

@@ -1,0 +1,201 @@
+{
+    "id": 3,
+    "attributes": {
+        "name": "Mad Ape Club",
+        "description": "The Mad Ape Club is a collection of 333 unique Mad Ape NFTs— unique digital collectibles living on Starknet.",
+        "longDescription": null,
+        "creator": null,
+        "collectionCategory": "LaunchpadDrops",
+        "collectionStatus": "Active",
+        "isFeatured": true,
+        "collectionType": null,
+        "code": "madape",
+        "whitelistStartTime": null,
+        "whitelistEndTime": null,
+        "publicStartTime": "2024-01-26T15:00:00.000Z",
+        "publicEndTime": "2024-10-27T15:00:00.000Z",
+        "privateStartTime": null,
+        "privateEndTime": null,
+        "splittingPrizeTime": null,
+        "totalPrize": null,
+        "botPrevention": null,
+        "keyHolderStartTime": null,
+        "keyHolderEndTime": null,
+        "mintPoolName": "Private Mint",
+        "listingStartTime": "2024-01-27T15:00:00.000Z",
+        "royaltyPercentage": 5,
+        "SC_collection": "0x01335defa219c2d0911a75ff85245200932501d6975d6178eabfa544e7d82b07",
+        "mintPoolHolderName": "Key Holder Mint",
+        "mintPoolWhitelistName": "Whitelist Mint",
+        "mintPoolPublicName": "Public Mint",
+        "royaltyReceiverAddress": null,
+        "createdAt": "2024-01-24T03:18:03.416Z",
+        "updatedAt": "2024-02-22T08:56:23.285Z",
+        "publishedAt": "2024-01-24T03:18:06.992Z",
+        "website": "https://madape.club/",
+        "telegramLink": "https://twitter.com/MadApeNFT_",
+        "discordLink": "https://twitter.com/MadApeNFT_",
+        "twitterLink": "https://twitter.com/MadApeNFT_",
+        "itemCount": "333",
+        "crossPoolMint": null,
+        "maxWhitelistMint": null,
+        "maxPrivateMint": null,
+        "maxPublicMint": "333",
+        "maxKeyHolderMint": null,
+        "whitelistAccountLimit": null,
+        "privateAccountLimit": null,
+        "publicAccountLimit": "10",
+        "keyHolderAccountLimit": null,
+        "reserved": null,
+        "priceWhitelist": null,
+        "pricePublic": 0.0045,
+        "pricePrivate": null,
+        "priceKeyHolder": null,
+        "enableFollowsCheck": false,
+        "chainNetwork": "starknet_eth",
+        "enableDiscordFollowsCheck": false,
+        "discordRolename": null,
+        "enableRetweetCheck": null,
+        "retweetUrl": null,
+        "enableVentoryFollowsCheck": null,
+        "logo": {
+            "data": {
+                "id": 5,
+                "attributes": {
+                    "name": "NFT.gif",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1000,
+                    "height": 1000,
+                    "formats": null,
+                    "hash": "NFT_2942601d56",
+                    "ext": ".gif",
+                    "mime": "image/gif",
+                    "size": 2079.51,
+                    "url": "https://ipfs.ventory.gg:443/ventory/upload/NFT_2942601d56.gif",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-01-24T07:45:03.877Z",
+                    "updatedAt": "2024-01-24T07:45:03.877Z"
+                }
+            }
+        },
+        "banner": {
+            "data": {
+                "id": 3,
+                "attributes": {
+                    "name": "1500x500_2_f1808ea80c.jpg",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1500,
+                    "height": 500,
+                    "formats": {
+                        "large": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/large_1500x500_2_f1808ea80c_2c171b7dea.jpg",
+                            "hash": "large_1500x500_2_f1808ea80c_2c171b7dea",
+                            "mime": "image/jpeg",
+                            "name": "large_1500x500_2_f1808ea80c.jpg",
+                            "path": null,
+                            "size": 82.82,
+                            "width": 1000,
+                            "height": 333
+                        },
+                        "small": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/small_1500x500_2_f1808ea80c_2c171b7dea.jpg",
+                            "hash": "small_1500x500_2_f1808ea80c_2c171b7dea",
+                            "mime": "image/jpeg",
+                            "name": "small_1500x500_2_f1808ea80c.jpg",
+                            "path": null,
+                            "size": 28.41,
+                            "width": 500,
+                            "height": 167
+                        },
+                        "medium": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/medium_1500x500_2_f1808ea80c_2c171b7dea.jpg",
+                            "hash": "medium_1500x500_2_f1808ea80c_2c171b7dea",
+                            "mime": "image/jpeg",
+                            "name": "medium_1500x500_2_f1808ea80c.jpg",
+                            "path": null,
+                            "size": 53.56,
+                            "width": 750,
+                            "height": 250
+                        },
+                        "thumbnail": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg:443/ventory/upload/thumbnail_1500x500_2_f1808ea80c_2c171b7dea.jpg",
+                            "hash": "thumbnail_1500x500_2_f1808ea80c_2c171b7dea",
+                            "mime": "image/jpeg",
+                            "name": "thumbnail_1500x500_2_f1808ea80c.jpg",
+                            "path": null,
+                            "size": 9.27,
+                            "width": 245,
+                            "height": 82
+                        }
+                    },
+                    "hash": "1500x500_2_f1808ea80c_2c171b7dea",
+                    "ext": ".jpg",
+                    "mime": "image/jpeg",
+                    "size": 156.18,
+                    "url": "https://ipfs.ventory.gg:443/ventory/upload/1500x500_2_f1808ea80c_2c171b7dea.jpg",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-01-24T03:09:40.422Z",
+                    "updatedAt": "2024-01-24T03:09:40.422Z"
+                }
+            }
+        },
+        "otherImages": {
+            "data": [
+                {
+                    "id": 5,
+                    "attributes": {
+                        "name": "NFT.gif",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 1000,
+                        "height": 1000,
+                        "formats": null,
+                        "hash": "NFT_2942601d56",
+                        "ext": ".gif",
+                        "mime": "image/gif",
+                        "size": 2079.51,
+                        "url": "https://ipfs.ventory.gg:443/ventory/upload/NFT_2942601d56.gif",
+                        "previewUrl": null,
+                        "provider": "strapi-provider-upload-minio-ce",
+                        "provider_metadata": null,
+                        "createdAt": "2024-01-24T07:45:03.877Z",
+                        "updatedAt": "2024-01-24T07:45:03.877Z"
+                    }
+                }
+            ]
+        },
+        "featuredImage": {
+            "data": {
+                "id": 5,
+                "attributes": {
+                    "name": "NFT.gif",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1000,
+                    "height": 1000,
+                    "formats": null,
+                    "hash": "NFT_2942601d56",
+                    "ext": ".gif",
+                    "mime": "image/gif",
+                    "size": 2079.51,
+                    "url": "https://ipfs.ventory.gg:443/ventory/upload/NFT_2942601d56.gif",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-01-24T07:45:03.877Z",
+                    "updatedAt": "2024-01-24T07:45:03.877Z"
+                }
+            }
+        }
+    }
+}

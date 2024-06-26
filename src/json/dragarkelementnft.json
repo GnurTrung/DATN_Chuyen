@@ -1,0 +1,303 @@
+{
+    "id": 27,
+    "attributes": {
+        "name": "Dragark Element NFT",
+        "description": "Exclusive NFT for early supporters of Dragark with limited supply on Ventory",
+        "longDescription": null,
+        "creator": null,
+        "collectionCategory": "LaunchpadDrops",
+        "collectionStatus": "Active",
+        "isFeatured": null,
+        "collectionType": null,
+        "code": "dragarkelementnft",
+        "whitelistStartTime": "2024-05-14T14:30:00.000Z",
+        "whitelistEndTime": "2024-05-14T15:30:00.000Z",
+        "publicStartTime": "2024-05-14T15:00:00.000Z",
+        "publicEndTime": "2024-10-15T14:00:00.000Z",
+        "privateStartTime": null,
+        "privateEndTime": null,
+        "splittingPrizeTime": null,
+        "totalPrize": null,
+        "botPrevention": null,
+        "keyHolderStartTime": null,
+        "keyHolderEndTime": null,
+        "mintPoolName": "Private Mint",
+        "listingStartTime": "2024-05-14T14:00:00.000Z",
+        "royaltyPercentage": 3,
+        "SC_collection": "0x0537fa10cefbb8ff7e61e86e950746809f95faa7398f250f0063069b29bb7933",
+        "mintPoolHolderName": "Key Holder Mint",
+        "mintPoolWhitelistName": "Whitelist Mint",
+        "mintPoolPublicName": "Public Mint",
+        "royaltyReceiverAddress": null,
+        "createdAt": "2024-05-10T02:59:11.074Z",
+        "updatedAt": "2024-05-15T14:00:00.034Z",
+        "publishedAt": "2024-05-10T02:59:51.938Z",
+        "website": "https://dragark.net/",
+        "telegramLink": "https://hub.xyz/dragark",
+        "discordLink": "https://discord.com/invite/KEChMrdk7z",
+        "twitterLink": "https://twitter.com/playDRAGARK",
+        "itemCount": "3000",
+        "crossPoolMint": null,
+        "maxWhitelistMint": "947",
+        "maxPrivateMint": null,
+        "maxPublicMint": "2053",
+        "maxKeyHolderMint": null,
+        "whitelistAccountLimit": "1",
+        "privateAccountLimit": null,
+        "publicAccountLimit": "1",
+        "keyHolderAccountLimit": null,
+        "reserved": null,
+        "priceWhitelist": 0,
+        "pricePublic": 0,
+        "pricePrivate": null,
+        "priceKeyHolder": null,
+        "enableFollowsCheck": false,
+        "chainNetwork": "starknet",
+        "enableDiscordFollowsCheck": false,
+        "discordRolename": null,
+        "enableRetweetCheck": false,
+        "retweetUrl": "https://x.com/playdragark/status/1790377735283421614?s=46&t=MZhb6INDPWHhDkG9kKfmUA",
+        "enableVentoryFollowsCheck": null,
+        "logo": {
+            "data": {
+                "id": 37,
+                "attributes": {
+                    "name": "Dragark Element-01.png",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1000,
+                    "height": 1000,
+                    "formats": {
+                        "small": {
+                            "ext": ".png",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/small_Dragark_Element_01_30d8c435ca.png",
+                            "hash": "small_Dragark_Element_01_30d8c435ca",
+                            "mime": "image/png",
+                            "name": "small_Dragark Element-01.png",
+                            "path": null,
+                            "size": 240.86,
+                            "width": 500,
+                            "height": 500
+                        },
+                        "medium": {
+                            "ext": ".png",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/medium_Dragark_Element_01_30d8c435ca.png",
+                            "hash": "medium_Dragark_Element_01_30d8c435ca",
+                            "mime": "image/png",
+                            "name": "medium_Dragark Element-01.png",
+                            "path": null,
+                            "size": 493.58,
+                            "width": 750,
+                            "height": 750
+                        },
+                        "thumbnail": {
+                            "ext": ".png",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/thumbnail_Dragark_Element_01_30d8c435ca.png",
+                            "hash": "thumbnail_Dragark_Element_01_30d8c435ca",
+                            "mime": "image/png",
+                            "name": "thumbnail_Dragark Element-01.png",
+                            "path": null,
+                            "size": 37.59,
+                            "width": 156,
+                            "height": 156
+                        }
+                    },
+                    "hash": "Dragark_Element_01_30d8c435ca",
+                    "ext": ".png",
+                    "mime": "image/png",
+                    "size": 190.59,
+                    "url": "https://ipfs.ventory.gg/ventory/upload/Dragark_Element_01_30d8c435ca.png",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-05-10T02:55:23.990Z",
+                    "updatedAt": "2024-05-10T02:55:34.532Z"
+                }
+            }
+        },
+        "banner": {
+            "data": {
+                "id": 38,
+                "attributes": {
+                    "name": "1500x500.jpg",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1500,
+                    "height": 500,
+                    "formats": {
+                        "large": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/large_1500x500_a13c8440cd.jpg",
+                            "hash": "large_1500x500_a13c8440cd",
+                            "mime": "image/jpeg",
+                            "name": "large_1500x500.jpg",
+                            "path": null,
+                            "size": 72.46,
+                            "width": 1000,
+                            "height": 333
+                        },
+                        "small": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/small_1500x500_a13c8440cd.jpg",
+                            "hash": "small_1500x500_a13c8440cd",
+                            "mime": "image/jpeg",
+                            "name": "small_1500x500.jpg",
+                            "path": null,
+                            "size": 24.94,
+                            "width": 500,
+                            "height": 167
+                        },
+                        "medium": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/medium_1500x500_a13c8440cd.jpg",
+                            "hash": "medium_1500x500_a13c8440cd",
+                            "mime": "image/jpeg",
+                            "name": "medium_1500x500.jpg",
+                            "path": null,
+                            "size": 46.91,
+                            "width": 750,
+                            "height": 250
+                        },
+                        "thumbnail": {
+                            "ext": ".jpg",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/thumbnail_1500x500_a13c8440cd.jpg",
+                            "hash": "thumbnail_1500x500_a13c8440cd",
+                            "mime": "image/jpeg",
+                            "name": "thumbnail_1500x500.jpg",
+                            "path": null,
+                            "size": 8.22,
+                            "width": 245,
+                            "height": 82
+                        }
+                    },
+                    "hash": "1500x500_a13c8440cd",
+                    "ext": ".jpg",
+                    "mime": "image/jpeg",
+                    "size": 134.75,
+                    "url": "https://ipfs.ventory.gg/ventory/upload/1500x500_a13c8440cd.jpg",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-05-10T02:55:43.422Z",
+                    "updatedAt": "2024-05-10T02:55:43.422Z"
+                }
+            }
+        },
+        "otherImages": {
+            "data": [
+                {
+                    "id": 37,
+                    "attributes": {
+                        "name": "Dragark Element-01.png",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 1000,
+                        "height": 1000,
+                        "formats": {
+                            "small": {
+                                "ext": ".png",
+                                "url": "https://ipfs.ventory.gg/ventory/upload/small_Dragark_Element_01_30d8c435ca.png",
+                                "hash": "small_Dragark_Element_01_30d8c435ca",
+                                "mime": "image/png",
+                                "name": "small_Dragark Element-01.png",
+                                "path": null,
+                                "size": 240.86,
+                                "width": 500,
+                                "height": 500
+                            },
+                            "medium": {
+                                "ext": ".png",
+                                "url": "https://ipfs.ventory.gg/ventory/upload/medium_Dragark_Element_01_30d8c435ca.png",
+                                "hash": "medium_Dragark_Element_01_30d8c435ca",
+                                "mime": "image/png",
+                                "name": "medium_Dragark Element-01.png",
+                                "path": null,
+                                "size": 493.58,
+                                "width": 750,
+                                "height": 750
+                            },
+                            "thumbnail": {
+                                "ext": ".png",
+                                "url": "https://ipfs.ventory.gg/ventory/upload/thumbnail_Dragark_Element_01_30d8c435ca.png",
+                                "hash": "thumbnail_Dragark_Element_01_30d8c435ca",
+                                "mime": "image/png",
+                                "name": "thumbnail_Dragark Element-01.png",
+                                "path": null,
+                                "size": 37.59,
+                                "width": 156,
+                                "height": 156
+                            }
+                        },
+                        "hash": "Dragark_Element_01_30d8c435ca",
+                        "ext": ".png",
+                        "mime": "image/png",
+                        "size": 190.59,
+                        "url": "https://ipfs.ventory.gg/ventory/upload/Dragark_Element_01_30d8c435ca.png",
+                        "previewUrl": null,
+                        "provider": "strapi-provider-upload-minio-ce",
+                        "provider_metadata": null,
+                        "createdAt": "2024-05-10T02:55:23.990Z",
+                        "updatedAt": "2024-05-10T02:55:34.532Z"
+                    }
+                }
+            ]
+        },
+        "featuredImage": {
+            "data": {
+                "id": 37,
+                "attributes": {
+                    "name": "Dragark Element-01.png",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1000,
+                    "height": 1000,
+                    "formats": {
+                        "small": {
+                            "ext": ".png",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/small_Dragark_Element_01_30d8c435ca.png",
+                            "hash": "small_Dragark_Element_01_30d8c435ca",
+                            "mime": "image/png",
+                            "name": "small_Dragark Element-01.png",
+                            "path": null,
+                            "size": 240.86,
+                            "width": 500,
+                            "height": 500
+                        },
+                        "medium": {
+                            "ext": ".png",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/medium_Dragark_Element_01_30d8c435ca.png",
+                            "hash": "medium_Dragark_Element_01_30d8c435ca",
+                            "mime": "image/png",
+                            "name": "medium_Dragark Element-01.png",
+                            "path": null,
+                            "size": 493.58,
+                            "width": 750,
+                            "height": 750
+                        },
+                        "thumbnail": {
+                            "ext": ".png",
+                            "url": "https://ipfs.ventory.gg/ventory/upload/thumbnail_Dragark_Element_01_30d8c435ca.png",
+                            "hash": "thumbnail_Dragark_Element_01_30d8c435ca",
+                            "mime": "image/png",
+                            "name": "thumbnail_Dragark Element-01.png",
+                            "path": null,
+                            "size": 37.59,
+                            "width": 156,
+                            "height": 156
+                        }
+                    },
+                    "hash": "Dragark_Element_01_30d8c435ca",
+                    "ext": ".png",
+                    "mime": "image/png",
+                    "size": 190.59,
+                    "url": "https://ipfs.ventory.gg/ventory/upload/Dragark_Element_01_30d8c435ca.png",
+                    "previewUrl": null,
+                    "provider": "strapi-provider-upload-minio-ce",
+                    "provider_metadata": null,
+                    "createdAt": "2024-05-10T02:55:23.990Z",
+                    "updatedAt": "2024-05-10T02:55:34.532Z"
+                }
+            }
+        }
+    }
+}

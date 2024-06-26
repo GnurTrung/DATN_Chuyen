@@ -106,7 +106,7 @@ const ListItem = () => {
     try {
       if (!data || data?.length === 0) return <NoData />;
       let ui = data.map((item: any, index: any) => {
-        return <ItemMintNFT data={item} key={index} />;
+        return <ItemMintNFT dataX={item} key={index} />;
       });
       return ui;
     } catch (ex) {
